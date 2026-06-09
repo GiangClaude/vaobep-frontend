@@ -1,0 +1,88 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import apiClient from './api/index'; // Import apiClient để gọi API
+
+// Tạo Context
+export const AuthContext = createContext(null);
+
+// Hook để các component con sử dụng dễ dàng
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+// [THÊM MỚI] Component Provider chứa toàn bộ logic xác thực
+export const AuthProvider = ({ children }) => {
+  // 1. Chuyển State từ App.js sang đây
+  const [currentUser, setCurrentUser] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchMyProfile = async () => {
+    const token = localStorage.getItem('token');
+    
+    // Check token ở client trước
+    if (!token) {
+      setIsLoading(false);
+      setCurrentUser(null);
+      return;
+    }
+
+    try {
+      const response = await apiClient.get('/user/me', { 
+          headers: { 'Authorization': `Bearer ${token}` } 
+      });
+       if (response.success) {
+            setCurrentUser(response.data); 
+       } else {
+            setCurrentUser(null);
+            localStorage.removeItem('token');
+        }
+    } catch (error) {
+      // Xử lý lỗi
+        console.error("Lỗi xác thực:", error.message);
+        setCurrentUser(null);
+        localStorage.removeItem('token');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // 2. Chuyển useEffect (Check token) từ App.js sang đây
+  useEffect(() => {
+    fetchMyProfile();
+
+    const handleUnauthorized = () => {
+      setCurrentUser(null);
+      localStorage.removeItem('token');
+      // Lưu ý: Không dùng navigate ở đây được vì AuthProvider bọc ngoài BrowserRouter trong index.js. 
+      // Việc gán currentUser = null sẽ tự động kích hoạt ProtectedRoute đẩy user về /login
+    };
+
+     window.addEventListener('auth_unauthorized', handleUnauthorized);
+
+    // Cleanup khi component unmount
+    return () => {
+      window.removeEventListener('auth_unauthorized', handleUnauthorized);
+    };
+  }, []);
+
+  // 3. Hàm logout (Tiện ích thêm để dùng ở Header/Profile)
+  const logout = () => {
+      localStorage.removeItem('token');
+      setCurrentUser(null);
+  };
+
+  // Giá trị cung cấp cho toàn bộ App
+  const value = {
+      currentUser,
+      setCurrentUser,
+      isLoading,
+      logout, 
+      refreshProfile: fetchMyProfile
+  };
+
+  // Render children
+  return (
+    <AuthContext.Provider value={value}>
+      {!isLoading ? children : <div>Đang tải thông tin...</div>}
+    </AuthContext.Provider>
+  );
+};
