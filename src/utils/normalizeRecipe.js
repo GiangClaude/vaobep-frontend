@@ -48,7 +48,7 @@ export function normalizeRecipe(r) {
     cookTime: r.cook_time,
     servings: r.servings,
     calories: r.total_calo !== undefined && r.total_calo !== null ? Number(r.total_calo) : 0,
-    image: getRecipeImageUrl(r.recipe_id, r.cover_image),
+    image: r.cover_image,
     createdAt: r.created_at ? new Date(r.created_at).toLocaleDateString('vi-VN') : "",
     status: r.status || "public",
     likes: r.like_count !== undefined && r.like_count !== null ? Number(r.like_count) : 0,

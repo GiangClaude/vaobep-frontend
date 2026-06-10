@@ -4,6 +4,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000';
 export const getAvatarUrl = (userId, avatarName) => {
     // console.log(userId, avatarName);
     if (!avatarName) return `/assets/avatar_default.png`;
+    
     // [Safety Check] Nếu đã là link full hoặc blob thì trả về luôn
     if (avatarName.toString().startsWith('http') || avatarName.toString().startsWith('blob:')) {
         return avatarName;
@@ -15,9 +16,6 @@ export const getAvatarUrl = (userId, avatarName) => {
 };
 
 export const getRecipeImageUrl = (recipeId, cover_image) => {
-    if (recipeId === '082f84f4-5f3f-4369-a8f4-1b1bb27c5efa') {
-        console.log(recipeId, cover_image );
-    }
     if (!cover_image) return '/assets/recipe_default.png'; // Hoặc ảnh placeholder món ăn
 
     // [Safety Check] Nếu đã là link full hoặc blob thì trả về luôn

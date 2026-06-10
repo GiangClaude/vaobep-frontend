@@ -25,6 +25,8 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
   });
 
   const displaySteps = stepsCount || (detailedSteps ? detailedSteps.length : 0);
+  // console.log(image);
+  console.log(userAvatar);
 
   return (
       <motion.div
@@ -49,7 +51,7 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
                 {/* Image */}
                 <div className="absolute inset-0 transform transition-transform duration-700 ease-out" style={{ transform: isHovered ? "scale(1.08) rotate(-1deg)" : "scale(1)" }}>
                   {/* Đã xóa class bo góc ở ảnh, để cho thẻ cha ngoài cùng tự cắt */}
-                  <ImageWithFallBack src={getRecipeImageUrl(id, image)} alt={title} className="w-full h-full object-cover" />
+                  <ImageWithFallBack src={image} alt={title} className="w-full h-full object-cover" />
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent opacity-80" />
                 
@@ -80,7 +82,7 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
 
                 {/* USER INFO */}
                 <div className="absolute bottom-3 left-3 flex items-center gap-2 bg-white/95 backdrop-blur-md pl-1 pr-3 py-1 rounded-full shadow-md border border-orange-50/50 hover:scale-105 transition-transform duration-300">
-                  <ImageWithFallBack src={getAvatarUrl(recipe.userId, userAvatar)} alt={userName} className="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm" />
+                  <ImageWithFallBack src={userAvatar} alt={userName} className="w-7 h-7 rounded-full object-cover border-2 border-white shadow-sm" />
                   <span className="text-xs text-gray-700 font-bold truncate max-w-[120px]">{userName}</span>
                 </div>
               </div>
