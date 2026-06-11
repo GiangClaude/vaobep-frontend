@@ -42,6 +42,11 @@ const articleApi = {
         const response = await apiClient.get('/articles/me/saved', { params });
         return response;
     },
+
+	getUserArticles: async (userId, params = {}) => {
+        const response = await apiClient.get(`/articles/user/${userId}`, { params });
+        return response;
+    },
 };
 
 export default articleApi;

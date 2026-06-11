@@ -80,23 +80,3 @@ export const useRecipeByIdQuery = (id) => {
         }
     });
 };
-
-export const useFetchRecipeDetailAsync = () => {
-    const queryClient = useQueryClient();
-
-    const fetchRecipeDetail = async (id) => {
-        return await queryClient.fetchQuery({
-            queryKey: [QUERY_KEYS.RECIPE_DETAIL, id],
-            queryFn: async () => {
-                const response = await recipeApi.getRecipeById(id);
-                if (response.success) {
-                    return response.data.data || response.data;
-                }
-                throw new Error("Lỗi tải chi tiết công thức");
-            },
-            staleTime: 1000 * 60 * 5, // Cache 5 phút
-        });
-    };
-
-    return fetchRecipeDetail;
-};

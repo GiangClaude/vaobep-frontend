@@ -34,8 +34,11 @@ export const useProfileUI = () => {
         const formData = new FormData();
         if (data.fullName) formData.append('fullName', data.fullName);
         if (data.bio) formData.append('bio', data.bio);
+        
         if (data.avatarFile) formData.append('avatar', data.avatarFile);
-
+        if (data.coverFile) {
+                formData.append('cover_image', data.coverFile); // Tên field 'cover_image' phải khớp với backend
+            }
         try {
             const result = await updateProfileMutation.mutateAsync(formData);
             if (result.success) {

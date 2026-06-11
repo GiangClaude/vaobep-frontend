@@ -19,7 +19,6 @@ import VerifyOTPPage from './pages/VerifyOTPPage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import HomePage from './pages/HomepagePage';
-import ProfilePage from './pages/ProfilePage';
 import RecipeDetailPage from './pages/RecipeDetailPage';
 import RecipesListPage from './pages/RecipesListPage';
 // import SearchPage from './pages/SearchPage';
@@ -30,7 +29,12 @@ import SearchRecipeTab from './pages/search/SearchRecipeTab';
 import SearchArticleTab from './pages/search/SearchArticleTab';
 
 import UserProfilePage from './pages/UserProfilePage';
-
+import ProfileLayout from './pages/ProfileLayout'; // Đổi tên ProfilePage thành ProfileLayout
+import { MyRecipesTab } from './component/profile/MyRecipeTab';
+import { MyArticlesTab } from './component/profile/MyArticlesTab';
+import { MyMenusTab } from './component/profile/MyMenusTab'; // Đã tạo ở bước trước
+import { SavedRecipeTab } from './component/profile/SavedRecipeTab';
+import { PointsTab } from './component/profile/PointsTab';
 
 
 import ArticleDetailPage from './pages/ArticleDetailPage';
@@ -121,7 +125,16 @@ function App() {
               <Route path="/dish/:id" element={<DishDetailPage />} />
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
-                 <Route path="/profile" element={<ProfilePage />} />
+                  <Route path="/profile" element={<ProfileLayout />}>
+                    {/* Redirect mặc định vào recipes */}
+                    <Route index element={<Navigate to="recipes" replace />} />
+                    
+                    <Route path="recipes" element={<MyRecipesTab isPublicView={false} />} />
+                    <Route path="articles" element={<MyArticlesTab />} />
+                    <Route path="menus" element={<MyMenusTab isPublicView={false} />} />
+                    <Route path="saved" element={<SavedRecipeTab />} />
+                    <Route path="points" element={<PointsTab />} />
+                </Route>
                  <Route path="/menus" element={<MenuListPage />} />
                 <Route path="/menus/planner/:menuId" element={<MenuPlannerPage />} />
               </Route>

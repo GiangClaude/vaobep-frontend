@@ -134,7 +134,7 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
       ) : displayArticles.length === 0 ? (
         <div className="text-center py-20 text-[#7d5a3f]">Chưa có bài viết phù hợp.</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {displayArticles.map(a => (
             <ArticleCard
               key={a.id}

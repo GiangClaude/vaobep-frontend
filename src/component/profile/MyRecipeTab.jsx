@@ -71,7 +71,7 @@ export function MyRecipesTab({ isPublicView = false, publicRecipes = [] }) {
           <h3 className="text-2xl text-gray-800 mb-2">Chưa có công thức nào</h3>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
           {displayRecipes.map((recipe) => {
             const badge = getStatusBadge(recipe.status);
             return (

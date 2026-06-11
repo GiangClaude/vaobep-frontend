@@ -4,20 +4,23 @@ import { useQuery } from '@tanstack/react-query';
 import userApi from '../../api/userApi';
 import menuApi from '../../api/menuApi';
 import recipeApi from '../../api/recipeApi';
+import articleApi from '../../api/articleApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
 import { normalizeRecipeList } from '../../utils/normalizeRecipe';
-
+import { normalizeArticleList } from '../../utils/normalizeArticle';
 // 1. Lấy hồ sơ người dùng khác (Trang UserProfilePage)
 export const useUserProfileQuery = (userId) => {
     return useQuery({
         queryKey: [QUERY_KEYS.USER_PROFILE, userId],
         queryFn: async () => {
             // Gọi song song 3 API để tối ưu tốc độ
-            const [userRes, recipeRes, menuRes] = await Promise.all([
+           const [userRes, recipeRes, menuRes, articleRes] = await Promise.all([
                 userApi.getUserProfile(userId).catch(() => null),
                 recipeApi.getUserRecipes(userId).catch(() => null),
-                menuApi.getPublicMenusByUser(userId).catch(() => null)
+                menuApi.getPublicMenusByUser(userId).catch(() => null),
+                articleApi.getUserArticles(userId).catch(() => null) // GỌI API MỚI
             ]);
+
 
             if (!userRes || !userRes.success) {
                 throw new Error("Không thể tải thông tin người dùng.");
@@ -26,7 +29,8 @@ export const useUserProfileQuery = (userId) => {
             return {
                 user: userRes.data,
                 recipes: recipeRes?.success ? normalizeRecipeList(recipeRes.data) : [],
-                menus: menuRes?.success ? menuRes.data : []
+                menus: menuRes?.success ? menuRes.data : [],
+                articles: articleRes?.success ? normalizeArticleList(articleRes.data) : [] 
             };
         },
         enabled: !!userId
