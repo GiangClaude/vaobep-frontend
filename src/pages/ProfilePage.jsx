@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ProfileHeader } from "../component/profile/ProfileHeader";
 import { ProfileTabs } from "../component/profile/ProfileTabs";
 import { MyRecipesTab } from "../component/profile/MyRecipeTab";
 import { MyArticlesTab } from "../component/profile/MyArticlesTab";
+import { MyMenusTab } from "../component/profile/MyMenusTab"; 
 import { ProfileInfoTab } from "../component/profile/ProfileInfoTab";
 import { PointsTab } from "../component/profile/PointsTab";
 import { SettingsTab } from "../component/profile/SettingsTab";
@@ -26,7 +28,9 @@ const mockBadges = [{ id: "1", name: "Đầu bếp xuất sắc", icon: "🏆", 
 export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState("my-recipes");
   const { currentUser } = useAuth();
-
+  
+  const navigate = useNavigate();
+  
   // 1. Data Fetching (React Query)
   const { data: pointsData, isLoading: pointsLoading } = usePointsHistoryQuery(1, 'all');
   const pointsHistory = pointsData?.history || [];
@@ -51,6 +55,18 @@ export default function ProfilePage() {
       <main className="container mx-auto px-4 py-8">
         <ProfileHeader user={currentUser} isOwnProfile={true} onEditProfile={() => setActiveTab("info")} />
 
+        {/* Nút chuyển hướng chỉ hiển thị khi user có role là admin */}
+        {currentUser?.role === 'admin' && (
+          <div className="flex justify-end mt-4 mb-2">
+            <button
+              onClick={() => navigate('/admin/dashboard')}
+              className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg shadow-md transition-all"
+            >
+              🚀 Chuyển sang trang quản lý
+            </button>
+          </div>
+        )}
+
         <div className="top-0 z-40 bg-[#fff9f0]/95 backdrop-blur-sm py-2">
             <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} />
         </div>
@@ -59,6 +75,7 @@ export default function ProfilePage() {
           <div className="lg:col-span-8">
             {activeTab === "my-recipes" && <MyRecipesTab isPublicView={false} />}
             {activeTab === "my-articles" && <MyArticlesTab />}
+            {currentUser.role !== 'user' && activeTab === "my-menus" && <MyMenusTab isPublicView={false} />}
             {activeTab === "saved" && <SavedRecipeTab />}
             
             {activeTab === "info" && (

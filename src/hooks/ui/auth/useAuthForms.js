@@ -33,14 +33,7 @@ export const useLoginForm = () => {
             const res = await loginMutation.mutateAsync(loginData);
             console.log("Login API response:", res);
             if (res.success) {
-                if (res.data.user.role === 'admin') {
-                    console.log("Admin logged in, navigating to dashboard");
-                    setTimeout(() => {
-                        navigate('/admin/dashboard');
-                    }, 1000);
-                } else {
-                    navigate('/homepage');
-                }
+                navigate('/homepage');
             } else {
                 setErrors({ 
                     api: res.message, 

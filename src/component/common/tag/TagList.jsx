@@ -11,7 +11,7 @@ export function TagList({
   maxDisplay = 2, 
   onTagClick, 
   tagClassName,
-  containerClassName = "flex flex-wrap gap-2 mt-3" 
+  containerClassName = "flex flex-wrap gap-2" 
 }) {
   const { displayedTags, hiddenCount } = getDisplayTags(tags, maxDisplay);
 

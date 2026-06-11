@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
 // [MỚI] Import icons và animation
-import { LayoutDashboard, Users, UtensilsCrossed, Carrot, Flag, LogOut, ChevronLeft, ChevronRight, BookOpen, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, UtensilsCrossed, Carrot, Flag, LogOut, ChevronLeft, ChevronRight, BookOpen, FileText, Home } from 'lucide-react';
 import { motion } from 'motion/react';
 
 const AdminSidebar = () => {
@@ -116,8 +116,20 @@ const AdminSidebar = () => {
                 ))}
             </nav>
 
-            {/* Footer / Logout */}
-            <div className="p-4 border-t border-orange-100 bg-[#fff9f0]/50">
+            <div className="p-4 border-t border-orange-100 bg-[#fff9f0]/50 space-y-2">
+                {/* Nút Về trang chủ (Đã thêm responsive) */}
+                <button
+                    onClick={() => navigate('/')}
+                    className={`w-full flex items-center rounded-xl transition-all duration-300 hover:bg-teal-50 text-gray-500 hover:text-teal-600 border border-transparent hover:border-teal-100 ${
+                        isCollapsed ? 'justify-center p-3' : 'px-4 py-3 space-x-3'
+                    }`}
+                    title={isCollapsed ? "Trang chủ" : ""}
+                >
+                    <Home size={22} className="min-w-[22px]" />
+                    {!isCollapsed && <span className="font-medium whitespace-nowrap">Về trang chủ</span>}
+                </button>
+
+                {/* Nút Đăng xuất */}
                 <button
                     onClick={handleLogout}
                     className={`w-full flex items-center rounded-xl transition-all duration-300 hover:bg-red-50 text-gray-500 hover:text-red-500 border border-transparent hover:border-red-100 ${
@@ -125,8 +137,8 @@ const AdminSidebar = () => {
                     }`}
                     title={isCollapsed ? "Đăng xuất" : ""}
                 >
-                    <LogOut size={22} />
-                    {!isCollapsed && <span className="font-medium">Đăng xuất</span>}
+                    <LogOut size={22} className="min-w-[22px]" />
+                    {!isCollapsed && <span className="font-medium whitespace-nowrap">Đăng xuất</span>}
                 </button>
             </div>
         </motion.div>

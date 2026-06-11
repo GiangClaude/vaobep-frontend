@@ -1,9 +1,10 @@
-import { FileText, Heart, User, Coins, Settings } from "lucide-react";
+import { FileText, Heart, User, Coins, Settings,  CalendarDays } from "lucide-react";
 import { motion } from "motion/react";
 
 const tabs = [
   { id: "my-recipes", label: "Công Thức Của Tôi", icon: FileText },
   { id: "my-articles", label: "Bài Viết", icon: FileText },
+  { id: "my-menus", label: "Thực Đơn", icon: CalendarDays },
   { id: "saved", label: "Đã Lưu", icon: Heart },
   { id: "info", label: "Thông Tin", icon: User },
   { id: "points", label: "Quản Lý Điểm", icon: Coins },

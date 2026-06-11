@@ -159,14 +159,14 @@ const AdminRecipePage = () => {
                         />
                     </div>
                     
-                    {/* Create Button (Đã uncomment và style lại) */}
+                    {/* Create Button (Đã uncomment và style lại)
                     <button 
                         onClick={openCreateModal}
                         className="bg-gradient-to-r from-[#ff6b35] to-[#f7931e] hover:shadow-lg hover:shadow-orange-200 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all active:scale-95 shrink-0"
                     >
                         <Plus size={18} />
                         <span className="hidden sm:inline">Tạo món</span>
-                    </button>
+                    </button> */}
                 </div>
             </div>
 

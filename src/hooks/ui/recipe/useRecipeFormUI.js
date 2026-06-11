@@ -72,11 +72,21 @@ export const useRecipeFormUI = (initialData, isOpen, onClose) => {
         submitData.append('steps', JSON.stringify(formData.steps));
         submitData.append('instructions', formData.steps.map(s => s.description).join('\n\n'));
 
-        if (formData.coverImageFile) submitData.append('cover_image', formData.coverImageFile);
+        console.log("FormData", formData);
+        // if (formData.coverImageFile) submitData.append('cover_image', formData.coverImageFile);
+        if (formData.coverImageFile) {
+            // 1. User CÓ CHỌN ẢNH MỚI -> Gửi file lên
+            submitData.append('cover_image', formData.coverImageFile);
+        } 
+        else if (formData.coverImage === "") {
+            // 2. User BẤM XÓA ẢNH (coverImage bị rỗng) -> Gửi chuỗi rỗng lên
+            // Backend nhận được chuỗi rỗng sẽ tự hiểu là xóa ảnh cũ và tráo thành Default Image
+            submitData.append('cover_image', "");
+        }
         
         const safeTags = Array.isArray(formData.tags) ? formData.tags.map(t => t.tag_id || t.id) : [];
         if (safeTags.length > 0) submitData.append('tags', JSON.stringify(safeTags));
-
+        console.log("Submit Data: ", submitData);
         try {
             let res;
             if (formData.id) {
