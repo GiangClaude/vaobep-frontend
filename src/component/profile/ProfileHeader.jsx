@@ -83,14 +83,14 @@ export function ProfileHeader({
                   {isFollowing ? <><UserMinus className="w-4 h-4" /> Đang theo dõi</> : <><UserPlus className="w-4 h-4" /> Theo dõi</>}
                 </motion.button>
 
-                <motion.button
+                {/* <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={onGift}
                   className="px-5 py-2.5 rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 font-semibold flex items-center justify-center gap-2 transition-all text-sm"
                 >
                   <Gift className="w-4 h-4" /> Tặng điểm
-                </motion.button>
+                </motion.button> */}
 
                 <motion.button
                   whileHover={{ scale: 1.05 }}

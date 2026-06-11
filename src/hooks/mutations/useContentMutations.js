@@ -34,6 +34,7 @@ export const useDeleteRecipeMutation = () => {
         mutationFn: (recipeId) => recipeApi.deleteRecipe(recipeId),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.OWNER_RECIPES] });
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.MY_PROFILE] });
         }
     });
 };
@@ -61,7 +62,10 @@ export const useDeleteArticleMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: (articleId) => articleApi.deleteArticle(articleId),
-        onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.OWNER_ARTICLES] })
+        onSuccess: () =>{
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.OWNER_ARTICLES] })
+            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.MY_PROFILE] });
+        } 
     });
 };
 

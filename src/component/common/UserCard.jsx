@@ -23,7 +23,6 @@ export default function UserCard({ id, fullName, avatar, bio, followersCount, is
     if (isMe) navigate(`/profile`)
     else navigate(`/user/${id}`);
   }
-  console.log("UserCard: ", isMe, currentUser, id);
 
   return (
     <motion.div

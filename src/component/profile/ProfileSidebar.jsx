@@ -28,27 +28,29 @@ export function ProfileSidebar({ stats, badges = [], pendingRewards = [], onOpen
         onClick={() => onOpenReward(pendingRewards.filter(r => r.status === 'pending')[0])} 
       />
 
-      {/* 2. ĐIỂM DANH HÀNG NGÀY (Rất quan trọng để giữ chân user) */}
-      <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
-         <div className="flex items-center gap-3 mb-4">
-            <CalendarCheck className="w-5 h-5 text-[#ff6b35]" />
-            <h3 className="font-bold text-gray-800">Điểm danh</h3>
-         </div>
-         <p className="text-xs text-gray-500 mb-4">Nhận +10 điểm mỗi ngày để thăng hạng và đổi quà.</p>
-         <motion.button 
-            whileHover={{ scale: 1.02 }} 
-            whileTap={{ scale: 0.98 }} 
-            onClick={onCheckIn} 
-            disabled={isCheckedIn} 
-            className={`w-full py-2.5 rounded-xl font-bold transition-all text-sm ${
-                isCheckedIn 
-                ? "bg-green-50 text-green-600 cursor-not-allowed border border-green-200" 
-                : "bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white shadow-md hover:shadow-lg"
-            }`}
-          >
-            {isCheckedIn ? "Đã nhận điểm hôm nay" : "Điểm danh ngay"}
-          </motion.button>
-      </div>
+      {isOwnProfile && 
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
+          <div className="flex items-center gap-3 mb-4">
+              <CalendarCheck className="w-5 h-5 text-[#ff6b35]" />
+              <h3 className="font-bold text-gray-800">Điểm danh</h3>
+          </div>
+          <p className="text-xs text-gray-500 mb-4">Nhận +10 điểm mỗi ngày để thăng hạng và đổi quà.</p>
+          <motion.button 
+              whileHover={{ scale: 1.02 }} 
+              whileTap={{ scale: 0.98 }} 
+              onClick={onCheckIn} 
+              disabled={isCheckedIn} 
+              className={`w-full py-2.5 rounded-xl font-bold transition-all text-sm ${
+                  isCheckedIn 
+                  ? "bg-green-50 text-green-600 cursor-not-allowed border border-green-200" 
+                  : "bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white shadow-md hover:shadow-lg"
+              }`}
+            >
+              {isCheckedIn ? "Đã nhận điểm hôm nay" : "Điểm danh ngay"}
+            </motion.button>
+        </div>
+      }
+
 
       {/* 3. THỐNG KÊ (Di chuyển từ Header cũ xuống đây) */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
