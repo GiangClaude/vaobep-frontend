@@ -12,6 +12,10 @@ apiClient.interceptors.request.use((config) => {
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }
+    
+    // [THÊM MỚI]: Bổ sung header để bypass trang cảnh báo bảo mật mặc định của Ngrok
+    config.headers['ngrok-skip-browser-warning'] = 'true';
+    
     return config;
 }, (error) => {
     return Promise.reject(error);
@@ -33,8 +37,8 @@ apiClient.interceptors.response.use(
         }
         return Promise.reject({
             success: false,
-            message: error.response.data.message || 'Không thể kết nối đến máy chủ.',
-            status: error.response.status
+            message: error.response?.data?.message || 'Không thể kết nối đến máy chủ.',
+            status: error.response?.status
         });
     }
 );
