@@ -139,7 +139,7 @@ const DishMap = () => {
             {/* Overlay Trang trí */}
             <div className="absolute top-4 left-4 pointer-events-none">
                 <div className="bg-[#fff9f0]/90 backdrop-blur-sm p-3 rounded-xl border border-[#7d5a3f]/20 shadow-lg">
-                    <h2 className="text-[#7d5a3f] font-bold text-sm tracking-widest uppercase">Food Dictionary Map</h2>
+                    <h2 className="text-[#7d5a3f] font-bold text-sm tracking-widest uppercase">Bản đồ ẩm thực</h2>
                     <p className="text-[10px] text-[#a68b6d]">Phóng to để xem tinh hoa từng vùng miền</p>
                 </div>
             </div>

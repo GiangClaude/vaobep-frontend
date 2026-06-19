@@ -5,7 +5,7 @@ import { getAvatarUrl } from '../../utils/imageHelper';
 
 const MenuCard = ({ menu }) => {
     const navigate = useNavigate();
-    
+    console.log("Menu Card: ", menu);
     return (
         <div 
             onClick={() => navigate(`/menus/planner/${menu.menu_id}`)}
@@ -56,7 +56,7 @@ const MenuCard = ({ menu }) => {
                 <div className="mt-auto pt-4 flex items-center justify-between">
                     <div className="flex items-center gap-2.5 bg-orange-50/50 hover:bg-orange-50 border border-transparent hover:border-orange-100 px-2 py-1.5 rounded-full transition-colors w-max pr-4">
                         {menu.author_avatar ? (
-                            <img src={getAvatarUrl(menu.author_id, menu.author_avatar)} alt="avatar" className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm" />
+                            <img src={menu.author_avatar} alt="avatar" className="w-8 h-8 rounded-full object-cover border-2 border-white shadow-sm" />
                         ) : (
                             <div className="w-8 h-8 bg-gradient-to-tr from-gray-200 to-gray-100 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
                                 <User className="w-4 h-4 text-gray-400" />

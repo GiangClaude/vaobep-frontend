@@ -77,7 +77,7 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                             <p className="text-xs font-semibold text-[#ff6b35] uppercase tracking-wider">Tự động hoá</p>
                         </div>
                     </div>
-                    <button onClick={onClose} disabled={isThinking} className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-white rounded-full transition-all relative z-10 shadow-sm border border-transparent hover:border-slate-100 disabled:opacity-50">
+                    <button onClick={onClose} disabled={isThinking} className="p-2.5 text-slate-400 hover:text-red-500 hover:bg-white rounded-full transition-all relative z-10 shadow-sm border border-transparent hover:border-orange-100 disabled:opacity-50">
                         <X className="w-5 h-5" />
                     </button>
                 </div>
@@ -94,14 +94,17 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                                 <p className="font-extrabold text-slate-700 animate-pulse text-lg mb-1">
                                     Đang lục lọi kho công thức...
                                 </p>
-                                <p className="text-sm text-slate-400 font-medium bg-slate-50 px-3 py-1 rounded-full inline-block">Vui lòng chờ khoảng 10-15 giây nhé 🍳</p>
+                                <p className="text-sm text-slate-400 font-medium bg-[#fff9f0] px-3 py-1 rounded-full inline-block">Vui lòng chờ khoảng 10-15 giây nhé 🍳</p>
                             </div>
                         </div>
                     ) : (
                         <>
-                            <div className="bg-slate-50 border border-slate-100 p-4 rounded-[20px] mb-5">
+                            <div className="bg-[#fff9f0] border border-orange-100 p-4 rounded-[20px] mb-5">
                                 <p className="text-slate-600 text-[15px] font-medium leading-relaxed">
                                     Hãy miêu tả chi tiết mong muốn của bạn (số ngày, mục tiêu, sở thích ăn uống, nguyên liệu có sẵn...). AI sẽ tự động ráp nối thành một thực đơn hoàn chỉnh.
+                                </p>
+                                <p className="text-red-500 text-[15px] font-medium leading-relaxed">
+                                    Lưu ý: AI sẽ tự động thay thế toàn bộ thực đơn, hãy chắc chắn bạn đồng ý cho phép sửa. 
                                 </p>
                             </div>
                             <div className="relative">

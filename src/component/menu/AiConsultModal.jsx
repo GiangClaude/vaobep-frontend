@@ -66,7 +66,7 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                 <div className="p-5 bg-gradient-to-r from-violet-50 to-fuchsia-50 flex justify-between items-center relative overflow-hidden border-b border-violet-100/50">
                     <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-violet-200/40 to-fuchsia-200/40 rounded-full blur-xl"></div>
                     <div className="flex items-center gap-3 relative z-10">
-                        <div className="w-10 h-10 rounded-[14px] bg-gradient-to-br from-violet-500 to-fuchsia-500 flex items-center justify-center shadow-md shadow-violet-200">
+                        <div className="w-10 h-10 rounded-[14px] bg-gradient-to-br from-[#ff751f] to-yellow-400 flex items-center justify-center shadow-md shadow-violet-200">
                             <Sparkles className="w-5 h-5 text-white" />
                         </div>
                         <div>
@@ -90,7 +90,7 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                             <p className="font-bold tracking-wide animate-pulse">Đang phân tích vi chất & calo...</p>
                         </div>
                     ) : (
-                        <div className="text-slate-600 leading-relaxed text-[15px] font-medium bg-slate-50/50 p-5 rounded-[24px] border border-slate-100/80">
+                        <div className="text-slate-600 leading-relaxed text-[15px] font-medium bg-[#fff9f0]/50 p-5 rounded-[24px] border border-orange-100/80">
                             {formatText(aiResponse)}
                         </div>
                     )}

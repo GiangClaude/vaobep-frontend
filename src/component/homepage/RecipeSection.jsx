@@ -3,10 +3,10 @@ import { ChevronLeft, ChevronRight, UtensilsCrossed, Plus } from "lucide-react";
 // Giữ nguyên đường dẫn import của bạn
 import { RecipeCard } from "../common/RecipeCard";
 import { ViewMoreCard } from "./ViewMoreCard"; // Đảm bảo đường dẫn này đúng trong dự án của bạn
-
+import { useNavigate } from "react-router-dom";
 export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick}) {
   const scrollContainerRef = useRef(null);
-
+  const navigate = useNavigate();
   // console.log("RecipeSection: ", recipes);
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
@@ -42,7 +42,7 @@ export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick})
             Hãy trở thành người đầu tiên chia sẻ công thức nấu ăn tuyệt vời của bạn!
           </p>
           <button
-            onClick={() => console.log("Chuyển hướng đến trang tạo công thức")}
+            onClick={() => navigate('/profile')}
             className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white font-semibold rounded-full shadow-md transform transition-all duration-200 ease-in-out hover:shadow-lg hover:brightness-110 hover:-translate-y-0.5 active:scale-95 active:shadow-sm"
           >
             <Plus className="w-5 h-5 transition-transform group-hover:rotate-90" />

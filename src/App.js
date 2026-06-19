@@ -123,6 +123,9 @@ function App() {
 
               <Route path="/dish-map" element={<DishMap />} />
               <Route path="/dish/:id" element={<DishDetailPage />} />
+
+              <Route path="/menus/planner/:menuId" element={<MenuPlannerPage />} />
+
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfileLayout />}>
@@ -135,8 +138,6 @@ function App() {
                     <Route path="saved" element={<SavedRecipeTab />} />
                     <Route path="points" element={<PointsTab />} />
                 </Route>
-                 <Route path="/menus" element={<MenuListPage />} />
-                <Route path="/menus/planner/:menuId" element={<MenuPlannerPage />} />
               </Route>
             </Route>
 
