@@ -230,7 +230,7 @@ const MenuPlannerBoard = () => {
                                         <div className="p-3 flex flex-col gap-3 min-h-[90px]">
                                             {(!meal.recipes || meal.recipes.length === 0) ? (
                                                 <div className="h-full flex items-center justify-center border-2 border-dashed border-orange-200 rounded-[16px] py-6 bg-white/50">
-                                                    <span className="text-sm font-semibold text-orange-300">{isOwner ? 'Thả món ăn vào đây nhé 🍲' : 'Chưa có món ăn'}</span>
+                                                    <span className="text-sm font-semibold text-orange-300">{isOwner ? 'Kéo thả món ăn' : 'Chưa có món ăn'}</span>
                                                 </div>
                                             ) : (
                                                 meal.recipes?.map(recipe => (
