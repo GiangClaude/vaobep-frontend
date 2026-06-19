@@ -32,7 +32,7 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
         animate={{ y: -8 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
         // [ĐỒNG BỘ ĐỘ DÀI]: Dùng h-full để component luôn dãn đều chiều cao khi nằm trong Grid/Flex
-        className="cursor-pointer flex-shrink-0 relative mb-6 group w-full max-w-[640px] md:w-[640px] h-full"
+        className="cursor-pointer flex-shrink-0 relative mb-6 group w-full max-w-[640px] md:w-full h-full"
         style={{ zIndex: 50, position: 'relative' }}
         onClick={onClick}
       >
