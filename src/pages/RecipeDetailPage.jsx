@@ -63,6 +63,7 @@ export default function RecipeDetailPage() {
 
   const isAuthor = currentUser?.id === recipe.userId;
 
+  console.log("RecipeDetail: ", recipe);
   return (
     <div className="min-h-screen bg-[#fff9f0]">
       <main className="container mx-auto px-4 py-8">
@@ -150,7 +151,7 @@ export default function RecipeDetailPage() {
               )}
 
               <div className="bg-[#fff9f0] p-6 rounded-2xl border border-[#ffc857]/20">
-                <p className="text-[#7d5a3f] whitespace-pre-line text-sm">{recipe.detailedDescription}</p>
+                <p className="text-[#7d5a3f] whitespace-pre-line text-sm">{recipe.description}</p>
               </div>
             </div>
           </div>
@@ -165,7 +166,7 @@ export default function RecipeDetailPage() {
                   {detailedIngredients.map((ingredient, index) => (
                     <div key={index} className="flex items-center justify-between p-4 bg-[#fff9f0] rounded-xl border border-transparent hover:border-[#ffc857]/50 transition-colors">
                       <div className="flex items-center gap-3"><div className="w-2 h-2 rounded-full bg-[#ff6b35]" /><span className="font-medium text-gray-700">{ingredient.name}</span></div>
-                      <span className="text-[#ff6b35] font-bold">{ingredient.amount}</span>
+                      <span className="text-[#ff6b35] font-bold">{ingredient.quantity} {ingredient.unit_name}</span>
                     </div>
                   ))}
                 </div>
@@ -184,6 +185,16 @@ export default function RecipeDetailPage() {
                           <div className="absolute top-6 left-[-10px] w-4 h-4 bg-[#fff9f0] transform rotate-45"></div>
                           <p className="text-gray-800 leading-relaxed whitespace-pre-line font-medium">{step.description}</p>
                         </div>
+
+                        {step.image && (
+                              <div className="mt-4 rounded-xl overflow-hidden max-w-sm border-2 border-orange-100 shadow-sm bg-white">
+                                  <ImageWithFallBack 
+                                    src={step.image} 
+                                    alt={`Bước ${step.step}`} 
+                                    className="w-full h-auto object-cover max-h-[250px]" 
+                                  />
+                              </div>
+                          )}
                       </div>
                     </div>
                   ))

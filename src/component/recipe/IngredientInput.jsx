@@ -19,6 +19,8 @@ export function IngredientInput({ ingredients, onChange }) {
       handleRemoveIngredient
   } = useIngredientInputUI(ingredients, onChange);
 
+  console.log("ingredientInput: ", ingredients);
+
   return (
     <div>
       {/* --- Phần hiển thị danh sách đã chọn --- */}
@@ -35,7 +37,7 @@ export function IngredientInput({ ingredients, onChange }) {
               >
                 <div className="flex-1 flex items-center gap-2">
                   <span className="font-medium text-gray-800">{ing.name}</span>
-                  {ing.isNew && (
+                  {(ing.isNew || ing.status === 'pending') && (
                     <div className="relative group">
                       <AlertCircle className="w-4 h-4 text-[#ff6b35] cursor-help" />
                       <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-gray-900 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
@@ -45,8 +47,8 @@ export function IngredientInput({ ingredients, onChange }) {
                   )}
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span className="font-semibold text-[#ff6b35]">{ing.amount}</span>
-                  <span>{ing.unit}</span>
+                  <span className="font-semibold text-[#ff6b35]">{ing.amount} {ing.unit}</span>
+                  {/* <span>{ing.unit}</span> */}
                 </div>
                 <button
                   type="button" // Ngăn form submit

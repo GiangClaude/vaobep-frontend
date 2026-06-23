@@ -39,12 +39,18 @@ function parseInstructions(instructionData) {
  */
 export function normalizeRecipe(r) {
   const parsedSteps = parseInstructions(r.instructions);
-
   return {
     id: r.recipe_id || r.id,
     title: r.title || "",
     description: r.description || "",
     stepsCount: r.steps || parsedSteps.length || 0, 
+    detailedSteps: parsedSteps.map((step, index) => {
+        const foundImg = (r.images || []).find(img => img.description === `Bước ${index + 1}`);
+        return {
+            ...step,
+            image: foundImg ? getRecipeImageUrl(r.recipe_id || r.id, foundImg.imgLink) : null
+        };
+    }),
     cookTime: r.cook_time,
     servings: r.servings,
     calories: r.total_calo !== undefined && r.total_calo !== null ? Number(r.total_calo) : 0,
@@ -65,18 +71,15 @@ export function normalizeRecipe(r) {
     // Chuyển đổi mảng ingredients từ backend thành detailedIngredients cho UI
     detailedIngredients: Array.isArray(r.ingredients) 
       ? r.ingredients.map(ing => ({
+          id: ing.ingredient_id,
           name: ing.ingredient_name,
-          amount: `${ing.quantity} ${ing.unit_name}`
+          quantity: ing.quantity,
+          // amount: `${ing.quantity} ${ing.unit_name}`,
+          unit_name: ing.unit_name,
+          unit_id: ing.unit_id
         }))
       : [],
     // -------------------------------
-
-    ingredientNames: r.ingredient_names
-      ? r.ingredient_names.split(',').map(s => s.trim())
-      : [],
-    rawInstructions: r.instructions || "", 
-    detailedSteps: parsedSteps, 
-    detailedDescription: r.description || "", // Đảm bảo trùng tên với RecipeDetailPage
     reportCount: r.report_count !== undefined ? Number(r.report_count) : 0,
     ratingCount: r.rating_count !== undefined ? Number(r.rating_count) : 0,
     ratingSumScore: r.rating_sum_score !== undefined ? Number(r.rating_sum_score) : 0,

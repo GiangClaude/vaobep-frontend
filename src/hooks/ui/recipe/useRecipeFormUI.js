@@ -68,11 +68,23 @@ export const useRecipeFormUI = (initialData, isOpen, onClose) => {
         submitData.append('status', status);
         submitData.append('ingredients', JSON.stringify(formData.ingredients));
         
+       const stepsForBackend = formData.steps.map((s, idx) => {
+            // Đẩy file ảnh mới vào FormData với key chứa index
+            if (s.imageFile) {
+                submitData.append(`step_image_${idx}`, s.imageFile);
+            }
+            return { 
+                step: s.step, 
+                description: s.description, 
+                // Gửi kèm link ảnh cũ (nếu có) để backend biết giữ lại, bỏ qua các link blob (ảnh preview cục bộ)
+                existingImage: (s.image && !s.image.startsWith('blob:')) ? s.image : null 
+            };
+        });
+
         // [FIX] Tương thích ngược: Gửi cả steps (JSON) và instructions (TEXT) đề phòng Backend yêu cầu 1 trong 2
-        submitData.append('steps', JSON.stringify(formData.steps));
+        submitData.append('steps', JSON.stringify(stepsForBackend));
         submitData.append('instructions', formData.steps.map(s => s.description).join('\n\n'));
 
-        console.log("FormData", formData);
         // if (formData.coverImageFile) submitData.append('cover_image', formData.coverImageFile);
         if (formData.coverImageFile) {
             // 1. User CÓ CHỌN ẢNH MỚI -> Gửi file lên
@@ -86,7 +98,6 @@ export const useRecipeFormUI = (initialData, isOpen, onClose) => {
         
         const safeTags = Array.isArray(formData.tags) ? formData.tags.map(t => t.tag_id || t.id) : [];
         if (safeTags.length > 0) submitData.append('tags', JSON.stringify(safeTags));
-        console.log("Submit Data: ", submitData);
         try {
             let res;
             if (formData.id) {

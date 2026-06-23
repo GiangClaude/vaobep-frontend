@@ -39,6 +39,7 @@ export const useIngredientInputUI = (ingredients, onChange) => {
             ...prev,
             id: ing.ingredient_id || `new-${Date.now()}`,
             name: ing.name,
+            status: ing.status || (isNew ? 'pending' : 'approved'), 
             isNew
         }));
         setSearchTerm(ing.name);

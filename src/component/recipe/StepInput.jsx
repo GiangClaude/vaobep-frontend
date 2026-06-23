@@ -29,9 +29,15 @@ export function StepInput({ steps, onChange }) {
   const handleImageUpload = (index, event) => {
     const file = event.target.files?.[0];
     if (file) {
-      // Mock upload - thực tế cần upload lên server lấy URL thật
-      const mockUrl = URL.createObjectURL(file);
-      handleUpdateStep(index, "image", mockUrl);
+        const mockUrl = URL.createObjectURL(file);
+        // Gộp chung 1 lần cập nhật để React hiển thị ngay lập tức
+        const updatedSteps = [...steps];
+        updatedSteps[index] = { 
+            ...updatedSteps[index], 
+            image: mockUrl, 
+            imageFile: file // Lưu file thật để gửi xuống Backend
+          };
+      onChange(updatedSteps);
     }
   };
 
