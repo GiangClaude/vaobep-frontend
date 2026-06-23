@@ -153,6 +153,15 @@ const adminApi = {
     }
   },
 
+  getDictionaryCountries: async () => {
+    try {
+        const response = await apiClient.get('/admin/dictionary/countries');
+        return response;
+    } catch (error) {
+        throw error;
+    }
+  },
+
   createDictionaryDish: async (formData) => {
     try {
         // formData: Dùng FormData vì có upload file ảnh

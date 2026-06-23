@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { BookOpen, Plus, Search, Edit, Trash2, X, Upload, MapPin } from 'lucide-react';
+import { BookOpen, Plus, Search, Edit, Trash2, X, Upload, MapPin, ChevronDown, ChevronRight } from 'lucide-react';
 import debounce from 'lodash.debounce';
 import { toast } from 'react-toastify';
 
@@ -7,7 +7,7 @@ import AdminTable from '../../component/admin/AdminTable';
 import { getDishImageUrl } from '../../utils/imageHelper';
 
 // [MỚI] Import hooks kiến trúc mới
-import { useAdminDictionaryQuery } from '../../hooks/queries/useAdminQueries';
+import { useAdminDictionaryQuery, useAdminCountriesQuery } from '../../hooks/queries/useAdminQueries';
 import { useAdminDictionaryMutations } from '../../hooks/mutations/useAdminMutations';
 
 const AdminDictionaryPage = () => {
@@ -21,11 +21,15 @@ const AdminDictionaryPage = () => {
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     
+    const [showAdvanced, setShowAdvanced] = useState(false);
+
     // Dữ liệu Form
     const [formData, setFormData] = useState({
         original_name: '', english_name: '', description: '', 
         history: '', country: '', latitude: '', longitude: ''
     });
+
+    const { data: countries = [], isLoading: isLoadingCountries } = useAdminCountriesQuery();
     
     // Ảnh
     const [imageFile, setImageFile] = useState(null);
@@ -40,6 +44,7 @@ const AdminDictionaryPage = () => {
         page, limit: 10, search: debouncedSearch, sortKey: currentSort.key, sortOrder: currentSort.order
     });
     const dishes = data?.data || [];
+    console.log("AdminDish: ", dishes);
     const pagination = data?.pagination || { page: 1, limit: 10, totalPages: 1 };
 
     const { createDish, updateDish, deleteDish } = useAdminDictionaryMutations();
@@ -67,6 +72,7 @@ const AdminDictionaryPage = () => {
         setImageFile(null);
         setImagePreview(null);
         setEditEateries(true);
+        setShowAdvanced(false);
         setEateries([]);
         setIsFormOpen(true);
     };
@@ -82,6 +88,7 @@ const AdminDictionaryPage = () => {
             latitude: item.latitude || '', 
             longitude: item.longitude || ''
         });
+        console.log("OpenEditModel: ", item, formData);
         
         setImageFile(null);
         if (item.image_url) {
@@ -92,6 +99,7 @@ const AdminDictionaryPage = () => {
 
         setEditEateries(false);
         setEateries([]);
+        setShowAdvanced(false);
         setIsFormOpen(true);
     };
 
@@ -278,17 +286,59 @@ const AdminDictionaryPage = () => {
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium mb-1">Quốc gia</label>
-                                        <input type="text" className="w-full px-3 py-2 border rounded" value={formData.country} onChange={e => setFormData({...formData, country: e.target.value})} />
+                                        <select 
+                                            className="w-full px-3 py-2 border rounded bg-white focus:outline-none focus:border-blue-500 disabled:bg-gray-100" 
+                                            value={formData.country} 
+                                            onChange={e => setFormData({...formData, country: e.target.value})}
+                                            disabled={isLoadingCountries}
+                                        >
+                                            <option value="">
+                                                {isLoadingCountries ? "Đang tải danh sách..." : "-- Chọn quốc gia --"}
+                                            </option>
+                                            {countries.map(c => (
+                                                <option key={c} value={c}>{c}</option>
+                                            ))}
+                                        </select>
                                     </div>
-                                    <div className="grid grid-cols-2 gap-2">
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1">Vĩ độ (Latitude)</label>
-                                            <input type="number" step="any" className="w-full px-3 py-2 border rounded" value={formData.latitude} onChange={e => setFormData({...formData, latitude: e.target.value})} />
-                                        </div>
-                                        <div>
-                                            <label className="block text-sm font-medium mb-1">Kinh độ (Longitude)</label>
-                                            <input type="number" step="any" className="w-full px-3 py-2 border rounded" value={formData.longitude} onChange={e => setFormData({...formData, longitude: e.target.value})} />
-                                        </div>
+                                     <div className="pt-2">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowAdvanced(!showAdvanced)}
+                                            className="flex items-center gap-1 text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors"
+                                        >
+                                            {showAdvanced ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
+                                            Cài đặt nâng cao (Ghim bản đồ)
+                                        </button>
+
+                                        {showAdvanced && (
+                                            <div className="mt-3 p-4 bg-gray-50 border rounded-lg space-y-3">
+                                                <p className="text-xs text-gray-500 italic">
+                                                    * Mặc định hệ thống sẽ tự động ghim vị trí ngẫu nhiên theo Quốc gia. Chỉ nhập nếu bạn muốn ghim chính xác địa phương của món ăn này.
+                                                </p>
+                                                <div className="grid grid-cols-2 gap-3">
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-700 mb-1">Vĩ độ (Latitude)</label>
+                                                        <input 
+                                                            type="number" step="any" 
+                                                            placeholder="VD: 21.0285"
+                                                            className="w-full px-3 py-2 border rounded text-sm focus:outline-none focus:border-blue-500" 
+                                                            value={formData.latitude} 
+                                                            onChange={e => setFormData({...formData, latitude: e.target.value})} 
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-medium text-gray-700 mb-1">Kinh độ (Longitude)</label>
+                                                        <input 
+                                                            type="number" step="any" 
+                                                            placeholder="VD: 105.8048"
+                                                            className="w-full px-3 py-2 border rounded text-sm focus:outline-none focus:border-blue-500" 
+                                                            value={formData.longitude} 
+                                                            onChange={e => setFormData({...formData, longitude: e.target.value})} 
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

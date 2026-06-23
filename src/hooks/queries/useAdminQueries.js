@@ -101,6 +101,18 @@ export const useAdminDictionaryQuery = (params) => {
     });
 };
 
+export const useAdminCountriesQuery = () => {
+    return useQuery({
+        queryKey: [QUERY_KEYS.ADMIN_DICTIONARY, 'countries'],
+        queryFn: async () => {
+            const res = await adminApi.getDictionaryCountries();
+            if (!res.success) throw new Error(res.message);
+            return res.data || [];
+        },
+        staleTime: 1000 * 60 * 60, // Cache 1 tiếng vì danh sách quốc gia ít khi đổi
+    });
+};
+
 export const useAdminFetchDetails = () => {
     const queryClient = useQueryClient();
 
