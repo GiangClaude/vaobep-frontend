@@ -15,7 +15,6 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
         isSaving
     } = useRecipeFormUI(initialData, isOpen, onClose);
 
-    console.log("Form Data:", formData, initialData); // Debug: Kiểm tra dữ liệu form mỗi khi nó thay đổi
     if (!isOpen) return null;
 
     return (

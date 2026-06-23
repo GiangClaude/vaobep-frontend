@@ -19,7 +19,6 @@ export function IngredientInput({ ingredients, onChange }) {
       handleRemoveIngredient
   } = useIngredientInputUI(ingredients, onChange);
 
-  console.log("ingredientInput: ", ingredients);
 
   return (
     <div>

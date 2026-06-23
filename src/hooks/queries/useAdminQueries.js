@@ -47,6 +47,18 @@ export const useAdminArticlesQuery = (params) => {
     });
 };
 
+export const useAdminCategoriesQuery = () => {
+    return useQuery({
+        // Tái sử dụng base key ADMIN_INGREDIENTS nhưng thêm param 'categories' để phân biệt
+        queryKey: [QUERY_KEYS.ADMIN_INGREDIENTS, 'categories'],
+        queryFn: async () => {
+            const res = await adminApi.getAllCategories();
+            if (!res.success) throw new Error(res.message);
+            return res.data || [];
+        }
+    });
+};
+
 export const useAdminIngredientsQuery = (params) => {
     return useQuery({
         queryKey: [QUERY_KEYS.ADMIN_INGREDIENTS, params],

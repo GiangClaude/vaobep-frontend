@@ -50,7 +50,11 @@ const adminApi = {
         return apiClient.put(`/admin/recipes/${recipeId}/hide`, { status });
     },
 
-    // 4. Quản lý Nguyên liệu (Pending)
+    
+
+  // --- THÊM MỚI TỪ ĐÂY: API QUẢN LÝ TẤT CẢ NGUYÊN LIỆU ---
+
+    //4. Quản lý Nguyên liệu (Pending)
     getPendingIngredients: () => {
         return apiClient.get('/admin/ingredients/pending');
     },
@@ -60,12 +64,6 @@ const adminApi = {
         return apiClient.put(`/admin/ingredients/${ingredientId}/process`, data);
     },
 
-    // --- CÁC HÀM CŨ GIỮ NGUYÊN ---
-  // getPendingIngredients: ...
-  // processIngredient: ...
-
-  // --- THÊM MỚI TỪ ĐÂY: API QUẢN LÝ TẤT CẢ NGUYÊN LIỆU ---
-  
   // Lấy danh sách tất cả nguyên liệu (có phân trang)
   getAllIngredients: async (page = 1, limit = 10, search = '', sortKey = 'name', sortOrder = 'ASC') => {
     try {
@@ -109,6 +107,17 @@ const adminApi = {
         throw error;
     }
   },
+
+  getAllCategories: async () => {
+    try {
+        const response = await apiClient.get('/admin/ingredients/categories');
+        return response;
+    } catch (error) {
+        throw error;
+    }
+  },
+
+
   // --- KẾT THÚC PHẦN THÊM MỚI ---
 
     // 5. Quản lý Báo cáo

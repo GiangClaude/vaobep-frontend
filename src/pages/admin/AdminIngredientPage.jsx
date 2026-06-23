@@ -6,7 +6,7 @@ import debounce from 'lodash.debounce'; // Import thêm thư viện debounce
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
 
-import { useAdminIngredientsQuery } from '../../hooks/queries/useAdminQueries';
+import { useAdminIngredientsQuery, useAdminCategoriesQuery} from '../../hooks/queries/useAdminQueries';
 import { useAdminIngredientMutations, useAdminProcessIngredientMutation } from '../../hooks/mutations/useAdminMutations';
 
 const AdminIngredientPage = () => {
@@ -15,12 +15,14 @@ const AdminIngredientPage = () => {
     const [searchTerm, setSearchTerm] = useState(''); // Text đang hiển thị ở UI
     const [debouncedSearch, setDebouncedSearch] = useState(''); // Text dùng để fetch API
     const [currentSort, setCurrentSort] = useState({ key: 'name', order: 'ASC' });
-    const [caloInputs, setCaloInputs] = useState({});
     
+    const [caloInputs, setCaloInputs] = useState({});
+    const [categoryInputs, setCategoryInputs] = useState({});
+
     // State Modal Form (Thêm/Sửa)
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
-    const [formData, setFormData] = useState({ name: '', calo_per_100g: '', status: 'approved' });
+    const [formData, setFormData] = useState({ name: '', calo_per_100g: '', status: 'approved',  category: ''});
 
     // 2. Logic Debounce Search
     const debouncedSearchAction = useCallback(
@@ -43,6 +45,8 @@ const AdminIngredientPage = () => {
         sortKey: currentSort.key, 
         sortOrder: currentSort.order
     });
+
+    const { data: categories = [] } = useAdminCategoriesQuery();
     
     const allIngredients = data?.data || [];
     const allPagination = data?.pagination || { page: 1, limit: 10, totalPages: 1 };
@@ -55,10 +59,13 @@ const AdminIngredientPage = () => {
         setCaloInputs(prev => ({ ...prev, [id]: value }));
     };
 
+    const handleCategoryChange = (id, value) => setCategoryInputs(prev => ({ ...prev, [id]: value }));
+
     // Hàm Duyệt / Từ chối nhanh
     const handleAction = async (id, action) => {
         const calo = caloInputs[id];
-        
+        const category = categoryInputs[id];
+
         if (action === 'approve' && !calo) {
             toast.warning("Vui lòng nhập số Calo/100g trước khi duyệt!");
             return;
@@ -67,8 +74,12 @@ const AdminIngredientPage = () => {
         try {
             await processIngredientMutation.mutateAsync({ 
                 ingredientId: id, 
-                data: { action, calo_per_100g: calo } 
+                data: { action, calo_per_100g: calo, category: category || 'others' } 
             });
+            if(action === 'approve') {
+                setCaloInputs(prev => { const updated = {...prev}; delete updated[id]; return updated; });
+                setCategoryInputs(prev => { const updated = {...prev}; delete updated[id]; return updated; });
+            }
         } catch (error) {
             toast.error(error.message || "Có lỗi xảy ra");
         }
@@ -76,7 +87,7 @@ const AdminIngredientPage = () => {
 
     const openCreateModal = () => {
         setEditingItem(null);
-        setFormData({ name: '', calo_per_100g: '', status: 'approved' });
+        setFormData({ name: '', calo_per_100g: '', status: 'approved', category: '' });
         setIsFormOpen(true);
     };
 
@@ -85,7 +96,8 @@ const AdminIngredientPage = () => {
         setFormData({ 
             name: item.name, 
             calo_per_100g: item.calo_per_100g || '', 
-            status: item.status 
+            status: item.status,
+            category: item.category || '' 
         });
         setIsFormOpen(true);
     };
@@ -120,14 +132,21 @@ const AdminIngredientPage = () => {
 
     // 5. Cấu hình cột cho bảng
     const columns = [
-        { key: 'name', label: 'Tên nguyên liệu', className: 'w-[25%]', sortable: true },
-        { key: 'status', label: 'Trạng thái', className: 'w-[15%]', sortable: true },
-        { key: 'calo', label: 'Calo / 100g', className: 'w-[20%]', sortable: true },
-        { key: 'actions', label: 'Hành động', className: 'w-[40%]' }
+        { key: 'name', label: 'Tên nguyên liệu', className: 'min-w-[150px] w-[20%]', sortable: true },
+        { key: 'category', label: 'Danh mục', className: 'min-w-[150px] w-[20%]', sortable: true },
+        { key: 'status', label: 'Trạng thái', className: 'min-w-[120px] w-[15%]', sortable: true },
+        { key: 'calo', label: 'Calo / 100g', className: 'min-w-[140px] w-[15%]', sortable: true },
+        { key: 'actions', label: 'Hành động', className: 'min-w-[120px] w-[30%]' }
     ];
 
     return (
         <div className="space-y-6 relative">
+            <datalist id="category-list">
+                {categories.map((cat, idx) => (
+                    <option key={idx} value={cat} />
+                ))}
+            </datalist>
+
             {/* HEADER & TOOLBAR */}
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
@@ -172,6 +191,7 @@ const AdminIngredientPage = () => {
                 }}
                 currentSort={currentSort}
                 onPageChange={setPage}
+                pagination={allPagination}
             >
                 {allIngredients.length === 0 && !isLoadingAll ? (
                     <tr>
@@ -191,6 +211,24 @@ const AdminIngredientPage = () => {
                                 <span className="font-bold text-gray-800 text-sm" title={ing.name}>
                                     {ing.name}
                                 </span>
+                            </td>
+
+                            {/* Danh mục */}
+                            <td className="px-5 py-4">
+                                {ing.status === 'pending' ? (
+                                    <input 
+                                        type="text"
+                                        list="category-list" // Liên kết với datalist ở trên
+                                        placeholder="Chọn/Nhập mục..."
+                                        className="w-full min-w-[120px] px-3 py-1.5 text-sm rounded-lg border-2 border-gray-200 focus:border-[#ff6b35] focus:outline-none transition-all placeholder-gray-300"
+                                        value={categoryInputs[ing.ingredient_id] || ''}
+                                        onChange={(e) => handleCategoryChange(ing.ingredient_id, e.target.value)}
+                                    />
+                                ) : (
+                                    <span className="text-sm font-medium text-gray-600 bg-gray-100 px-2.5 py-1 rounded-md capitalize">
+                                        {ing.category || 'others'}
+                                    </span>
+                                )}
                             </td>
 
                             <td className="px-5 py-4">
@@ -254,7 +292,7 @@ const AdminIngredientPage = () => {
                 )}
             </AdminTable>
 
-            {/* PAGINATION */}
+            {/* PAGINATION
             {allPagination.totalPages > 1 && (
                 <div className="flex justify-end items-center gap-4 mt-4">
                     <button 
@@ -275,7 +313,7 @@ const AdminIngredientPage = () => {
                         Trang sau
                     </button>
                 </div>
-            )}
+            )} */}
 
             {/* MODAL FORM */}
             {isFormOpen && (
@@ -300,6 +338,20 @@ const AdminIngredientPage = () => {
                                     onChange={e => setFormData({...formData, name: e.target.value})} 
                                 />
                             </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
+                                <input 
+                                    type="text" 
+                                    list="category-list" // Liên kết Datalist
+                                    placeholder="Chọn hoặc nhập danh mục mới"
+                                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#ff6b35]"
+                                    value={formData.category} 
+                                    onChange={e => setFormData({...formData, category: e.target.value})} 
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Bỏ trống hệ thống sẽ tự xếp vào "others"</p>
+                            </div>
+
                             <div>
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Lượng Calo (trên 100g)</label>
                                 <input 

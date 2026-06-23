@@ -39,7 +39,6 @@ export const useMyRecipesUI = ({ isPublicView, publicRecipes }) => {
     const handleEditRecipe = async (id) => {
         try {
             const recipeData = await fetchRecipeDetailAsync(id); 
-            console.log("Editing Recipe Data: ", recipeData);
             setEditingRecipe(recipeData);
             setIsCreateModalOpen(true);
         } catch (error) {
