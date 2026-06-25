@@ -271,6 +271,26 @@ export const useEditCommentMutation = () => {
     });
 };
 
+export const useRatePostMutation = () => {
+    const queryClient = useQueryClient();
+    return useMutation({
+        mutationFn: ({ postId, postType, score }) => interactionApi.ratePost(postId, postType, score),
+        onSuccess: (data, variables) => {
+            // 1. Cập nhật lại state tương tác của user (để FE biết user đã vote sao)
+            queryClient.invalidateQueries({ 
+                queryKey: [QUERY_KEYS.INTERACTION_STATE, variables.postType, variables.postId] 
+            });
+            
+            // 2. Cập nhật lại chi tiết bài viết (để lấy điểm avgScore và ratingCount mới nhất)
+            if (variables.postType === 'recipe') {
+                queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.RECIPE_DETAIL, variables.postId] });
+            } else if (variables.postType === 'article') {
+                queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_DETAIL, variables.postId] });
+            }
+        }
+    });
+};
+
 export const useReportPostMutation = () => {
     return useMutation({
         mutationFn: ({ postId, reason, postType }) => interactionApi.reportPost(postId, reason, postType)

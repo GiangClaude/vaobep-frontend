@@ -3,17 +3,16 @@ import { Search, UserPlus, Eye, PenLine, Lock, Unlock, Users } from 'lucide-reac
 // import useAdminUsers from '../../hooks/admin/useAdminUsers';
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
-import ConfirmModal from '../../component/admin/ConfirmModal';
 import UserModal from '../../component/admin/UserModal';
 import { toast } from 'react-toastify'; 
 import debounce from 'lodash.debounce';
 
 import { useAdminUsersQuery, useAdminFetchDetails} from '../../hooks/queries/useAdminQueries';
 import { useAdminUserMutations } from '../../hooks/mutations/useAdminMutations';
-import adminApi from '../../api/adminApi';
-
+import { useGlobalModal } from '../../context/ModalContext';
 const AdminUserPage = () => {
     // const { users, loading, pagination, fetchUsers, toggleStatus, createUser, getUser, updateUser } = useAdminUsers();
+    const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', order: 'DESC' });
@@ -35,8 +34,6 @@ const AdminUserPage = () => {
     const { toggleStatus, createUser, updateUser } = useAdminUserMutations();
     const { fetchUserDetail } = useAdminFetchDetails();
 
-    const [selectedUser, setSelectedUser] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
     const [modalMode, setModalMode] = useState('create'); // 'create', 'view', 'edit'
     const [selectedUserData, setSelectedUserData] = useState(null);
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
@@ -68,24 +65,35 @@ const AdminUserPage = () => {
         setPage(1);
     };
 
+    // THAY THẾ TOÀN BỘ onBlockClick VÀ confirmBlock CŨ BẰNG ĐOẠN NÀY:
     const onBlockClick = (user) => {
         if (user.role === 'admin') {
             toast.warning("Không thể tương tác với tài khoản Admin!");
             return;
         }
-        setSelectedUser(user);
-        setIsModalOpen(true);
-    };
 
-    const confirmBlock = async () => {
-        if (!selectedUser) return;
-        try {
-           await toggleStatus.mutateAsync({ userId: selectedUser.user_id, status: selectedUser.account_status });
-            setIsModalOpen(false);
-            toast.success(`Đã cập nhật trạng thái user: ${selectedUser.full_name}`);
-        } catch (error) {
-            toast.error("Có lỗi xảy ra");
-        }
+        const isActive = user.account_status === 'active';
+
+        showModal({
+            title: isActive ? 'Khóa tài khoản' : 'Mở khóa tài khoản',
+            message: `Bạn có chắc muốn ${isActive ? 'KHÓA' : 'MỞ KHÓA'} người dùng ${user.full_name}? Hành động này sẽ ảnh hưởng đến quyền truy cập của họ.`,
+            type: isActive ? 'warning' : 'info',
+            actions: [
+                { label: 'Hủy', style: 'secondary' },
+                {
+                    label: isActive ? 'Khóa ngay' : 'Mở khóa',
+                    style: isActive ? 'danger' : 'primary',
+                    onClick: async () => {
+                        try {
+                            await toggleStatus.mutateAsync({ userId: user.user_id, status: user.account_status });
+                            toast.success(`Đã cập nhật trạng thái user: ${user.full_name}`);
+                        } catch (error) {
+                            toast.error("Có lỗi xảy ra");
+                        }
+                    }
+                }
+            ]
+        });
     };
 
     const openCreateModal = () => {
@@ -256,17 +264,6 @@ const AdminUserPage = () => {
                     </tr>
                 ))}
             </AdminTable>
-
-            {/* MODALS */}
-            <ConfirmModal 
-                isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
-                onConfirm={confirmBlock}
-                title={selectedUser?.account_status === 'active' ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}
-                message={`Bạn có chắc muốn ${selectedUser?.account_status === 'active' ? 'KHÓA' : 'MỞ KHÓA'} người dùng ${selectedUser?.full_name}? Hành động này sẽ ảnh hưởng đến quyền truy cập của họ.`}
-                isDanger={selectedUser?.account_status === 'active'}
-                confirmText={selectedUser?.account_status === 'active' ? 'Khóa ngay' : 'Mở khóa'}
-            />
 
             <UserModal 
                 isOpen={isUserModalOpen}

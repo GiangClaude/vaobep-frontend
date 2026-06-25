@@ -15,6 +15,12 @@ const aiApi = {
         return response;
     },
 
+    analyzePost: async (payload) => {
+        // payload: { title, description, ingredients, instructions }
+        const response = await apiClient.post('/ai/analyze-post', payload);
+        return response;
+    },
+
     // Xóa lịch sử trò chuyện
     clearHistory: async (payload) => {
         // payload: { sessionId, userId }

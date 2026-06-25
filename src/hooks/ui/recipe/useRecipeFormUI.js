@@ -2,11 +2,16 @@ import { useState, useEffect } from 'react';
 import { useGlobalModal } from '../../../context/ModalContext';
 import { useCreateRecipeMutation, useUpdateRecipeMutation } from '../../mutations/useContentMutations';
 import { getRecipeImageUrl } from '../../../utils/imageHelper';
-
+import { useAnalyzePostMutation } from '../../mutations/useAiMutations';
+import { useTagQueries } from '../../queries/useTagQueries';
 export const useRecipeFormUI = (initialData, isOpen, onClose) => {
     const { showModal } = useGlobalModal();
     const createMutation = useCreateRecipeMutation();
     const updateMutation = useUpdateRecipeMutation();
+
+    const analyzePostMutation = useAnalyzePostMutation();
+    const { tags: availableTags = [] } = useTagQueries(); // Lấy list tag từ DB để so khớp
+    const [aiResult, setAiResult] = useState(null); 
 
     const [formData, setFormData] = useState({
         id: null, title: "", description: "", coverImage: "", coverImageFile: null,
@@ -129,9 +134,93 @@ export const useRecipeFormUI = (initialData, isOpen, onClose) => {
         }
     };
 
+    // ... (code cũ: hàm handleSubmit giữ nguyên)
+
+    // [BẮT ĐẦU THÊM MỚI 3] Các hàm xử lý AI
+    const handleCallAI = async () => {
+        try {
+            // Ép mảng nguyên liệu thành chuỗi để AI đọc hiểu
+            const ingredientsString = formData.ingredients
+                .map(ing => `${ing.name} (${ing.amount} ${ing.unit})`)
+                .join(', ');
+
+            // Ép mảng bước làm thành chuỗi
+            const instructionsString = formData.steps
+                .map((step, idx) => `Bước ${idx + 1}: ${step.description}`)
+                .join('\n');
+
+            const payload = {
+                title: formData.title,
+                description: formData.description,
+                ingredients: ingredientsString,
+                instructions: instructionsString
+            };
+
+            console.log("RecipeFormUI: ", payload);
+
+            const res = await analyzePostMutation.mutateAsync(payload);
+            const aiData = res.data.data; // Backend trả về bọc trong data
+            console.log(aiData);
+            if (!aiData.is_sufficient) {
+                // AI chê thiếu thông tin -> Báo lỗi
+                showModal({
+                    title: "Thiếu thông tin",
+                    message: aiData.message || "Vui lòng nhập thêm Tên món và chi tiết Nguyên liệu để AI có thể tính toán.",
+                    type: "warning"
+                });
+            } else {
+                // Thành công -> Lưu vào State để UI hiển thị Card
+                setAiResult(aiData);
+            }
+        } catch (error) {
+            showModal({
+                title: "Lỗi AI",
+                message: error.message || "Không thể gọi trợ lý AI lúc này.",
+                type: "error"
+            });
+        }
+    };
+
+    const handleApplyAI = () => {
+        if (!aiResult) return;
+
+        // 1. Áp dụng Calo
+        const newCalo = aiResult.total_calories;
+
+        // 2. So khớp Tag của AI (String) với Tag hệ thống (Object)
+        const mappedTags = aiResult.suggested_tags
+            .map(tagName => {
+                // Tìm tag object có tên khớp (không phân biệt hoa/thường)
+                return availableTags.find(t => t.name.toLowerCase() === tagName.toLowerCase());
+            })
+            .filter(Boolean); // Bỏ các kết quả undefined (nếu có)
+
+        // Cập nhật State
+        setFormData(prev => ({
+            ...prev,
+            totalCalo: newCalo,
+            tags: [...prev.tags, ...mappedTags.filter(newT => !prev.tags.some(oldT => oldT.tag_id === newT.tag_id))] // Thêm tag mới, không trùng lặp
+        }));
+
+        // Đóng Card AI
+        setAiResult(null);
+    };
+
+    const handleCancelAI = () => {
+        setAiResult(null);
+    };
+    // [KẾT THÚC THÊM MỚI 3
+
+
+    // Sửa lại đoạn return để xuất các hàm AI ra UI
     return {
         formData, setFormData,
         handleCoverImageUpload, handleRemoveCoverImage, handleSubmit,
-        isSaving: createMutation.isPending || updateMutation.isPending
+        isSaving: createMutation.isPending || updateMutation.isPending,
+        // [BẮT ĐẦU THÊM MỚI 4]
+        aiResult,
+        isAiLoading: analyzePostMutation.isPending,
+        handleCallAI, handleApplyAI, handleCancelAI
+        // [KẾT THÚC THÊM MỚI 4]
     };
 };

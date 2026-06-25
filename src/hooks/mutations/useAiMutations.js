@@ -18,3 +18,8 @@ export const useSummarizeMutation = () => {
         mutationFn: (payload) => aiApi.summarize(payload) // payload: { contextText }
     });
 };
+export const useAnalyzePostMutation = () => {
+    return useMutation({
+        mutationFn: (payload) => aiApi.analyzePost(payload) 
+    });
+};

@@ -1,4 +1,4 @@
-import { X, Upload, Save, Eye, FileText, Clock, Users, Flame } from "lucide-react";
+import { X, Upload, Save, Eye, FileText, Clock, Users, Flame,  Sparkles, Check, AlertTriangle} from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { IngredientInput } from "./IngredientInput";
 import { StepInput } from "./StepInput";
@@ -12,7 +12,8 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
     const {
         formData, setFormData,
         handleCoverImageUpload, handleRemoveCoverImage, handleSubmit,
-        isSaving
+        isSaving,
+        aiResult, isAiLoading, handleCallAI, handleApplyAI, handleCancelAI
     } = useRecipeFormUI(initialData, isOpen, onClose);
 
     if (!isOpen) return null;
@@ -76,10 +77,92 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                         </div>
 
                         {/* Tags, Ings, Steps */}
+
+
                         <div>
                             <label className="block text-lg mb-3 font-bold text-gray-800">🏷️ Thẻ (Tags)</label>
                             <TagSelector selectedTags={formData.tags} onChange={(newTags) => setFormData({...formData, tags: newTags})} />
                         </div>
+
+                                                {/* [BẮT ĐẦU THÊM MỚI 6] KHU VỰC AI ASSISTANT */}
+                        <div className="bg-gradient-to-br from-purple-50 to-orange-50 border border-purple-100 rounded-2xl p-4 mt-6">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+                                <div>
+                                    <h3 className="text-lg font-bold text-purple-900 flex items-center gap-2">
+                                        <Sparkles className="w-5 h-5 text-purple-600" /> Trợ lý AI Phân Tích
+                                    </h3>
+                                    <p className="text-sm text-gray-600 mt-1">Tự động gợi ý Tags và tính toán lượng Calo dựa trên Nguyên liệu & Cách làm.</p>
+                                </div>
+                                <button 
+                                    onClick={handleCallAI}
+                                    disabled={isAiLoading || !formData.title || formData.ingredients.length === 0}
+                                    className="px-5 py-2.5 bg-purple-600 text-white font-medium rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50 flex items-center gap-2 shadow-sm whitespace-nowrap"
+                                >
+                                    {isAiLoading ? (
+                                        <span className="animate-pulse">AI đang suy nghĩ...</span>
+                                    ) : (
+                                        <>Phân tích ngay <Sparkles className="w-4 h-4" /></>
+                                    )}
+                                </button>
+                            </div>
+
+                            {/* Card Hiển thị kết quả AI */}
+                            <AnimatePresence>
+                                {aiResult && (
+                                    <motion.div 
+                                        initial={{ opacity: 0, height: 0, marginTop: 0 }} 
+                                        animate={{ opacity: 1, height: 'auto', marginTop: 16 }} 
+                                        exit={{ opacity: 0, height: 0, marginTop: 0 }}
+                                        className="overflow-hidden"
+                                    >
+                                        <div className="bg-white rounded-xl p-5 border border-purple-200 shadow-sm relative">
+                                            <button onClick={handleCancelAI} className="absolute top-3 right-3 text-gray-400 hover:text-red-500"><X className="w-5 h-5"/></button>
+                                            
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                {/* Cột trái: Tags & Lý do */}
+                                                <div>
+                                                    <h4 className="font-semibold text-gray-800 mb-2">🏷️ Tags Đề Xuất</h4>
+                                                    <div className="flex flex-wrap gap-2 mb-4">
+                                                        {aiResult.suggested_tags.map((tag, idx) => (
+                                                            <span key={idx} className="bg-orange-100 text-[#ff6b35] px-3 py-1 rounded-full text-sm font-medium border border-orange-200">{tag}</span>
+                                                        ))}
+                                                    </div>
+                                                    <h4 className="font-semibold text-gray-800 mb-1">💡 Cơ sở phân tích</h4>
+                                                    <p className="text-sm text-gray-600 italic bg-gray-50 p-3 rounded-lg border border-gray-100">{aiResult.reasoning}</p>
+                                                </div>
+
+                                                {/* Cột phải: Calo */}
+                                                <div>
+                                                    <div className="flex items-end gap-2 mb-3">
+                                                        <h4 className="font-semibold text-gray-800">🔥 Tổng Calo ước lượng:</h4>
+                                                        <span className="text-xl font-bold text-red-500 leading-none">{aiResult.total_calories}</span>
+                                                    </div>
+                                                    
+                                                    <ul className="text-sm text-gray-600 space-y-1.5 mb-3 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                                        {aiResult.calorie_breakdown?.map((item, idx) => (
+                                                            <li key={idx} className="flex justify-between border-b border-gray-200 last:border-0 pb-1 last:pb-0">
+                                                                <span>{item.item}</span>
+                                                                <span className="font-medium">{item.calories} kcal</span>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    
+                                                    <p className="text-[11px] text-gray-400 flex items-start gap-1"><AlertTriangle className="w-3 h-3 flex-shrink-0 mt-0.5"/> {aiResult.disclaimer}</p>
+                                                </div>
+                                            </div>
+
+                                            <div className="mt-5 flex justify-end gap-3 border-t border-gray-100 pt-4">
+                                                <button onClick={handleCancelAI} className="px-4 py-2 rounded-lg text-gray-500 font-medium hover:bg-gray-100">Bỏ qua</button>
+                                                <button onClick={handleApplyAI} className="px-4 py-2 bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white font-medium rounded-lg flex items-center gap-2 hover:shadow-md">
+                                                    <Check className="w-4 h-4"/> Áp dụng vào Form
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
+                        </div>
+                        
                         <div>
                             <label className="block text-lg mb-3 font-bold text-gray-800">🥘 Nguyên liệu *</label>
                             <IngredientInput ingredients={formData.ingredients} onChange={(ingredients) => setFormData({ ...formData, ingredients })} />

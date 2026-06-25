@@ -14,6 +14,7 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
     tags 
   } = recipe;
 
+
   const [isHovered, setIsHovered] = useState(false);
 
   const { handleLike, handleSave, handleShare, handleReport } = usePostActions({
@@ -89,10 +90,10 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
               {/* mt-auto: Luôn đẩy các icon Stats này xuống sát đáy của cột trái */}
               <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-gray-600 mt-auto">
                 <div className="flex items-center gap-1.5 bg-orange-50 px-2.5 py-1.5 rounded-xl border border-orange-100/50">
-                  <Clock className="w-3.5 h-3.5 text-[#ff751f]" /><span>{cookTime} p</span>
+                  <Clock className="w-3.5 h-3.5 text-[#ff751f]" /><span>{cookTime} phút</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-orange-50 px-2.5 py-1.5 rounded-xl border border-orange-100/50">
-                  <Users className="w-3.5 h-3.5 text-[#ff751f]" /><span>{servings} ng</span>
+                  <Users className="w-3.5 h-3.5 text-[#ff751f]" /><span>{servings} người</span>
                 </div>
                 <div className="flex items-center gap-1.5 bg-yellow-50 px-2.5 py-1.5 rounded-xl border border-yellow-100/50">
                   <Star className="w-3.5 h-3.5 text-yellow-500 fill-yellow-500" /><span>{Math.round(rating*100)/100}</span>

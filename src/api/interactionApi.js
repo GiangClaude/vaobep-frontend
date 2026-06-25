@@ -55,8 +55,8 @@ const interactionApi = {
     },
 
     // 6. Đánh giá (Rating)
-    ratePost: async (postId, score, postType = 'recipe') => {
-        const response = await apiClient.post('/interaction/rate', { postId, postType, score });
+    ratePost: async (postId, postType = 'recipe', score) => {
+        const response = await apiClient.post('/interaction/rate', { postId, score, postType });
         return response;
     },
 

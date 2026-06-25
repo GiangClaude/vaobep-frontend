@@ -10,8 +10,11 @@ import { getDishImageUrl } from '../../utils/imageHelper';
 import { useAdminDictionaryQuery, useAdminCountriesQuery } from '../../hooks/queries/useAdminQueries';
 import { useAdminDictionaryMutations } from '../../hooks/mutations/useAdminMutations';
 
+import { useGlobalModal } from '../../context/ModalContext';
+
 const AdminDictionaryPage = () => {
     // 1. Local State UI & Filter
+    const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -152,18 +155,31 @@ const AdminDictionaryPage = () => {
     };
 
     // Xử lý Xóa
-    const confirmDelete = async (item) => {
-        if (window.confirm(`Xóa món "${item.original_name}" sẽ xóa cả các địa điểm ăn uống kèm theo. Bạn có chắc chắn?`)) {
-            try {
-                 await deleteDish.mutateAsync(item.dish_id);
-                 // Logic lùi trang nếu xóa phần tử cuối cùng
-                 if (dishes.length === 1 && page > 1) {
-                     setPage(prev => prev - 1);
-                 }
-            } catch (error) {
-                toast.error(error.message || "Lỗi khi xóa món ăn");
-            }
-        }
+    // THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
+    const confirmDelete = (item) => {
+        showModal({
+            title: 'Xóa món ăn',
+            message: `Xóa món "${item.original_name}" sẽ xóa cả các địa điểm ăn uống kèm theo. Bạn có chắc chắn?`,
+            type: 'warning',
+            actions: [
+                { label: 'Hủy', style: 'secondary' },
+                {
+                    label: 'Xóa ngay',
+                    style: 'danger',
+                    onClick: async () => {
+                        try {
+                            await deleteDish.mutateAsync(item.dish_id);
+                            if (dishes.length === 1 && page > 1) {
+                                setPage(prev => prev - 1);
+                            }
+                            toast.success("Xóa món ăn thành công!");
+                        } catch (error) {
+                            toast.error(error.message || "Lỗi khi xóa món ăn");
+                        }
+                    }
+                }
+            ]
+        });
     };
 
     const columns = [

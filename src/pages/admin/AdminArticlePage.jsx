@@ -9,6 +9,8 @@ import { useAdminArticlesQuery, useAdminFetchDetails } from '../../hooks/queries
 // Giả định bạn đã tạo mutation cho Article trong useAdminMutations.js
 import { useAdminArticleMutations } from '../../hooks/mutations/useAdminMutations';
 
+import { useGlobalModal } from '../../context/ModalContext';
+
 const AdminArticlePage = () => {
     // 1. Hook
     // const { 
@@ -16,6 +18,7 @@ const AdminArticlePage = () => {
     //     fetchArticles, fetchArticleDetail, 
     //     handleUpdateStatus, handleDeleteArticle 
     // } = useAdminArticles();
+    const { showModal } = useGlobalModal();
    const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
     const [statusFilter, setStatusFilter] = useState('all');
@@ -61,16 +64,28 @@ const AdminArticlePage = () => {
         }
     };
 
-    const confirmDelete = async (item) => {
-        if (window.confirm(`Bạn có chắc chắn muốn xóa bài viết "${item.title}"? Dữ liệu không thể khôi phục.`)) {
-           try {
-                await deleteArticle.mutateAsync(item.article_id);
-                // Xử lý tự lùi trang nếu trang hiện tại bị trống đã được ReactQuery lo (nhờ invalidateQueries)
-                toast.success("Xóa bài viết thành công!");
-            } catch (error) {
-                toast.error(error.response?.data?.message || "Lỗi khi xóa bài viết");
-            }
-        }
+// THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
+    const confirmDelete = (item) => {
+        showModal({
+            title: 'Xóa bài viết',
+            message: `Bạn có chắc chắn muốn xóa bài viết "${item.title}"? Dữ liệu không thể khôi phục.`,
+            type: 'warning',
+            actions: [
+                { label: 'Hủy', style: 'secondary' },
+                {
+                    label: 'Xóa vĩnh viễn',
+                    style: 'danger',
+                    onClick: async () => {
+                        try {
+                            await deleteArticle.mutateAsync(item.article_id);
+                            toast.success("Xóa bài viết thành công!");
+                        } catch (error) {
+                            toast.error(error.response?.data?.message || "Lỗi khi xóa bài viết");
+                        }
+                    }
+                }
+            ]
+        });
     };
 
     // Mở Modal Xem Trước (Gọi API lấy chi tiết HTML)

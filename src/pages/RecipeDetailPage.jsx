@@ -25,6 +25,7 @@ export default function RecipeDetailPage() {
 
   const { data: recipe, isLoading, error } = useRecipeDetailQuery(id);
 
+
   const detailedIngredients = recipe?.detailedIngredients || [];
   const detailedSteps = recipe?.detailedSteps || [];
   const tags = recipe?.tags || [];
@@ -32,9 +33,10 @@ export default function RecipeDetailPage() {
   const { data: interactionState } = useInteractionStateQuery(id, 'recipe', !!currentUser);
   const isLiked = interactionState?.liked !== undefined ? interactionState.liked : (recipe?.isLiked || false);
   const isSaved = interactionState?.saved !== undefined ? interactionState.saved : (recipe?.isSaved || false);
+  const userRating = interactionState?.rated || 0;
   const likesCount = recipe?.likes || 0;
   
-  const { handleLike, handleSave, handleShare, handleReport } = usePostActions({
+  const { handleLike, handleSave, handleShare, handleRate, handleReport } = usePostActions({
     id,
     type: 'recipe',
     isLiked: isLiked || false,
@@ -46,6 +48,7 @@ export default function RecipeDetailPage() {
    * Hàm kiểm tra trạng thái đăng nhập và mở modal đánh giá món ăn
    */
   const handleOpenRatingModal = requireAuth(() => {
+    setSelectedRating(userRating > 0 ? userRating : 5); // Mặc định 5 sao nếu chưa vote
     setIsRatingModalOpen(true);
   });
 
@@ -55,7 +58,9 @@ export default function RecipeDetailPage() {
   const handleSubmitRating = () => {
     if (selectedRating === 0) return;
     console.log("Submit rating:", selectedRating);
-    setIsRatingModalOpen(false);
+     handleRate(selectedRating, () => {
+        setIsRatingModalOpen(false);
+    });
   };
 
   if (isLoading) return <div className="min-h-screen bg-[#fff9f0] flex items-center justify-center">Đang tải...</div>;
@@ -241,14 +246,14 @@ export default function RecipeDetailPage() {
 
             <button 
               onClick={handleSubmitRating}
-              disabled={selectedRating === 0}
+              disabled={selectedRating === 0 || handleRate.isActionLoading}
               className={`w-full py-3 rounded-xl font-bold text-white transition-colors ${
                 selectedRating === 0 
                   ? "bg-gray-300 cursor-not-allowed" 
                   : "bg-[#ff6b35] hover:bg-[#e85a25]"
               }`}
             >
-              Gửi đánh giá
+              {handleRate.isActionLoading ? 'Đang gửi...' : 'Gửi đánh giá'}
             </button>
           </motion.div>
         </div>

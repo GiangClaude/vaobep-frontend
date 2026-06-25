@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff } from 'lucide-react';
+import { Lock, Eye, EyeOff, CheckCircle2, Circle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../component/common/Header';
@@ -17,6 +17,16 @@ const ResetPasswordPage = () => {
 
     // Tránh render lỗi nếu useEffect đang redirect
     if (!email) return null; 
+
+    // --- LOGIC HIỂN THỊ KIỂM TRA MẬT KHẨU REAL-TIME ---
+    const pwd = passwords.newPassword;
+    const passwordRules = [
+        { text: 'Ít nhất 8 ký tự', met: pwd.length >= 8 },
+        { text: 'Có chữ hoa (A-Z)', met: /[A-Z]/.test(pwd) },
+        { text: 'Có chữ thường (a-z)', met: /[a-z]/.test(pwd) },
+        { text: 'Có chữ số (0-9)', met: /[0-9]/.test(pwd) },
+        { text: 'Ký tự đặc biệt (!@#$...)', met: /[^A-Za-z0-9]/.test(pwd) }
+    ];
 
     return (
         <div className="min-h-screen flex flex-col bg-[#fff9f0]">
@@ -39,7 +49,9 @@ const ResetPasswordPage = () => {
                                     type={showPassword ? "text" : "password"}
                                     value={passwords.newPassword}
                                     onChange={(e) => setPasswords({...passwords, newPassword: e.target.value})}
-                                    className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#ff6b35] outline-none transition bg-gray-50 focus:bg-white"
+                                    className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-[#ff6b35] outline-none transition bg-gray-50 focus:bg-white ${
+                                        errors.newPassword ? 'border-red-500' : 'border-gray-300'
+                                    }`}
                                     placeholder="••••••••"
                                 />
                                 <button
@@ -50,6 +62,18 @@ const ResetPasswordPage = () => {
                                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                                 </button>
                             </div>
+
+                             {(passwords.newPassword.length > 0 || errors.newPassword) && (
+                                <div className="mt-3 grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                                    {passwordRules.map((rule, idx) => (
+                                        <div key={idx} className={`flex items-center gap-1.5 text-xs ${rule.met ? 'text-green-600 font-medium' : 'text-gray-400'}`}>
+                                            {rule.met ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+                                            <span>{rule.text}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+
                             {errors.newPassword && <p className="text-red-500 text-sm mt-1">{errors.newPassword}</p>}
                         </div>
 

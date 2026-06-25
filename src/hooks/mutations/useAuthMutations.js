@@ -10,6 +10,7 @@ export const useLoginMutation = () => {
         onSuccess: (data) => {
             if (data.data.token) {
                 localStorage.setItem('token', data.data.token);
+                // queryClient.removeQueries();
                 // Ép React Query tải lại thông tin User ngay lập tức
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.MY_PROFILE] });
             }

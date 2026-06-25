@@ -1,7 +1,7 @@
 // File: src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, CheckCircle2, Circle } from 'lucide-react';
 // import { useRegister } from '../hooks/useRegister';
 import {useRegisterForm} from '../hooks/ui/auth/useAuthForms'; // Import Hook vừa tạo
 import Header from '../component/common/Header';
@@ -21,6 +21,15 @@ const RegisterPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
  
+  const pwd = registerData.password;
+  const passwordRules = [
+    { text: 'Ít nhất 8 ký tự', met: pwd.length >= 8 },
+    { text: 'Có chữ hoa (A-Z)', met: /[A-Z]/.test(pwd) },
+    { text: 'Có chữ thường (a-z)', met: /[a-z]/.test(pwd) },
+    { text: 'Có chữ số (0-9)', met: /[0-9]/.test(pwd) },
+    { text: 'Ký tự đặc biệt (!@#$...)', met: /[^A-Za-z0-9]/.test(pwd) }
+  ];
+
   return (
     <div className="min-h-screen flex flex-col bg-[#fff9f0]">
       <Header />
@@ -76,7 +85,9 @@ const RegisterPage = () => {
                   autoComplete='new-password'
                   value={registerData.password}
                   onChange={(e) => setRegisterData({ ...registerData, password: e.target.value })}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#ff6b35] focus:border-transparent outline-none transition bg-gray-50 focus:bg-white"
+                  className={`w-full pl-10 pr-12 py-3 border rounded-xl focus:ring-2 focus:ring-[#ff6b35] outline-none transition bg-gray-50 focus:bg-white ${
+                    errors.password ? 'border-red-500' : 'border-gray-300'
+                  }`}
                   placeholder="••••••••"
                 />
                 <button
@@ -87,6 +98,17 @@ const RegisterPage = () => {
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>
               </div>
+              {(registerData.password.length > 0 || errors.password) && (
+                <div className="mt-3 grid grid-cols-2 gap-2 bg-gray-50 p-3 rounded-lg border border-gray-100">
+                  {passwordRules.map((rule, idx) => (
+                    <div key={idx} className={`flex items-center gap-1.5 text-xs ${rule.met ? 'text-green-600 font-medium' : 'text-gray-400'}`}>
+                      {rule.met ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Circle className="w-3.5 h-3.5" />}
+                      <span>{rule.text}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 

@@ -63,7 +63,6 @@ export const useFeaturedRecipesQuery = () => {
         queryKey: [QUERY_KEYS.FEATURED_RECIPES],
         queryFn: async () => {
             const response = await recipeApi.getFeatureRecipes();
-            console.log("API Response for Featured Recipes:", response); // Debug log để kiểm tra dữ liệu
             return response.success ? normalizeRecipeList(response.data) : [];
         }
     });

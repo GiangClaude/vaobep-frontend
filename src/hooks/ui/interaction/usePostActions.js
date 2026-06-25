@@ -1,6 +1,6 @@
 // frontend/src/hooks/ui/interaction/usePostActions.js
 import { useAuthGuard } from './useAuthGuard';
-import { useToggleLikeMutation, useToggleSaveMutation, useReportPostMutation } from '../../mutations/useInteractionMutations';
+import { useToggleLikeMutation, useToggleSaveMutation, useReportPostMutation, useRatePostMutation } from '../../mutations/useInteractionMutations';
 import { useGlobalModal } from '../../../context/ModalContext';
 
 export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
@@ -11,7 +11,8 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
     const toggleLikeMutation = useToggleLikeMutation();
     const toggleSaveMutation = useToggleSaveMutation();
     const reportMutation = useReportPostMutation();
-
+    const rateMutation = useRatePostMutation();
+    
     // Hành động Like
     const handleLike = requireAuth(() => {
         toggleLikeMutation.mutate({ 
@@ -51,6 +52,26 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
         });
     };
 
+    const handleRate = requireAuth((score, onSuccessCallback) => {
+        rateMutation.mutate({ postId: String(id), postType: type, score }, {
+            onSuccess: () => {
+                showModal({ 
+                    title: "Cảm ơn bạn!", 
+                    message: "Đánh giá của bạn đã được ghi nhận.", 
+                    type: "success" 
+                });
+                if (onSuccessCallback) onSuccessCallback();
+            },
+            onError: (err) => {
+                showModal({ 
+                    title: "Lỗi", 
+                    message: err.message || "Không thể gửi đánh giá lúc này.", 
+                    type: "error" 
+                });
+            }
+        });
+    });
+
     // Hành động Báo cáo
     const handleReport = requireAuth((e) => {
         if (e && e.stopPropagation) e.stopPropagation();
@@ -65,6 +86,7 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
         handleSave,
         handleShare,
         handleReport,
+        handleRate,
         isActionLoading: toggleLikeMutation.isPending || toggleSaveMutation.isPending
     };
 };

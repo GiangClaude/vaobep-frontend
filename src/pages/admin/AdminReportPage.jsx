@@ -7,17 +7,18 @@ import { toast } from 'react-toastify';
 import { useAdminReportsQuery } from '../../hooks/queries/useAdminQueries';
 import { useAdminReportMutations } from '../../hooks/mutations/useAdminMutations';
 
+import { useGlobalModal } from '../../context/ModalContext';
+
 const AdminReportPage = () => {
     // KẾT NỐI API
+    const { showModal } = useGlobalModal();
     const { data: reports = [], isLoading: loading } = useAdminReportsQuery();
     const { processReport } = useAdminReportMutations();
 
-    const handleResolve = async (report, action) => {
-        if (action === 'hide_content') {
-            const confirm = window.confirm("Bạn chắc chắn muốn ẩn nội dung bị báo cáo này?");
-            if (!confirm) return;
-        }
-        
+// THAY THẾ HÀM handleResolve CŨ BẰNG 2 HÀM DƯỚI ĐÂY:
+    
+    // Hàm thực thi gọi API (được tách ra để gọi lại trong hoặc ngoài Modal)
+    const executeResolve = async (report, action) => {
         try {
             await processReport.mutateAsync({
                 report_id: report.report_id,
@@ -28,6 +29,28 @@ const AdminReportPage = () => {
             toast.success(action === 'ignore' ? "Đã bỏ qua báo cáo" : "Đã ẩn nội dung vi phạm");
         } catch (error) {
             toast.error(error.message || "Lỗi khi xử lý báo cáo");
+        }
+    };
+
+    // Hàm xử lý khi người dùng click nút
+    const handleResolve = (report, action) => {
+        if (action === 'hide_content') {
+            showModal({
+                title: 'Ẩn nội dung vi phạm',
+                message: 'Bạn chắc chắn muốn ẩn nội dung bị báo cáo này?',
+                type: 'warning',
+                actions: [
+                    { label: 'Hủy', style: 'secondary' },
+                    {
+                        label: 'Ẩn ngay',
+                        style: 'danger',
+                        onClick: () => executeResolve(report, action)
+                    }
+                ]
+            });
+        } else {
+            // Nút "Bỏ qua" không cần hỏi, gọi API luôn
+            executeResolve(report, action);
         }
     };
 

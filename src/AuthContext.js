@@ -36,6 +36,8 @@ export const AuthProvider = ({ children }) => {
     const logout = () => {
         localStorage.removeItem('token');
         // 2. CHỈ XÓA DỮ LIỆU USER: Không dùng queryClient.clear() để tránh giết chết các query khác đang chạy
+    
+        // Đặt lại currentUser về null
         queryClient.setQueryData([QUERY_KEYS.MY_PROFILE], null);
     };
 

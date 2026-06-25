@@ -9,8 +9,11 @@ import StatusBadge from '../../component/admin/StatusBadge';
 import { useAdminIngredientsQuery, useAdminCategoriesQuery} from '../../hooks/queries/useAdminQueries';
 import { useAdminIngredientMutations, useAdminProcessIngredientMutation } from '../../hooks/mutations/useAdminMutations';
 
+import { useGlobalModal } from '../../context/ModalContext';
+
 const AdminIngredientPage = () => {
     // 1. Local State
+    const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState(''); // Text đang hiển thị ở UI
     const [debouncedSearch, setDebouncedSearch] = useState(''); // Text dùng để fetch API
@@ -117,17 +120,31 @@ const AdminIngredientPage = () => {
         }
     };
 
-    const confirmDelete = async (item) => {
-        if (window.confirm(`Bạn có chắc chắn muốn xóa nguyên liệu "${item.name}"?`)) {
-            try {
-                await deleteIngredient.mutateAsync(item.ingredient_id);
-                if (allIngredients.length === 1 && page > 1) {
-                    setPage(prev => prev - 1);
+// THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
+    const confirmDelete = (item) => {
+        showModal({
+            title: 'Xóa nguyên liệu',
+            message: `Bạn có chắc chắn muốn xóa nguyên liệu "${item.name}"?`,
+            type: 'warning',
+            actions: [
+                { label: 'Hủy', style: 'secondary' },
+                {
+                    label: 'Xóa',
+                    style: 'danger',
+                    onClick: async () => {
+                        try {
+                            await deleteIngredient.mutateAsync(item.ingredient_id);
+                            if (allIngredients.length === 1 && page > 1) {
+                                setPage(prev => prev - 1);
+                            }
+                            toast.success("Xóa nguyên liệu thành công!");
+                        } catch (error) {
+                            toast.error(error.message || "Lỗi khi xóa nguyên liệu");
+                        }
+                    }
                 }
-            } catch (error) {
-                toast.error(error.message || "Lỗi khi xóa nguyên liệu");
-            }
-        }
+            ]
+        });
     };
 
     // 5. Cấu hình cột cho bảng

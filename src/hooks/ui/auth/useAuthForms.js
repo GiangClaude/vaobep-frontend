@@ -31,7 +31,6 @@ export const useLoginForm = () => {
 
         try {
             const res = await loginMutation.mutateAsync(loginData);
-            console.log("Login API response:", res);
             if (res.success) {
                 navigate('/homepage');
             } else {
@@ -55,14 +54,32 @@ export const useRegisterForm = () => {
     const navigate = useNavigate();
     const registerMutation = useRegisterMutation();
 
+    const isPasswordValid = (password) => {
+        const hasLength = password.length >= 8;
+        const hasUpper = /[A-Z]/.test(password);
+        const hasLower = /[a-z]/.test(password);
+        const hasNumber = /[0-9]/.test(password);
+        const hasSpecial = /[^A-Za-z0-9]/.test(password);
+        return hasLength && hasUpper && hasLower && hasNumber && hasSpecial;
+    };
+
     const handleRegisterSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
 
         if (!registerData.fullName) newErrors.fullName = 'Họ tên không được trống';
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(registerData.email)) newErrors.email = 'Email không hợp lệ';
-        if (registerData.password.length < 6) newErrors.password = 'Mật khẩu > 6 ký tự';
-        if (registerData.password !== registerData.confirmPassword) newErrors.confirmPassword = 'Mật khẩu không khớp';
+        
+        if (!registerData.password) {
+            newErrors.password = 'Vui lòng nhập mật khẩu';
+        } else if (!isPasswordValid(registerData.password)) {
+            newErrors.password = 'Mật khẩu chưa đủ mạnh. Vui lòng kiểm tra các điều kiện bên dưới.';
+        }
+
+        if (registerData.password !== registerData.confirmPassword) {
+            newErrors.confirmPassword = 'Mật khẩu xác nhận không khớp';
+        }
+
         if (!agreedToTerms) newErrors.terms = "Vui lòng đồng ý điều khoản";
 
         setErrors(newErrors);
@@ -74,7 +91,7 @@ export const useRegisterForm = () => {
                 });
                 navigate('/verify-otp', { state: { email: registerData.email } });
             } catch (err) {
-                setErrors({ api: err.message });
+                setErrors({ api: "Có lỗi xảy ra" });
             }
         }
     };
@@ -102,7 +119,7 @@ export const useForgotPasswordForm = () => {
             // Thành công -> Chuyển hướng sang trang OTP kèm "intent" là quên mật khẩu
             navigate('/verify-otp', { state: { email, intent: 'reset_password' } });
         } catch (err) {
-            setError(err.message || "Không thể gửi yêu cầu. Vui lòng kiểm tra lại email.");
+            setError("Không thể gửi yêu cầu. Vui lòng kiểm tra lại email.");
         }
     };
 
@@ -122,6 +139,10 @@ export const useResetPasswordForm = () => {
     const email = location.state?.email;
     const otp = location.state?.otp;
 
+    const isPasswordValid = (password) => {
+        return password.length >= 8 && /[A-Z]/.test(password) && /[a-z]/.test(password) && /[0-9]/.test(password) && /[^A-Za-z0-9]/.test(password);
+    };
+
     useEffect(() => {
         if (!email || !otp) navigate('/forgot-password');
     }, [email, otp, navigate]);
@@ -130,9 +151,12 @@ export const useResetPasswordForm = () => {
         e.preventDefault();
         const newErrors = {};
 
-        if (!passwords.newPassword || passwords.newPassword.length < 8) {
-            newErrors.newPassword = 'Mật khẩu phải có ít nhất 8 ký tự';
+        if (!passwords.newPassword) {
+            newErrors.newPassword = 'Vui lòng nhập mật khẩu mới';
+        } else if (!isPasswordValid(passwords.newPassword)) {
+            newErrors.newPassword = 'Mật khẩu chưa đủ mạnh';
         }
+
         if (passwords.newPassword !== passwords.confirmPassword) {
             newErrors.confirmPassword = 'Mật khẩu xác nhận không khớp';
         }
@@ -144,7 +168,7 @@ export const useResetPasswordForm = () => {
                 const res = await resetMutation.mutateAsync({ email, otp, newPassword: passwords.newPassword });
                 setSuccessMessage(res.message || 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.');
             } catch (err) {
-                setErrors({ api: err.message || 'OTP không hợp lệ hoặc đã hết hạn.' });
+                setErrors('OTP không hợp lệ hoặc đã hết hạn.');
             }
         }
     };
@@ -241,7 +265,7 @@ export const useVerifyOTPForm = () => {
                 navigate('/login'); 
             }
         } catch (err) {
-            setError(err.message || 'OTP không hợp lệ hoặc đã hết hạn.');
+            setError('OTP không hợp lệ hoặc đã hết hạn.');
         }
     };
 
@@ -253,7 +277,7 @@ export const useVerifyOTPForm = () => {
             const res = await resendMutation.mutateAsync(email);
             showModal({ type: 'success', title: 'Thành công', message: res.message });
         } catch (err) {
-            setError(err.message || 'Không thể gửi lại mã.');
+            setError('Không thể gửi lại mã.');
         }
     };
 

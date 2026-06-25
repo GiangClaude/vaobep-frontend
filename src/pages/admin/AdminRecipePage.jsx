@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Search, ChefHat, Plus, Eye, PenLine, Ban, CheckCircle, Flame, Lock, Unlock } from 'lucide-react'; // [MỚI]
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
-import ConfirmModal from '../../component/admin/ConfirmModal';
+// import ConfirmModal from '../../component/admin/ConfirmModal';
 import RecipeModal from '../../component/admin/RecipeModal';
 import debounce from 'lodash.debounce';
 import { toast } from 'react-toastify';
@@ -11,9 +11,12 @@ import { toast } from 'react-toastify';
 import { useAdminRecipesQuery, useAdminFetchDetails } from '../../hooks/queries/useAdminQueries';
 import { useAdminRecipeMutations } from '../../hooks/mutations/useAdminMutations';
 
+import { useGlobalModal } from '../../context/ModalContext';
+
 const AdminRecipePage = () => {
     // [CẬP NHẬT] Lấy thêm create/update/get từ hook
     // const { recipes, loading, pagination, fetchRecipes, hideRecipe, createRecipe, updateRecipe, getRecipe } = useAdminRecipes();
+    const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', order: 'DESC' });
@@ -23,9 +26,6 @@ const AdminRecipePage = () => {
     const [modalMode, setModalMode] = useState('create');
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
-    // Confirm Modal (Cho nút ẩn nhanh)
-    const [targetRecipe, setTargetRecipe] = useState(null);
-    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
     const { data, isLoading: loading } = useAdminRecipesQuery({
         page, limit: 10, search: debouncedSearch, sortKey: sortConfig.key, sortOrder: sortConfig.order
@@ -105,22 +105,31 @@ const AdminRecipePage = () => {
         }
     };
 
-    // Quick Action (Ban/Unban)
+    // THAY THẾ TOÀN BỘ onQuickHide VÀ confirmQuickHide CŨ BẰNG ĐOẠN NÀY:
     const onQuickHide = (recipe) => {
-        setTargetRecipe(recipe);
-        setIsConfirmOpen(true);
-    };
+        const isBanned = recipe.status === 'banned';
+        const newStatus = isBanned ? 'public' : 'banned';
 
-    const confirmQuickHide = async () => {
-        if (!targetRecipe) return;
-        try {
-            const newStatus = targetRecipe.status === 'banned' ? 'public' : 'banned';
-            await hideRecipe(targetRecipe.recipe_id, newStatus);
-            setIsConfirmOpen(false);
-            toast.success(`Đã cập nhật trạng thái: ${newStatus}`);
-        } catch (e) {
-            toast.error("Lỗi cập nhật");
-        }
+        showModal({
+            title: isBanned ? "Mở khóa công thức" : "Ban công thức",
+            message: `Xác nhận thay đổi trạng thái cho bài viết "${recipe.title}"? Hành động này sẽ ảnh hưởng đến việc hiển thị bài viết.`,
+            type: isBanned ? 'info' : 'warning',
+            actions: [
+                { label: 'Hủy', style: 'secondary' },
+                {
+                    label: isBanned ? 'Mở khóa' : 'Ban ngay',
+                    style: isBanned ? 'primary' : 'danger',
+                    onClick: async () => {
+                        try {
+                            await hideRecipe(recipe.recipe_id, newStatus);
+                            toast.success(`Đã cập nhật trạng thái: ${newStatus}`);
+                        } catch (e) {
+                            toast.error("Lỗi cập nhật");
+                        }
+                    }
+                }
+            ]
+        });
     };
 
     const columns = [
@@ -255,16 +264,6 @@ const AdminRecipePage = () => {
                 mode={modalMode}
                 recipeData={selectedRecipe}
                 onSubmit={handleModalSubmit}
-            />
-
-            <ConfirmModal 
-                isOpen={isConfirmOpen}
-                onClose={() => setIsConfirmOpen(false)}
-                onConfirm={confirmQuickHide}
-                title={targetRecipe?.status === 'banned' ? "Mở khóa công thức" : "Ban công thức"}
-                message={`Xác nhận thay đổi trạng thái cho bài viết "${targetRecipe?.title}"? Hành động này sẽ ảnh hưởng đến việc hiển thị bài viết.`}
-                isDanger={targetRecipe?.status !== 'banned'}
-                confirmText={targetRecipe?.status === 'banned' ? 'Mở khóa' : 'Ban ngay'}
             />
         </div>
     );

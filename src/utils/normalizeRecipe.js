@@ -79,6 +79,15 @@ export function normalizeRecipe(r) {
           unit_id: ing.unit_id
         }))
       : [],
+
+     ingredientNames: Array.isArray(r.ingredients)
+      // Nếu API trả về mảng object -> Lấy ra mảng tên
+      ? r.ingredients.map(ing => ing.ingredient_names)
+      // Nếu API List trả về string (VD: "Thịt bò, Hành tây, Muối") -> Tách thành mảng
+      : (typeof r.ingredient_names === 'string' 
+          ? r.ingredient_names.split(',').map(name => name.trim()).filter(Boolean)
+          : Array.isArray(r.ingredient_names) ? r.ingredient_names : []),
+
     // -------------------------------
     reportCount: r.report_count !== undefined ? Number(r.report_count) : 0,
     ratingCount: r.rating_count !== undefined ? Number(r.rating_count) : 0,
