@@ -170,12 +170,12 @@ export function AccountSettingsModal({
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold mb-2 text-gray-700">Tiểu sử (Bio)</label>
+                                <label className="block text-sm font-semibold mb-2 text-gray-700">Tiểu sử</label>
                                 <textarea rows="4" value={profileData.bio} onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })} className="w-full px-4 py-3.5 rounded-xl border border-gray-200 focus:border-[#ff6b35] focus:ring-2 focus:ring-[#ff6b35]/20 outline-none transition-all resize-none text-gray-800" placeholder="Viết vài dòng giới thiệu về bản thân..." />
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold mb-2 text-gray-700">Email (Không thể thay đổi)</label>
+                                <label className="block text-sm font-semibold mb-2 text-gray-700">Email</label>
                                 <input type="email" value={user.email} disabled className="w-full px-4 py-3.5 rounded-xl border border-gray-100 bg-gray-50 text-gray-500 cursor-not-allowed" />
                             </div>
 
