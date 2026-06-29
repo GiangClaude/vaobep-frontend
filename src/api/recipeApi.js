@@ -16,38 +16,32 @@ const recipeApi = {
         return response;
     },
 
-    // Hàm lấy chi tiết công thức
     getRecipeById: async (id) => {
         const response = await apiClient.get(`/recipes/${id}`);
         return response;
     },
 
     createRecipe: async (formData) => {
-        // Ensure multipart is used for FormData uploads
         const response = await apiClient.post('/recipes/create', formData);
         return response;
     },
 
     updateRecipe: async (recipeId, formData) => {
-        // Ensure multipart for update when files may be included
         const response = await apiClient.put(`/recipes/update/${recipeId}`, formData);
         return response;
     },
 
     deleteRecipe: async (id) => {
-        // Method DELETE, route phải khớp với backend: /delete/:recipeId
         const response = await apiClient.delete(`/recipes/delete/${id}`);
         return response;
     },
 
     getPreviewComments: async (recipeId) => {
-        // Backend route: /recipes/:recipeId/preview-comments
         const response = await apiClient.get(`/recipes/${recipeId}/preview-comments`);
         return response;
     },
 
     changeStatus: async (recipeId, newStatus) => {
-        // Route này khớp với backend: router.patch('/status/:recipeId', ...)
         const response = await apiClient.patch(`/recipes/status/${recipeId}`, { status: newStatus });
         return response;
     },
@@ -58,7 +52,6 @@ const recipeApi = {
     },
     
     getSavedRecipes: async (params) => {
-        // params: { page, limit, sortKey, sortOrder }
         const response = await apiClient.get('/recipes/saved', { params });
         return response;
     }
@@ -68,7 +61,6 @@ const recipeApi = {
         return response;
     }
     ,
-    // Simple search used by Article editor to attach recipes
     searchSimple: async (keyword) => {
         const response = await apiClient.get('/recipes/search/simple', { params: { keyword } });
         return response;

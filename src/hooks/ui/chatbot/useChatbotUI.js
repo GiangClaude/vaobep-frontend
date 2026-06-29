@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useChatMutation, useClearAiHistoryMutation } from '../../mutations/useAiMutations';
+import { useGlobalModal } from '../../../context/ModalContext'; 
 
 const generateSessionId = () => {
     return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
@@ -11,12 +12,10 @@ export const useChatbotUI = () => {
     const [messages, setMessages] = useState([]);
     const [sessionId, setSessionId] = useState('');
     const [currentContext, setCurrentContext] = useState(null);
-
-    // Sử dụng Mutation thay vì gọi API trực tiếp
+    const { showModal } = useGlobalModal();
     const chatMutation = useChatMutation();
     const clearHistoryMutation = useClearAiHistoryMutation();
-
-    // 1. Khởi tạo Session ID
+    
     useEffect(() => {
         let sid = sessionStorage.getItem('chatbot_session_id');
         if (!sid) {
@@ -26,7 +25,6 @@ export const useChatbotUI = () => {
         setSessionId(sid);
     }, []);
 
-    // 2. Lắng nghe thay đổi ngữ cảnh (Context)
     useEffect(() => {
         const checkContext = () => {
             const ctx = sessionStorage.getItem('vaobep_ai_context');
@@ -38,7 +36,6 @@ export const useChatbotUI = () => {
         return () => window.removeEventListener('ai_context_updated', checkContext);
     }, []);
 
-    // 3. Câu hỏi gợi ý động
     const quicks = currentContext 
         ? [
             'Có thể thay thế nguyên liệu trong món này không?',
@@ -89,15 +86,32 @@ export const useChatbotUI = () => {
     };
 
     // 5. Xóa lịch sử
-    const handleClearChat = async () => {
-        if (!window.confirm("Bạn có chắc muốn xóa lịch sử trò chuyện không?")) return;
-        
-        setMessages([]);
-        try {
-            await clearHistoryMutation.mutateAsync({ sessionId: sessionId, userId: null });
-        } catch (error) {
-            console.error("Lỗi xóa lịch sử:", error);
-        }
+    const handleClearChat = () => {
+        if (messages.length === 0) return; 
+
+        showModal({
+            title: 'Xóa lịch sử?',
+            message: 'Bạn có chắc chắn muốn xóa toàn bộ lịch sử trò chuyện không? Hành động này không thể hoàn tác.',
+            type: 'warning', 
+            actions: [
+                {
+                    label: 'Hủy',
+                    style: 'secondary' 
+                },
+                {
+                    label: 'Xóa ngay',
+                    style: 'danger', 
+                    onClick: async () => {
+                        setMessages([]);
+                        try {
+                            await clearHistoryMutation.mutateAsync({ sessionId: sessionId, userId: null });
+                        } catch (error) {
+                            console.error("Lỗi xóa lịch sử:", error);
+                        }
+                    }
+                }
+            ]
+        });
     };
 
     const toggleOpen = () => setOpen(!open);

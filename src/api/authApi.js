@@ -29,7 +29,6 @@ const authApi = {
     return response;
     },
 
-    // Thêm vào trong object authApi
     requestPasswordReset: async (email) => {
         const response = await apiClient.post('/auth/request-password-reset', { email });
         return response;
@@ -46,7 +45,6 @@ const authApi = {
     },
 
     changePassword: async (data) => {
-        // Lưu ý: Token thường được đính kèm tự động bởi axios interceptor trong apiClient
         const response = await apiClient.put('/auth/change-password', data);
         return response;
     },

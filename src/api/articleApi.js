@@ -2,7 +2,6 @@ import apiClient from "./index";
 
 const articleApi = {
 	getPublicArticles: async (params = {}) => {
-		// console.log("ArticleAPi: ", params);
 		const response = await apiClient.get('/articles', { params });
 		return response;
 	},
@@ -38,7 +37,6 @@ const articleApi = {
 	},
 
 	getSavedArticles: async (params = {}) => {
-        // params sẽ chứa page, limit, sort...
         const response = await apiClient.get('/articles/me/saved', { params });
         return response;
     },

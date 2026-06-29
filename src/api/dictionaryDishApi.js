@@ -3,19 +3,16 @@ import apiClient from "./index";
 const API_URL = '/dictionary-dishes';
 
 const dictionaryDishApi = {
-    // Lấy tóm tắt quốc gia (Zoom out)
     getMapSummary: async () =>{
         const response = await apiClient.get(`${API_URL}/map/summary`);
         return response;
     },
 
-    // Lấy tất cả món ăn (Zoom in)
     getMapAllDishes: async () => {
         const response = await apiClient.get(`${API_URL}/map/all`);
         return response;
     },
     
-    // Lấy chi tiết món khi click vào marker
     getDishDetail: async (id) => {
         const response = await apiClient.get(`${API_URL}/${id}`);
         return response;

@@ -3,7 +3,7 @@ import { Facebook, MessageCircle, Send, Video } from "lucide-react";
 export function Footer() {
   return (
     <footer className="bg-gradient-to-br from-[#2d1b0e] to-[#4a3426] text-white py-12 mt-20">
-      <div className="w-full px-4">
+      <div className="w-full px-4 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           {/* Contact Form */}
           <div>

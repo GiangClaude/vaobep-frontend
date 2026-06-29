@@ -57,11 +57,11 @@ import LeaderboardPage from './pages/LeaderboardPage';
 // Layout chính
 const MainLayout = () => {
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header />
-      <div className="w-full py-4 px-4">
+      <main className="w-full max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex-grow">
         <Outlet />
-      </div>
+      </main>
       <Footer />
       <Chatbot />
     </div>

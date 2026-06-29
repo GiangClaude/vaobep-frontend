@@ -1,8 +1,6 @@
-// frontend/src/api/interactionApi.js
 import apiClient from "./index";
 
 const interactionApi = {
-    // 1. Lấy trạng thái tương tác ban đầu (Đã like chưa? Đã lưu chưa? Đánh giá mấy sao?)
     getInteractionState: async (postId, postType = 'recipe') => {
         const response = await apiClient.get('/interaction/state', {
             params: { postId, postType }
@@ -10,25 +8,21 @@ const interactionApi = {
         return response;
     },
 
-    // 2. Like / Unlike
     toggleLike: async (postId, postType = 'recipe') => {
         const response = await apiClient.post('/interaction/like', { postId, postType });
         return response;
     },
 
-    // 3. Save / Unsave (Bookmark)
     toggleSave: async (postId, postType = 'recipe') => {
         const response = await apiClient.post('/interaction/save', { postId, postType });
         return response;
     },
 
-    // 4. Gửi bình luận
     postComment: async (postId, content, postType = 'recipe', parentId = null) => {
         const response = await apiClient.post('/interaction/comment', { postId, postType, content, parentId });
         return response;
     },
 
-    // 5. Lấy danh sách bình luận (Có phân trang)
     getComments: async (postId, postType = 'recipe', page = 1) => {
         const response = await apiClient.get('/interaction/comments', {
             params: { postId, postType, page, limit: 10 }
@@ -36,31 +30,26 @@ const interactionApi = {
         return response;
     },
 
-    // Lấy danh sách phản hồi của một comment (Lazy Load)
     getReplies: async (parentId) => {
         const response = await apiClient.get(`/interaction/comments/${parentId}/replies`);
         return response;
     },
 
-    // Chỉnh sửa bình luận
     updateComment: async (commentId, content) => {
         const response = await apiClient.put(`/interaction/comment/${commentId}`, { content });
         return response;
     },
 
-    // Xóa bình luận
     deleteComment: async (commentId) => {
         const response = await apiClient.delete(`/interaction/comment/${commentId}`);
         return response;
     },
 
-    // 6. Đánh giá (Rating)
     ratePost: async (postId, postType = 'recipe', score) => {
         const response = await apiClient.post('/interaction/rate', { postId, score, postType });
         return response;
     },
 
-    // 7. Báo cáo bài viết (Report)
     reportPost: async (postId, reason, postType = 'recipe') => {
         const payload = { postId: String(postId), postType, reason };
         const response = await apiClient.post('/interaction/report', payload);
@@ -68,7 +57,6 @@ const interactionApi = {
     },
 
     followUser: async (followingId) => {
-        // Backend yêu cầu body: { followingId: "..." }
         const response = await apiClient.post('/interaction/follow', { followingId });
         return response;
     }
