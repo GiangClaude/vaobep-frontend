@@ -3,21 +3,17 @@ import { FileText, Heart, User, Coins, Settings, CalendarDays } from "lucide-rea
 import { motion } from "motion/react";
 import { Link, useLocation } from "react-router-dom";
 
-// Khai báo thêm thuộc tính 'path' và 'requirePro'
 const allTabs = [
   { id: "recipes", label: "Công Thức Của Tôi", icon: FileText, path: "/profile/recipes" },
   { id: "articles", label: "Bài Viết", icon: FileText, path: "/profile/articles", requirePro: true },
   { id: "menus", label: "Thực Đơn", icon: CalendarDays, path: "/profile/menus" },
   { id: "saved", label: "Đã Lưu", icon: Heart, path: "/profile/saved" },
-  { id: "info", label: "Thông Tin", icon: User, path: "/profile/info" },
   { id: "points", label: "Quản Lý Điểm", icon: Coins, path: "/profile/points" },
-  { id: "settings", label: "Cài Đặt", icon: Settings, path: "/profile/settings" }
 ];
 
 export function ProfileTabs({ userRole }) {
   const location = useLocation();
 
-  // Lọc tab: Nếu là 'user' bình thường thì bỏ tab Articles đi
   const displayTabs = allTabs.filter(tab => {
     if (tab.requirePro && userRole === 'user') return false;
     return true;
@@ -29,7 +25,6 @@ export function ProfileTabs({ userRole }) {
         <div className="flex gap-2 overflow-x-auto scrollbar-hide">
           {displayTabs.map((tab) => {
             const Icon = tab.icon;
-            // Kiểm tra xem URL hiện tại có chứa path của tab này không
             const isActive = location.pathname.includes(tab.path);
 
             return (

@@ -3,21 +3,16 @@ import { Flag, EyeOff, Archive, MessageSquareWarning, FileText, User } from 'luc
 import AdminTable from '../../component/admin/AdminTable';
 import { toast } from 'react-toastify';
 
-// [MỚI] Import hooks kiến trúc mới
 import { useAdminReportsQuery } from '../../hooks/queries/useAdminQueries';
 import { useAdminReportMutations } from '../../hooks/mutations/useAdminMutations';
 
 import { useGlobalModal } from '../../context/ModalContext';
 
 const AdminReportPage = () => {
-    // KẾT NỐI API
     const { showModal } = useGlobalModal();
     const { data: reports = [], isLoading: loading } = useAdminReportsQuery();
     const { processReport } = useAdminReportMutations();
 
-// THAY THẾ HÀM handleResolve CŨ BẰNG 2 HÀM DƯỚI ĐÂY:
-    
-    // Hàm thực thi gọi API (được tách ra để gọi lại trong hoặc ngoài Modal)
     const executeResolve = async (report, action) => {
         try {
             await processReport.mutateAsync({
@@ -32,7 +27,6 @@ const AdminReportPage = () => {
         }
     };
 
-    // Hàm xử lý khi người dùng click nút
     const handleResolve = (report, action) => {
         if (action === 'hide_content') {
             showModal({
@@ -49,7 +43,6 @@ const AdminReportPage = () => {
                 ]
             });
         } else {
-            // Nút "Bỏ qua" không cần hỏi, gọi API luôn
             executeResolve(report, action);
         }
     };
@@ -64,7 +57,6 @@ const AdminReportPage = () => {
 
     return (
         <div className="space-y-6">
-            {/* HEADER */}
             <div className="flex items-center gap-3">
                 <div className="p-2 bg-red-100 rounded-lg text-red-500">
                     <Flag size={24} />
@@ -75,7 +67,6 @@ const AdminReportPage = () => {
                 </div>
             </div>
 
-            {/* TABLE */}
             <AdminTable 
                 columns={columns} 
                 loading={loading}
@@ -87,7 +78,7 @@ const AdminReportPage = () => {
                                 <div className="p-3 bg-green-50 rounded-full">
                                     <Archive size={24} className="text-green-500" />
                                 </div>
-                                <p>Tuyệt vời! Hiện không có báo cáo nào cần xử lý.</p>
+                                <p>Hiện không có báo cáo nào cần xử lý.</p>
                             </div>
                         </td>
                     </tr>

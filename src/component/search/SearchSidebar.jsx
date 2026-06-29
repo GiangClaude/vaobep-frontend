@@ -15,7 +15,6 @@ export default function SearchSidebar() {
         { path: "articles", label: "Bài viết", icon: FileText },
     ];
 
-    // Hàm giữ nguyên từ khóa tìm kiếm khi chuyển URL
     const getUrl = (path) => `/search${path ? `/${path}` : ''}?keyword=${encodeURIComponent(keyword)}`;
 
     return (

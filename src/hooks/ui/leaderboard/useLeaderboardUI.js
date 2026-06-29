@@ -14,7 +14,6 @@ export const useLeaderboardUI = () => {
     const queryMonth = selectedPeriod === 'current' ? null : targetDate.month;
     const queryYear = selectedPeriod === 'current' ? null : targetDate.year;
 
-    // React Query tự lo việc fetch khi queryMonth/Year đổi
     const recipeQuery = useTopRecipesQuery(queryMonth, queryYear);
     const userQuery = useTopUsersQuery(queryMonth, queryYear);
 

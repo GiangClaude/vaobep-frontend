@@ -1,25 +1,19 @@
-// frontend/src/component/profile/MyMenusTab.jsx
 import { useState, useMemo } from 'react';
 import { Plus, CalendarDays } from 'lucide-react';
 import { motion } from 'motion/react';
 
-// Import Component MenuCard đã có
 import MenuCard from '../menu/MenuCard';
 
-// Import Hooks chuẩn của bạn
 import { useMyMenusQuery } from '../../hooks/queries/useMenuQueries';
 import { useMenuListUI } from '../../hooks/ui/menu/useMenuListUI';
 
 export function MyMenusTab({ isPublicView = false }) {
   const [filter, setFilter] = useState('all');
   
-  // 1. Lấy dữ liệu từ API thông qua React Query
   const { data: myMenus = [], isLoading } = useMyMenusQuery();
   
-  // 2. Lấy hàm tạo thực đơn mới từ UI Hook
   const { handleCreateBlankMenu, isCreating } = useMenuListUI();
 
-  // 3. Xử lý logic lọc (Tất cả / Công khai / Cá nhân)
   const displayMenus = useMemo(() => {
     let result = myMenus;
     if (filter === 'public') {
@@ -32,10 +26,8 @@ export function MyMenusTab({ isPublicView = false }) {
 
   return (
     <div className="relative">
-      {/* Header: Bộ lọc và Nút Tạo */}
       <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
         
-        {/* Bộ lọc trạng thái */}
         <div className="flex gap-2">
           {!isPublicView && [
             { id: 'all', label: 'Tất cả' },

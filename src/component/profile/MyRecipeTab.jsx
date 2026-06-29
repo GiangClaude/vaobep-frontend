@@ -5,13 +5,11 @@ import { useNavigate } from "react-router-dom";
 import ImageWithFallback from "../figma/ImageWithFallBack"; 
 import { CreateRecipeModal } from "../recipe/CreateRecipeModal";
 
-// CHỈ IMPORT DUY NHẤT UI HOOK NÀY VÀO
 import { useMyRecipesUI } from "../../hooks/ui/profile/useMyRecipesTabUI";
 
 export function MyRecipesTab({ isPublicView = false, publicRecipes = [] }) {
   const navigate = useNavigate();
 
-  // BÓC TÁCH TOÀN BỘ DATA VÀ ACTIONS TỪ HOOK (View không tự xử lý logic nào cả)
   const {
     filter, setFilter,
     isCreateModalOpen, setIsCreateModalOpen,
@@ -24,7 +22,6 @@ export function MyRecipesTab({ isPublicView = false, publicRecipes = [] }) {
     handleToggleVisibility
   } = useMyRecipesUI({ isPublicView, publicRecipes });
 
-  // UI Helper: Hàm này chỉ biến đổi chuỗi thành màu sắc, nên để ở View là hợp lý
   const getStatusBadge = (status) => {
     const badges = {
       public: { text: "Công khai", color: "bg-green-500" },
@@ -39,7 +36,6 @@ export function MyRecipesTab({ isPublicView = false, publicRecipes = [] }) {
     <div className="relative">
       <div className="flex flex-wrap items-center justify-between mb-6 gap-4">
         
-        {/* Bộ lọc trạng thái */}
         <div className="flex gap-2">
           {!isPublicView && ["all", "public", "draft", "hidden"].map((filterType) => (
                 <button
@@ -106,7 +102,6 @@ export function MyRecipesTab({ isPublicView = false, publicRecipes = [] }) {
         </div>
       )}
 
-      {/* Gọi Modal Create/Edit */}
       {isCreateModalOpen && (
         <CreateRecipeModal 
           isOpen={isCreateModalOpen}

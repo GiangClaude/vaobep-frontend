@@ -5,7 +5,6 @@ import UserRankCard from '../component/leaderboard/UserRankCard';
 import { ChefHat, Utensils, AlertCircle } from 'lucide-react';
 
 const LeaderboardPage = () => {
-    // Gọi Hook để lấy toàn bộ state và logic
     const { 
         activeTab, 
         selectedPeriod, 
@@ -18,7 +17,6 @@ const LeaderboardPage = () => {
 
     return (
         <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6">
-            {/* Header Trang */}
             <div className="text-center mb-8">
                 <h1 className="text-3xl font-extrabold text-gray-900 sm:text-4xl">
                     Bảng Xếp Hạng
@@ -28,10 +26,8 @@ const LeaderboardPage = () => {
                 </p>
             </div>
 
-            {/* Các bộ lọc (Tabs và Select) */}
             <div className="flex flex-col sm:flex-row justify-between items-center mb-8 space-y-4 sm:space-y-0">
                 
-                {/* Tabs Chuyển đổi */}
                 <div className="flex p-1 space-x-1 bg-gray-100 rounded-xl w-full sm:w-auto">
                     <button
                         onClick={() => handleTabChange('recipe')}
@@ -57,7 +53,6 @@ const LeaderboardPage = () => {
                     </button>
                 </div>
 
-                {/* Dropdown Thời gian */}
                 <select
                     value={selectedPeriod}
                     onChange={(e) => handlePeriodChange(e.target.value)}
@@ -68,9 +63,7 @@ const LeaderboardPage = () => {
                 </select>
             </div>
 
-            {/* Hiển thị Dữ liệu */}
             <div className="mt-4">
-                {/* Error State */}
                 {error && (
                     <div className="flex items-center justify-center p-6 bg-red-50 text-red-600 rounded-xl">
                         <AlertCircle className="mr-2" />

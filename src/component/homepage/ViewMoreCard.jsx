@@ -17,13 +17,11 @@ export function ViewMoreCard() {
       onClick={() => navigate('/recipes')}
     >
       <div className="bg-gradient-to-br from-[#ff6b35] to-[#f7931e] rounded-[25px] overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 h-full flex items-center justify-center relative group">
-        {/* Animated Background Pattern */}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-0 left-0 w-40 h-40 bg-white rounded-full blur-3xl animate-pulse" />
           <div className="absolute bottom-0 right-0 w-32 h-32 bg-white rounded-full blur-2xl animate-pulse" style={{ animationDelay: '150ms' }} />
         </div>
 
-        {/* Content */}
         <div className="relative z-10 text-center px-8 py-20">
           <motion.div
             animate={{
@@ -50,7 +48,6 @@ export function ViewMoreCard() {
           </div>
         </div>
 
-        {/* Decorative circles */}
         <motion.div
           animate={{
             scale: isHovered ? 1.2 : 1,
@@ -70,7 +67,6 @@ export function ViewMoreCard() {
         />
       </div>
 
-      {/* Creative decorative element */}
       <motion.div
         initial={false}
         animate={{

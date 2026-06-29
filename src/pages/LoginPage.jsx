@@ -1,15 +1,12 @@
-// File: src/pages/LoginPage.jsx
-import React, { useState } from 'react'; // React 17+ không bắt buộc import React nhưng cứ để cho chắc
+import React, { useState } from 'react'; 
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock } from 'lucide-react';
-// import { useLogin } from '../hooks/useLogin'; // Import Hook vừa tạo
-import {useLoginForm} from '../hooks/ui/auth/useAuthForms'; // Import Hook vừa tạo
+import {useLoginForm} from '../hooks/ui/auth/useAuthForms'; 
 import "../index.css";
 import Header from '../component/common/Header';
 import { Footer } from '../component/common/Footer';
 
 const LoginPage = () => {
-    // Gọi Hook để lấy toàn bộ logic và state
     const { 
         loginData, 
         setLoginData, 
@@ -18,7 +15,6 @@ const LoginPage = () => {
         handleLoginSubmit 
     } = useLoginForm();
 
-    // State UI thuần túy (hiện/ẩn mật khẩu) thì để lại ở đây là hợp lý
     const [showPassword, setShowPassword] = useState(false);
 
 return (
@@ -77,7 +73,6 @@ return (
                             {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
                         </div>
 
-                        {/* API Error & Verify Link */}
                         {errors.api && (
                             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative mb-4 flex flex-col gap-1" role="alert">
                                 <span className="block sm:inline">{errors.api}</span>
@@ -93,7 +88,6 @@ return (
                             </div>
                         )}
                         
-                        {/* Remember & Forgot Password */}
                         <div className="flex items-center justify-between text-sm">
                             <label className="flex items-center cursor-pointer">
                                 <input 
@@ -110,7 +104,6 @@ return (
                             </Link>
                         </div>
                         
-                        {/* Submit Button */}
                         <button
                             type="submit"
                             disabled={loading}
@@ -135,7 +128,6 @@ return (
                 </div>
             </main>
 
-            {/* 3. Footer */}
             <Footer />
         </div>
     );

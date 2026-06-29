@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-// Import thêm Menu, X (cho mobile) và ShieldCheck (cho admin)
 import { Search, ChevronDown, LogOut, Settings, User, Sparkles, ShieldCheck, Menu, X } from 'lucide-react';
 import { useAuth } from '../../AuthContext';
 import { getAvatarUrl } from '../../utils/imageHelper';
@@ -8,24 +7,22 @@ import { getAvatarUrl } from '../../utils/imageHelper';
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchValue, setSearchValue] = useState('');
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // State cho menu điện thoại
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); 
 
   const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
 
   console.log("Header: ", currentUser);
 
-  // Hàm xử lý đăng xuất
   const logout = () => {
     localStorage.removeItem('token');
     setCurrentUser(null);
     navigate('/login');
   };
 
-  // Hàm xử lý đóng mở menu trên mobile
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
-    if (isDropdownOpen) setIsDropdownOpen(false); // Đóng avatar dropdown nếu đang mở
+    if (isDropdownOpen) setIsDropdownOpen(false); 
   };
 
   const navItems = [
@@ -35,12 +32,11 @@ const Header = () => {
     { label: 'Từ Điển', to: '/dish-map' },
   ];
 
-  // Hàm xử lý khi user thực hiện tìm kiếm
   const handleSearch = (e) => {
     if (e.key === 'Enter' || e.type === 'click') {
       if (searchValue.trim()) {
         navigate(`/search?keyword=${encodeURIComponent(searchValue)}`);
-        setIsMobileMenuOpen(false); // Tự động đóng menu mobile khi search xong
+        setIsMobileMenuOpen(false); 
       }
     }
   };
@@ -50,9 +46,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
 
-          {/* KHU VỰC BÊN TRÁI: Nút Mobile Menu + Logo */}
           <div className="flex items-center gap-2 lg:gap-4">
-            {/* Nút Hamburger chỉ hiện trên Mobile/Tablet nhỏ */}
             <button
               onClick={toggleMobileMenu}
               className="md:hidden p-2 text-gray-600 hover:text-[#ff751f] hover:bg-orange-50 rounded-full transition-colors"
@@ -75,9 +69,7 @@ const Header = () => {
             </div>
           </div>
 
-          {/* KHU VỰC GIỮA: Điều hướng (Desktop) + Thanh Tìm kiếm */}
           <div className="hidden md:flex items-center flex-1 justify-center px-4 lg:px-8">
-            {/* Navigation Links - Chỉ hiện trên Laptop/iPad */}
             <nav className="flex gap-1 lg:gap-4 mr-4 lg:mr-8 whitespace-nowrap">
               {navItems.map((item) => (
                 <Link
@@ -90,11 +82,10 @@ const Header = () => {
               ))}
             </nav>
 
-            {/* Search Bar - Co giãn theo màn hình */}
             <div className="relative w-full max-w-sm group">
               <input
                 type="text"
-                placeholder="Hôm nay ăn gì nhỉ? 😋"
+                placeholder="Hôm nay ăn gì?"
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
                 onKeyDown={handleSearch}
@@ -109,10 +100,8 @@ const Header = () => {
             </div>
           </div>
 
-          {/* KHU VỰC BÊN PHẢI: Nút Admin + User Profile */}
           <div className="flex items-center gap-2 sm:gap-4">
             
-            {/* Nút Admin - Hiện ngoài Header ở Laptop/iPad */}
             {currentUser?.role === 'admin' && (
               <button
                 onClick={() => navigate('/admin/dashboard')}
@@ -126,7 +115,6 @@ const Header = () => {
 
             {currentUser ? (
               <div className='relative'>
-                {/* Nút User */}
                 <button 
                   onClick={() => { setIsDropdownOpen(!isDropdownOpen); setIsMobileMenuOpen(false); }}
                   className='flex items-center gap-2 md:gap-3 bg-white border-2 border-orange-100 hover:border-[#ff751f] p-1 md:pl-2 md:pr-3 md:py-1.5 rounded-full transition-all duration-300 hover:shadow-[0_4px_12px_rgba(255,117,31,0.2)]'
@@ -146,7 +134,7 @@ const Header = () => {
                 {/* Dropdown Menu */}
                 {isDropdownOpen && (
                   <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-xl shadow-orange-900/10 border-2 border-orange-100 z-50 overflow-hidden transform origin-top-right transition-all">
-                    {/* Header menu cho mobile (hiện email & tên) */}
+                    {/* Header menu cho mobile */}
                     <div className="p-4 bg-gradient-to-br from-orange-50 to-yellow-50 border-b border-orange-100 md:hidden">
                       <p className="text-sm font-bold text-gray-800 flex items-center gap-1">
                         {currentUser.fullName} <Sparkles className="w-3 h-3 text-yellow-500"/>
@@ -160,7 +148,6 @@ const Header = () => {
 
                     <div className="py-2 px-2 gap-1 flex flex-col">
                       
-                      {/* Nút Admin - Dành riêng cho Mobile khi nút trên header bị ẩn */}
                       {currentUser?.role === 'admin' && (
                         <Link 
                           to="/admin/dashboard"
@@ -223,7 +210,6 @@ const Header = () => {
         </div>
       </div>
 
-      {/* DROPDOWN MENU CHUYÊN DỤNG CHO MOBILE */}
       {isMobileMenuOpen && (
         <div className="md:hidden absolute top-[100%] left-0 w-full bg-white border-b-2 border-orange-100 shadow-xl z-40 px-4 py-4 flex flex-col gap-4 animate-in slide-in-from-top-2">
           

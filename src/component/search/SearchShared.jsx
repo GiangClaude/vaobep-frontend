@@ -3,7 +3,6 @@ import { LayoutGrid } from "lucide-react";
 import UserCard from "../common/UserCard";
 import ArticleCard from "../common/ArticleCard";
 
-// 1. Component Trạng thái trống
 export const EmptyState = ({ text }) => (
     <div className="bg-white rounded-2xl p-10 text-center border-2 border-dashed border-gray-200">
         <div className="text-4xl mb-3">🕵️‍♀️</div>
@@ -11,7 +10,6 @@ export const EmptyState = ({ text }) => (
     </div>
 );
 
-// 2. Component Danh sách User
 export const UserGrid = ({ data, isHorizontal = false, onTabChange }) => {
     if (data.length === 0) return <EmptyState text="Không tìm thấy người dùng phù hợp" />;
 
@@ -59,7 +57,6 @@ export const UserGrid = ({ data, isHorizontal = false, onTabChange }) => {
     );
 };
 
-// 3. Component Danh sách Article
 export const ArticleList = ({ data, onCardClick }) => (
     <div className="grid grid-cols-1 gap-6">
         {data.map((article) => (

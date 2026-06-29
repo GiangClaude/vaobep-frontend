@@ -10,26 +10,22 @@ import { useAuth } from '../../../AuthContext';
 
 export const useProfileUI = () => {
     const { showModal } = useGlobalModal();
-    const { setCurrentUser, refreshProfile } = useAuth(); // Để update context sau khi sửa profile
+    const { setCurrentUser, refreshProfile } = useAuth(); 
 
-    // --- 1. STATE ĐỔI MẬT KHẨU ---
     const [passwords, setPasswords] = useState({ oldPassword: '', newPassword: '', confirmPassword: '' });
     const [errors, setErrors] = useState({});
     const [isChangePassModalOpen, setIsChangePassModalOpen] = useState(false);
     
-    // --- 2. STATE HỘP QUÀ ---
     const [selectedBox, setSelectedBox] = useState(null);
     const [receivedItems, setReceivedItems] = useState([]);
     const [isRewardModalOpen, setIsRewardModalOpen] = useState(false);
     const [isOpening, setIsOpening] = useState(false);
 
-    // --- MUTATIONS ---
     const changePassMutation = useChangePasswordMutation();
     const checkInMutation = useCheckInMutation();
     const updateProfileMutation = useUpdateProfileMutation();
     const claimRewardMutation = useClaimRewardMutation();
 
-    // --- LOGIC: CẬP NHẬT PROFILE (Xử lý FormData ở đây) ---
     const handleSaveProfile = async (data) => {
         const formData = new FormData();
         if (data.fullName) formData.append('fullName', data.fullName);
@@ -37,12 +33,12 @@ export const useProfileUI = () => {
         
         if (data.avatarFile) formData.append('avatar', data.avatarFile);
         if (data.coverFile) {
-                formData.append('cover_image', data.coverFile); // Tên field 'cover_image' phải khớp với backend
+                formData.append('cover_image', data.coverFile); 
             }
         try {
             const result = await updateProfileMutation.mutateAsync(formData);
             if (result.success) {
-                setCurrentUser(result.data); // Update Global State ngay lập tức
+                setCurrentUser(result.data); 
                 showModal({ type: 'success', title: 'Thành công!', message: "Cập nhật hồ sơ thành công!", actions: [{ label: 'Đóng', style: 'primary' }] });
             } else {
                 showModal({ type: 'error', title: 'Thất bại', message: "Cập nhật thất bại", actions: [{ label: 'Đóng', style: 'danger' }] });
@@ -52,7 +48,6 @@ export const useProfileUI = () => {
         }
     };
 
-    // --- LOGIC: ĐIỂM DANH ---
     const handleCheckIn = async () => {
         try {
             const result = await checkInMutation.mutateAsync();
@@ -63,7 +58,6 @@ export const useProfileUI = () => {
         }
     };
 
-    // --- LOGIC: ĐỔI MẬT KHẨU ---
     const handleChangePassword = async () => {
         const newErrors = {};
         if (!passwords.oldPassword) newErrors.oldPassword = 'Nhập mật khẩu hiện tại';
@@ -86,7 +80,6 @@ export const useProfileUI = () => {
         }
     };
 
-    // --- LOGIC: MỞ HỘP QUÀ ---
     const handleOpenReward = async (reward) => {
         setSelectedBox(reward); 
         setIsRewardModalOpen(true); 
@@ -94,7 +87,7 @@ export const useProfileUI = () => {
         
         try {
             const result = await claimRewardMutation.mutateAsync(reward.user_reward_id);
-            setReceivedItems(result.data); // Axios bóc tách data, Mutation trả về data.data
+            setReceivedItems(result.data);
             await refreshProfile();
         } catch (err) {
             showModal({ type: 'error', title: 'Lỗi khi mở quà', message: err.message || "Có lỗi xảy ra" });
@@ -105,20 +98,16 @@ export const useProfileUI = () => {
     };
 
     return {
-        // State & Action Cập nhật Profile
         handleSaveProfile,
         isUpdatingProfile: updateProfileMutation.isPending,
         
-        // State & Action Đổi mật khẩu
         passwords, setPasswords, errors, resetFields: () => setPasswords({ oldPassword: '', newPassword: '', confirmPassword: '' }),
         isChangingPass: changePassMutation.isPending,
         handleChangePassword,
         isChangePassModalOpen, setIsChangePassModalOpen,
 
-        // Điểm danh
         handleCheckIn,
 
-        // State & Action Hộp quà
         selectedBox, receivedItems, isRewardModalOpen, setIsRewardModalOpen, isOpening, handleOpenReward
     };
 };

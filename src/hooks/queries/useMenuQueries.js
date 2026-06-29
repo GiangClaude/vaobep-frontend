@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useMenuQueries.js
-
 import { useQuery } from '@tanstack/react-query';
 import menuApi from '../../api/menuApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
@@ -54,6 +52,6 @@ export const usePublicMenusByUserQuery = (userId) => {
             const response = await menuApi.getPublicMenusByUser(userId);
             return response.success ? response.data : [];
         },
-        enabled: !!userId // Chỉ chạy khi có userId
+        enabled: !!userId
     });
 };

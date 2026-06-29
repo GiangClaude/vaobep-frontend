@@ -7,15 +7,12 @@ const ModalContext = createContext();
 export const useGlobalModal = () => useContext(ModalContext);
 
 export const ModalProvider = ({ children }) => {
-    // State cho Modal thông thường
     const [modalConfig, setModalConfig] = useState({ isOpen: false });
     
-    // State cho Report Modal
     const [reportConfig, setReportConfig] = useState({ isOpen: false, onSubmitAPI: null });
     const [reportLoading, setReportLoading] = useState(false);
     const [reportError, setReportError] = useState('');
 
-    // --- Actions ---
     const showModal = (config) => setModalConfig({ ...config, isOpen: true });
     const hideModal = () => setModalConfig({ isOpen: false });
 
@@ -25,7 +22,6 @@ export const ModalProvider = ({ children }) => {
     };
     const hideReportModal = () => setReportConfig({ isOpen: false });
 
-    // Hàm bọc xử lý logic loading/error cho Report
     const handleReportSubmit = async (reason) => {
         setReportLoading(true);
         setReportError('');
@@ -44,7 +40,6 @@ export const ModalProvider = ({ children }) => {
         <ModalContext.Provider value={{ showModal, hideModal, showReportModal }}>
             {children}
             
-            {/* DUY NHẤT 2 MODAL NÀY TỒN TẠI TRONG TOÀN APP */}
             <Modal 
                 isOpen={modalConfig.isOpen} 
                 onClose={hideModal} 

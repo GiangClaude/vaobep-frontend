@@ -49,7 +49,6 @@ export const useAdminArticlesQuery = (params) => {
 
 export const useAdminCategoriesQuery = () => {
     return useQuery({
-        // Tái sử dụng base key ADMIN_INGREDIENTS nhưng thêm param 'categories' để phân biệt
         queryKey: [QUERY_KEYS.ADMIN_INGREDIENTS, 'categories'],
         queryFn: async () => {
             const res = await adminApi.getAllCategories();
@@ -109,7 +108,7 @@ export const useAdminCountriesQuery = () => {
             if (!res.success) throw new Error(res.message);
             return res.data || [];
         },
-        staleTime: 1000 * 60 * 60, // Cache 1 tiếng vì danh sách quốc gia ít khi đổi
+        staleTime: 1000 * 60 * 60,
     });
 };
 
@@ -138,7 +137,7 @@ export const useAdminFetchDetails = () => {
             queryFn: async () => {
                 const res = await adminApi.getArticleDetail(articleId);
                 if (!res.success) throw new Error(res.message);
-                return res.data.data || res.data; // Tùy cấu trúc bài viết của bạn
+                return res.data.data || res.data; 
             }
         })
     };

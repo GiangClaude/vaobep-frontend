@@ -20,7 +20,6 @@ export const useSearchUsersQuery = ({ keyword, limit, sort, page, enabled }) => 
 
 export const useSearchRecipesQuery = ({ keyword, limit, filters, page, enabled }) => {
     return useQuery({
-        // Tái sử dụng key RECIPES_LIST nhưng gán thêm mác 'search' để tách biệt cache
         queryKey: [QUERY_KEYS.RECIPES_LIST, 'search', { keyword, limit, ...filters, page }],
         queryFn: async () => {
             if (!keyword) return { data: [], pagination: {} };

@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useArticlesQueries.js
-
 import { useQuery } from '@tanstack/react-query';
 import articleApi from '../../api/articleApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
@@ -9,7 +7,6 @@ export const useArticlesListQuery = (params) => {
     return useQuery({
         queryKey: [QUERY_KEYS.PUBLIC_ARTICLES, params],
         queryFn: async () => {
-            // console.log("ArticleQueries: ", params);
             const response = await articleApi.getPublicArticles(params);
             if (response.success) {
                 return {
@@ -28,7 +25,6 @@ export const useArticleDetailQuery = (id) => {
         queryFn: async () => {
             const response = await articleApi.getArticleById(id);
             if (response.success) {
-                // Do normalizeArticleList trả về mảng, ta lấy phần tử đầu tiên
                 return normalizeArticleList([response.data])[0];
             }
             throw new Error('Lỗi tải chi tiết bài viết');

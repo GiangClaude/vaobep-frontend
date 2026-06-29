@@ -41,7 +41,6 @@ const RecipeRankCard = ({ recipe, rank }) => {
                 </div>
             </div>
 
-            {/* Điểm (Hiện trên Desktop, ẩn trên Mobile nhỏ nếu chật) */}
             <div className="hidden sm:flex flex-col items-end ml-4 shrink-0">
                 <span className="text-xs text-gray-400 font-semibold uppercase tracking-wider">Điểm XH</span>
                 <span className="text-xl font-bold text-orange-500">{Math.round(recipe.score || 0)}</span>

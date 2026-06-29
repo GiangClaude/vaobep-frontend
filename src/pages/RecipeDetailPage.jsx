@@ -1,4 +1,3 @@
-// frontend/src/pages/RecipeDetailPage.jsx
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
@@ -44,17 +43,11 @@ export default function RecipeDetailPage() {
     isSaved: isSaved || false
   });
 
-  /**
-   * Hàm kiểm tra trạng thái đăng nhập và mở modal đánh giá món ăn
-   */
   const handleOpenRatingModal = requireAuth(() => {
-    setSelectedRating(userRating > 0 ? userRating : 5); // Mặc định 5 sao nếu chưa vote
+    setSelectedRating(userRating > 0 ? userRating : 5); 
     setIsRatingModalOpen(true);
   });
 
-  /**
-   * Hàm xử lý gửi dữ liệu đánh giá món ăn lên hệ thống backend
-   */
   const handleSubmitRating = () => {
     if (selectedRating === 0) return;
     console.log("Submit rating:", selectedRating);
@@ -68,7 +61,6 @@ export default function RecipeDetailPage() {
 
   const isAuthor = currentUser?.id === recipe.userId;
 
-  console.log("RecipeDetail: ", recipe);
   return (
     <div className="min-h-screen bg-[#fff9f0]">
       <main className="container mx-auto px-4 py-8">

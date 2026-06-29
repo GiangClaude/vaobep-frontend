@@ -9,7 +9,6 @@ export const useSearchUI = (keyword, initialConfig = {}) => {
     );
     const [articleFilter, setArticleFilter] = useState({ sort: "newest", tags: [] });
 
-    // Luôn reset về trang 1 khi người dùng gõ từ khóa mới
     useEffect(() => {
         setCurrentPage(1);
     }, [keyword]);

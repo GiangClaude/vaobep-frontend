@@ -2,7 +2,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import adminApi from '../../api/adminApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
 
-// 1. USERS
 export const useAdminUserMutations = () => {
     const queryClient = useQueryClient();
     const invalidate = () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_USERS] });
@@ -14,7 +13,6 @@ export const useAdminUserMutations = () => {
     };
 };
 
-// 2. RECIPES
 export const useAdminRecipeMutations = () => {
     const queryClient = useQueryClient();
     const invalidate = () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_RECIPES] });
@@ -26,18 +24,15 @@ export const useAdminRecipeMutations = () => {
     };
 };
 
-// 3. ARTICLES (Dựa theo hook cũ của bạn)
 export const useAdminArticleMutations = () => {
     const queryClient = useQueryClient();
     const invalidate = () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_ARTICLES] });
 
     return {
-        // Tương ứng với handleUpdateStatus cũ
         updateStatus: useMutation({ 
             mutationFn: ({ articleId, status }) => adminApi.updateArticleStatus(articleId, status), 
             onSuccess: invalidate 
         }),
-        // Tương ứng với handleDeleteArticle cũ
         deleteArticle: useMutation({ 
             mutationFn: (articleId) => adminApi.deleteArticle(articleId), 
             onSuccess: invalidate 
@@ -45,7 +40,6 @@ export const useAdminArticleMutations = () => {
     };
 };
 
-// 4. INGREDIENTS
 export const useAdminProcessIngredientMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -65,7 +59,6 @@ export const useAdminIngredientMutations = () => {
     };
 };
 
-// 5. DICTIONARY DISHES
 export const useAdminDictionaryMutations = () => {
     const queryClient = useQueryClient();
     const invalidate = () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_DICTIONARY] });
@@ -77,15 +70,13 @@ export const useAdminDictionaryMutations = () => {
     };
 };
 
-// 6. REPORTS
 export const useAdminReportMutations = () => {
     const queryClient = useQueryClient();
     return {
         processReport: useMutation({
-            mutationFn: (data) => adminApi.processReport(data), // { report_id, action, post_id, post_type }
+            mutationFn: (data) => adminApi.processReport(data),
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_REPORTS] });
-                // Cập nhật luôn các bảng nếu nội dung bị ẩn
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_RECIPES] });
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ADMIN_ARTICLES] });
             }

@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useRecipeDetailQuery.js
-
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import recipeApi from '../../api/recipeApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
@@ -21,7 +19,6 @@ export const useRecipeDetailQuery = (id) => {
     });
 };
 
-//Cần đợi data trả về id mới thực hiện fetch 
 export const useFetchRecipeDetailAsync = () => {
     const queryClient = useQueryClient();
 
@@ -29,7 +26,7 @@ export const useFetchRecipeDetailAsync = () => {
         return await queryClient.fetchQuery({
             queryKey: [QUERY_KEYS.RECIPE_DETAIL, id],
             queryFn: () => fetchRecipeDetailFn(id),
-            staleTime: 1000 * 60 * 5, // Cache 5 phút
+            staleTime: 1000 * 60 * 5,
         });
     };
 

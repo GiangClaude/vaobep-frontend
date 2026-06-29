@@ -14,7 +14,6 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
         onSort(columnKey, newOrder);
     };
 
-// [CẬP NHẬT] Dùng Lucide Icon cho Sort
     const renderSortIcon = (columnKey) => {
         if (currentSort?.key !== columnKey) return <ArrowUpDown size={14} className="text-gray-400 ml-1 opacity-30" />;
         return currentSort.order === 'ASC' 
@@ -23,7 +22,6 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
     };
 
     return (
-        // [CẬP NHẬT] Container: Bo góc lớn (rounded-3xl), bóng đổ màu cam nhạt, viền mỏng
         <motion.div 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -33,7 +31,6 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
                 <table className="min-w-full leading-normal table-fixed">
                     <colgroup>
                         {columns.map((col, index) => (
-                            // Áp dụng class width (vd: w-[30%]) vào thẻ col này
                             <col key={index} className={col.className || "w-auto"} />
                         ))}
                     </colgroup>
@@ -43,7 +40,6 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
                                 <th
                                     key={index}
                                     onClick={() => col.sortable ? handleSort(col.key) : null}
-                                    // [CẬP NHẬT] Header Styles: Text màu nâu, font đậm vừa phải
                                     className={`px-5 py-4 text-left text-xs font-bold text-[#7d5a3f] uppercase tracking-wider ${col.className || ''} ${col.sortable ? 'cursor-pointer hover:bg-orange-100/50 select-none transition-colors' : ''}`}
                                 >
                                     <div className="flex items-center gap-1">
@@ -55,13 +51,11 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
                         </tr>
                     </thead>
                     
-                    {/* [LOGIC CŨ] Loading làm mờ body */}
                     <tbody className={`transition-opacity duration-200 divide-y divide-gray-100 ${loading ? 'opacity-40 pointer-events-none' : 'opacity-100'}`}>
                         {children}
                     </tbody>
                 </table>
                 
-                {/* [CẬP NHẬT] Spinner Loading hiện đại hơn */}
                 {loading && (
                     <div className="absolute inset-0 flex items-center justify-center z-10 bg-white/30 backdrop-blur-[1px]">
                         <div className="bg-white p-3 rounded-full shadow-lg">
@@ -71,7 +65,6 @@ const AdminTable = ({ columns, children, pagination, onPageChange, onSort, curre
                 )}
             </div>
             
-            {/* [CẬP NHẬT] Pagination UI: Nút bo tròn, style Clean */}
             {pagination && (
                 <div className="px-5 py-4 bg-white border-t border-orange-100 flex flex-col xs:flex-row items-center justify-between gap-4">
                     <span className="text-sm text-gray-500 font-medium">

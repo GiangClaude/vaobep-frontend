@@ -32,7 +32,6 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
         initial={false}
         animate={{ y: -8 }}
         transition={{ type: "spring", stiffness: 300, damping: 30 }}
-        // [ĐỒNG BỘ ĐỘ DÀI]: Dùng h-full để component luôn dãn đều chiều cao khi nằm trong Grid/Flex
         className="cursor-pointer flex-shrink-0 relative mb-6 group w-full max-w-[640px] md:w-full h-full"
         style={{ zIndex: 50, position: 'relative' }}
         onClick={onClick}
@@ -41,10 +40,8 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
              onMouseEnter={() => setIsHovered(true)}
              onMouseLeave={() => setIsHovered(false)}
         >
-          {/* --- CỘT BÊN TRÁI --- */}
           <div className="w-full md:w-80 flex-shrink-0 flex flex-col bg-white relative h-full">
             
-            {/* Ảnh Cover: Fix cứng height để không bị xô lệch */}
             <div className="relative h-[220px] md:h-48 w-full overflow-hidden flex-shrink-0">
               <div className="absolute inset-0 transform transition-transform duration-700 ease-out" style={{ transform: isHovered ? "scale(1.08) rotate(-1deg)" : "scale(1)" }}>
                 <ImageWithFallBack src={image} alt={title} className="w-full h-full object-cover" />
@@ -74,20 +71,16 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
               </div>
             </div>
 
-            {/* Thông tin Cột Trái: flex-grow để tự động lấp đầy khoảng trống */}
             <div className="p-4 pt-3 flex-grow flex flex-col">
               
-              {/* [CỐ ĐỊNH VỊ TRÍ]: min-h-[48px] đảm bảo title luôn chiếm đủ chỗ của 2 dòng chữ */}
               <h3 className="text-[17px] font-extrabold mb-2 line-clamp-2 min-h-[48px] text-gray-800 leading-snug group-hover:text-[#ff751f] transition-colors">
                 {title}
               </h3>
               
-              {/* [CỐ ĐỊNH VỊ TRÍ]: set cứng h-[28px] cho mảng Tags */}
               <div className="mb-3 h-[28px] flex items-center">
                 <TagList tags={tags} maxDisplay={2} />
               </div>
 
-              {/* mt-auto: Luôn đẩy các icon Stats này xuống sát đáy của cột trái */}
               <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-gray-600 mt-auto">
                 <div className="flex items-center gap-1.5 bg-orange-50 px-2.5 py-1.5 rounded-xl border border-orange-100/50">
                   <Clock className="w-3.5 h-3.5 text-[#ff751f]" /><span>{cookTime} phút</span>
@@ -102,7 +95,6 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
             </div>
           </div>
 
-          {/* --- CỘT BÊN PHẢI (Chi tiết mở rộng) --- */}
           <motion.div
             initial={false}
             animate={{ opacity: 1 }}
@@ -112,13 +104,11 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
             <div className="p-5 h-full flex flex-col w-full">
               
               <div className="mb-4">
-                {/* [CỐ ĐỊNH VỊ TRÍ]: min-h-[40px] đảm bảo description luôn chiếm đủ 2 dòng */}
                 <p className="text-sm text-gray-500 line-clamp-2 min-h-[40px] leading-relaxed font-medium italic">
                   "{description}"
                 </p>
               </div>
               
-              {/* [CỐ ĐỊNH VỊ TRÍ]: h-[120px] bắt buộc khung nguyên liệu luôn cố định chiều cao dù có data hay không */}
               <div className="mb-4 bg-white p-3 rounded-2xl shadow-sm border border-orange-50 h-[120px] flex flex-col overflow-hidden">
                 <h4 className="text-sm mb-2 text-[#ff751f] flex items-center gap-1.5 font-bold uppercase tracking-wide flex-shrink-0">
                   <ChefHat className="w-4 h-4" /> Nguyên liệu chính
@@ -137,7 +127,6 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
                 </ul>
               </div>
               
-              {/* mt-auto: Luôn đẩy nút Bình Luận xuống sát đáy của cột phải */}
               <div className="flex-grow min-h-0 mt-auto flex items-end">
                 <div className="w-full bg-orange-100/50 rounded-xl p-2.5 flex items-center justify-center gap-2 hover:bg-[#ff751f] hover:text-white transition-colors group/btn text-[#ff751f] cursor-pointer">
                   <MessageCircle className="w-4 h-4" />

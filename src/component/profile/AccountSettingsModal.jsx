@@ -8,10 +8,8 @@ export function AccountSettingsModal({
   isOpen, 
   onClose, 
   user, 
-  // Props cho Profile
   onSaveProfile,
   isUpdatingProfile,
-  // Props cho Đổi Mật Khẩu
   passwords, 
   setPasswords, 
   errors, 
@@ -21,7 +19,6 @@ export function AccountSettingsModal({
 }) {
   const [activeTab, setActiveTab] = useState("info");
   
-  // --- STATE CHO ĐỔI THÔNG TIN ---
   const fileInputRef = useRef(null);
   const coverInputRef = useRef(null);
   const [previewAvatar, setPreviewAvatar] = useState(user?.avatar);
@@ -33,7 +30,6 @@ export function AccountSettingsModal({
     bio: user?.bio || '',
   });
 
-  // Đồng bộ data khi mở modal
   useEffect(() => {
     if (user && isOpen) {
       setProfileData({ fullName: user.fullName, bio: user.bio });
@@ -68,12 +64,11 @@ export function AccountSettingsModal({
     });
   };
 
-  // --- HÀM ĐÓNG MODAL ---
   const handleClose = () => {
-    resetFields(); // Reset form mật khẩu
-    setSelectedFile(null); // Xóa file đang chọn hờ
+    resetFields(); 
+    setSelectedFile(null);
     setSelectedCoverFile(null); 
-    setActiveTab("info"); // Quay về tab mặc định
+    setActiveTab("info"); 
     onClose();
   };
 
@@ -89,7 +84,7 @@ export function AccountSettingsModal({
           className="bg-white rounded-3xl w-full max-w-4xl flex flex-col md:flex-row overflow-hidden shadow-2xl h-[85vh] max-h-[700px]"
         >
           
-          {/* CỘT TRÁI: MENU ĐIỀU HƯỚNG */}
+          {/* MENU ĐIỀU HƯỚNG */}
           <div className="w-full md:w-72 bg-gray-50 border-r border-gray-100 p-6 flex flex-col flex-shrink-0">
             <h2 className="text-2xl font-bold mb-8 text-gray-800">Cài đặt</h2>
             
@@ -106,7 +101,7 @@ export function AccountSettingsModal({
             </nav>
           </div>
 
-          {/* CỘT PHẢI: NỘI DUNG FORM */}
+          {/* NỘI DUNG  */}
           <div className="flex-1 bg-white relative flex flex-col h-full overflow-hidden">
             {/* Nút tắt */}
             <div className="absolute top-4 right-4 z-10">
@@ -131,7 +126,7 @@ export function AccountSettingsModal({
                                 >
                                     {previewCover ? (
                                         <img 
-                                            src={previewCover} // Hàm lấy URL
+                                            src={previewCover} 
                                             alt="Cover Preview" 
                                             className="w-full h-full object-cover" 
                                         />
@@ -144,7 +139,6 @@ export function AccountSettingsModal({
                                     
                                     <input type="file" ref={coverInputRef} onChange={handleCoverChange} accept="image/*" className="hidden" />
                                     
-                                    {/* Overlay khi hover */}
                                     <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                                         <div className="flex items-center gap-2 text-white font-medium bg-black/50 px-4 py-2 rounded-lg backdrop-blur-sm">
                                             <Camera className="w-5 h-5" /> Thay đổi ảnh bìa
@@ -192,7 +186,7 @@ export function AccountSettingsModal({
                     </motion.div>
                 )}
 
-                {/* 2. TAB BẢO MẬT (ĐỔI MẬT KHẨU) */}
+                {/* 2. TAB BẢO MẬT */}
                 {activeTab === "security" && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="max-w-xl">
                         <h3 className="text-2xl font-bold mb-2 text-gray-800">Đổi Mật Khẩu</h3>
@@ -231,7 +225,7 @@ export function AccountSettingsModal({
                     </motion.div>
                 )}
 
-                {/* 3. TAB VIP (GÓI THÀNH VIÊN) */}
+                {/* 3. TAB VIP */}
                 {activeTab === "vip" && (
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="max-w-xl text-center pt-8">
                         <div className="inline-flex bg-yellow-50 p-6 rounded-full mb-6">

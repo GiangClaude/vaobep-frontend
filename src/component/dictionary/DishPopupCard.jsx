@@ -1,10 +1,9 @@
 import React from 'react';
 import { getDishImageUrl } from '../../utils/imageHelper';
-import { Heart, MapPin, ChevronRight } from 'lucide-react'; // Sử dụng lucide giống project của bạn
+import { Heart, MapPin, ChevronRight } from 'lucide-react';
 const DishPopupCard = ({ dish }) => {
     return (
         <div className="w-64 bg-[#fff9f0] rounded-2xl overflow-hidden shadow-2xl border border-[#d4b99a]/30 font-sans">
-            {/* Image Container */}
             <div className="relative h-40">
                 <img 
                     className="w-full h-full object-cover" 
@@ -16,7 +15,6 @@ const DishPopupCard = ({ dish }) => {
                 </div>
             </div>
 
-            {/* Content */}
             <div className="p-4">
                 <h3 className="text-lg font-bold text-[#7d5a3f] leading-tight mb-1">
                     {dish.original_name}
@@ -29,7 +27,6 @@ const DishPopupCard = ({ dish }) => {
                     {dish.description}
                 </p>
 
-                {/* Footer */}
                 <div className="flex items-center justify-between border-t border-[#d4b99a]/30 pt-3">
                     <div className="flex items-center text-[#e67e22]">
                         <Heart size={14} fill="currentColor" className="mr-1" />

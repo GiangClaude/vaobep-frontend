@@ -1,10 +1,8 @@
-// src/components/ui/TagList.jsx
-import { getDisplayTags } from "../../../utils/tagUtils"; // Hàm bà đã tạo sẵn
+import { getDisplayTags } from "../../../utils/tagUtils";
 import { TagItem } from "./TagItem";
 
 /**
  * Component quản lý danh sách thẻ tag.
- * Cho phép truyền tagClassName và onTagClick để tùy biến theo từng trang.
  */
 export function TagList({ 
   tags = [], 

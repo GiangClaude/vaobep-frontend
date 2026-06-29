@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Carrot, Check, X, Edit, Trash2, Plus, Search } from 'lucide-react';
 
 import { toast } from 'react-toastify';
-import debounce from 'lodash.debounce'; // Import thêm thư viện debounce
+import debounce from 'lodash.debounce';
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
 
@@ -12,22 +12,19 @@ import { useAdminIngredientMutations, useAdminProcessIngredientMutation } from '
 import { useGlobalModal } from '../../context/ModalContext';
 
 const AdminIngredientPage = () => {
-    // 1. Local State
     const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
-    const [searchTerm, setSearchTerm] = useState(''); // Text đang hiển thị ở UI
-    const [debouncedSearch, setDebouncedSearch] = useState(''); // Text dùng để fetch API
+    const [searchTerm, setSearchTerm] = useState(''); 
+    const [debouncedSearch, setDebouncedSearch] = useState(''); 
     const [currentSort, setCurrentSort] = useState({ key: 'name', order: 'ASC' });
     
     const [caloInputs, setCaloInputs] = useState({});
     const [categoryInputs, setCategoryInputs] = useState({});
 
-    // State Modal Form (Thêm/Sửa)
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({ name: '', calo_per_100g: '', status: 'approved',  category: ''});
 
-    // 2. Logic Debounce Search
     const debouncedSearchAction = useCallback(
         debounce((keyword) => { 
             setDebouncedSearch(keyword); 
@@ -40,11 +37,10 @@ const AdminIngredientPage = () => {
         debouncedSearchAction(e.target.value);
     };
 
-    // 3. Tích hợp Queries & Mutations
     const { data, isLoading: isLoadingAll } = useAdminIngredientsQuery({
         page, 
         limit: 10, 
-        search: debouncedSearch, // Gọi API theo giá trị đã debounce
+        search: debouncedSearch, 
         sortKey: currentSort.key, 
         sortOrder: currentSort.order
     });
@@ -57,14 +53,12 @@ const AdminIngredientPage = () => {
     const { createIngredient, updateIngredient, deleteIngredient } = useAdminIngredientMutations();
     const processIngredientMutation = useAdminProcessIngredientMutation();
 
-    // 4. Các hàm xử lý giao diện
     const handleCaloChange = (id, value) => {
         setCaloInputs(prev => ({ ...prev, [id]: value }));
     };
 
     const handleCategoryChange = (id, value) => setCategoryInputs(prev => ({ ...prev, [id]: value }));
 
-    // Hàm Duyệt / Từ chối nhanh
     const handleAction = async (id, action) => {
         const calo = caloInputs[id];
         const category = categoryInputs[id];
@@ -120,7 +114,6 @@ const AdminIngredientPage = () => {
         }
     };
 
-// THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
     const confirmDelete = (item) => {
         showModal({
             title: 'Xóa nguyên liệu',
@@ -147,7 +140,6 @@ const AdminIngredientPage = () => {
         });
     };
 
-    // 5. Cấu hình cột cho bảng
     const columns = [
         { key: 'name', label: 'Tên nguyên liệu', className: 'min-w-[150px] w-[20%]', sortable: true },
         { key: 'category', label: 'Danh mục', className: 'min-w-[150px] w-[20%]', sortable: true },
@@ -177,14 +169,13 @@ const AdminIngredientPage = () => {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    {/* Bỏ thẻ <form> đi vì giờ không cần submit enter nữa */}
                     <div className="relative">
                         <input 
                             type="text" 
                             placeholder="Tìm nguyên liệu..." 
                             className="pl-10 pr-4 py-2 rounded-lg border focus:border-[#ff6b35] focus:outline-none"
                             value={searchTerm}
-                            onChange={handleSearchChange} // Gọi hàm debounce
+                            onChange={handleSearchChange}
                         />
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     </div>
@@ -235,7 +226,7 @@ const AdminIngredientPage = () => {
                                 {ing.status === 'pending' ? (
                                     <input 
                                         type="text"
-                                        list="category-list" // Liên kết với datalist ở trên
+                                        list="category-list"
                                         placeholder="Chọn/Nhập mục..."
                                         className="w-full min-w-[120px] px-3 py-1.5 text-sm rounded-lg border-2 border-gray-200 focus:border-[#ff6b35] focus:outline-none transition-all placeholder-gray-300"
                                         value={categoryInputs[ing.ingredient_id] || ''}
@@ -309,29 +300,6 @@ const AdminIngredientPage = () => {
                 )}
             </AdminTable>
 
-            {/* PAGINATION
-            {allPagination.totalPages > 1 && (
-                <div className="flex justify-end items-center gap-4 mt-4">
-                    <button 
-                        disabled={allPagination.page === 1}
-                        onClick={() => setPage(allPagination.page - 1)}
-                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Trang trước
-                    </button>
-                    <span className="text-sm font-medium text-gray-600">
-                        Trang {allPagination.page} / {allPagination.totalPages}
-                    </span>
-                    <button 
-                        disabled={allPagination.page >= allPagination.totalPages}
-                        onClick={() => setPage(allPagination.page + 1)}
-                        className="px-4 py-2 border rounded-lg hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Trang sau
-                    </button>
-                </div>
-            )} */}
-
             {/* MODAL FORM */}
             {isFormOpen && (
                 <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
@@ -360,7 +328,7 @@ const AdminIngredientPage = () => {
                                 <label className="block text-sm font-medium text-gray-700 mb-1">Danh mục</label>
                                 <input 
                                     type="text" 
-                                    list="category-list" // Liên kết Datalist
+                                    list="category-list" 
                                     placeholder="Chọn hoặc nhập danh mục mới"
                                     className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-[#ff6b35]"
                                     value={formData.category} 
@@ -385,9 +353,9 @@ const AdminIngredientPage = () => {
                                     value={formData.status} 
                                     onChange={e => setFormData({...formData, status: e.target.value})}
                                 >
-                                    <option value="approved">Đã duyệt (Approved)</option>
-                                    <option value="pending">Chờ duyệt (Pending)</option>
-                                    <option value="reject">Từ chối (Reject)</option>
+                                    <option value="approved">Approve</option>
+                                    <option value="pending">Pending</option>
+                                    <option value="reject">Reject</option>
                                 </select>
                             </div>
                             <div className="pt-4 flex justify-end gap-3">

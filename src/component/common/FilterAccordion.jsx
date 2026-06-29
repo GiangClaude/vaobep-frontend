@@ -11,7 +11,6 @@ const FilterAccordion = ({
 }) => {
     return (
         <div className="border-b border-gray-50 last:border-0 pb-3 mb-2">
-            {/* Header: Chứa tiêu đề, badge và nút đóng mở */}
             <button 
                 onClick={onToggle}
                 className="flex items-center justify-between w-full py-2 px-1 hover:bg-gray-50 rounded-lg transition-colors group"
@@ -23,7 +22,6 @@ const FilterAccordion = ({
                         {label}
                     </span>
                     
-                    {/* Badge: Chỉ hiện khi có tag được chọn */}
                     {activeCount > 0 && (
                         <motion.span 
                             initial={{ scale: 0 }}
@@ -40,13 +38,11 @@ const FilterAccordion = ({
                 </div>
             </button>
 
-            {/* Content: Danh sách tag (đã được lọc bên ngoài truyền vào children) */}
             <div className="flex flex-wrap gap-2 mt-2 px-1">
                 <AnimatePresence mode="popLayout">
                     {children}
                 </AnimatePresence>
                 
-                {/* Thông báo nhỏ khi đóng mà không có gì để hiện */}
                 {!isOpen && activeCount === 0 && (
                     <motion.span 
                         initial={{ opacity: 0 }}

@@ -1,13 +1,11 @@
 import { useRef } from "react";
 import { ChevronLeft, ChevronRight, UtensilsCrossed, Plus } from "lucide-react";
-// Giữ nguyên đường dẫn import của bạn
 import { RecipeCard } from "../common/RecipeCard";
-import { ViewMoreCard } from "./ViewMoreCard"; // Đảm bảo đường dẫn này đúng trong dự án của bạn
+import { ViewMoreCard } from "./ViewMoreCard"; 
 import { useNavigate } from "react-router-dom";
 export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick}) {
   const scrollContainerRef = useRef(null);
   const navigate = useNavigate();
-  // console.log("RecipeSection: ", recipes);
   const scroll = (direction) => {
     if (scrollContainerRef.current) {
       const scrollAmount = 400;
@@ -18,7 +16,6 @@ export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick})
     }
   };
 
-  // --- Giữ nguyên phần Logic Empty State (khi không có công thức) ---
   if (!recipes || recipes.length === 0) {
     return (
       <section className="mb-12">
@@ -53,10 +50,8 @@ export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick})
     );
   }
 
-  // --- Phần render chính ---
   return (
     <section className="mb-12">
-      {/* Section Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <h2 className="text-3xl relative inline-block">
@@ -81,7 +76,6 @@ export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick})
         </div>
       </div>
 
-      {/* Scrollable Recipe Grid */}
       <div className="relative">
         <div
           ref={scrollContainerRef}
@@ -94,14 +88,11 @@ export function RecipeSection({ title, recipes, onRecipeClick ,onViewMoreClick})
           {recipes.map((recipe) => (
             <RecipeCard
               key={recipe.id}
-              // Truyền toàn bộ object recipe vào component
               recipe={recipe}
-              // Quan trọng: Truyền hàm xử lý click
               onClick={() => onRecipeClick && onRecipeClick(recipe.id)}
             />
           ))}
           
-          {/* View More Card at the end */}
           {onViewMoreClick && (
               <div 
                 onClick={onViewMoreClick} 

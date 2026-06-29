@@ -2,10 +2,8 @@ import { X, Upload, Image as ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import ImageWithFallBack from "../figma/ImageWithFallBack";
 
-// Component nhập danh sách các bước thực hiện
 export function StepInput({ steps, onChange }) {
   
-  // Thêm một bước trống mới vào danh sách
   const handleAddStep = () => {
     onChange([
       ...steps,
@@ -13,29 +11,25 @@ export function StepInput({ steps, onChange }) {
     ]);
   };
 
-  // Cập nhật nội dung hoặc hình ảnh của một bước cụ thể
   const handleUpdateStep = (index, field, value) => {
     const updatedSteps = [...steps];
     updatedSteps[index] = { ...updatedSteps[index], [field]: value };
     onChange(updatedSteps);
   };
 
-  // Xóa một bước khỏi danh sách dựa trên index
   const handleRemoveStep = (index) => {
     onChange(steps.filter((_, i) => i !== index));
   };
 
-  // Xử lý sự kiện upload ảnh minh họa cho bước
   const handleImageUpload = (index, event) => {
     const file = event.target.files?.[0];
     if (file) {
         const mockUrl = URL.createObjectURL(file);
-        // Gộp chung 1 lần cập nhật để React hiển thị ngay lập tức
         const updatedSteps = [...steps];
         updatedSteps[index] = { 
             ...updatedSteps[index], 
             image: mockUrl, 
-            imageFile: file // Lưu file thật để gửi xuống Backend
+            imageFile: file 
           };
       onChange(updatedSteps);
     }
@@ -124,7 +118,6 @@ export function StepInput({ steps, onChange }) {
         ))}
       </AnimatePresence>
 
-      {/* Nút thêm bước mới */}
       <motion.button
         whileHover={{ scale: 1.01 }}
         whileTap={{ scale: 0.99 }}

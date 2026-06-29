@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useMiscQueries.js
-
 import { useQuery } from '@tanstack/react-query';
 import tagApi from '../../api/tagApi';
 import ingredientApi from '../../api/ingredientApi';
@@ -7,7 +5,6 @@ import unitApi from '../../api/unitApi';
 import { rewardApi } from '../../api/rewardApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
 
-// Lấy Tags (Dữ liệu ít thay đổi, có thể cache Infinity)
 export const useTagsQuery = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.TAGS],
@@ -15,11 +12,10 @@ export const useTagsQuery = () => {
             const response = await tagApi.getAllTags();
             return response.success ? response.data : (Array.isArray(response.data) ? response.data : []);
         },
-        staleTime: Infinity, // Không gọi lại API trong suốt phiên làm việc
+        staleTime: Infinity,
     });
 };
 
-// Lấy hộp quà của tôi
 export const useMyRewardsQuery = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.REWARDS, 'my_rewards'],
@@ -30,7 +26,6 @@ export const useMyRewardsQuery = () => {
     });
 };
 
-// Lấy danh sách nguyên liệu cho Form Tạo công thức
 export const useIngredientsQuery = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.ADMIN_INGREDIENTS, 'all'],
@@ -38,11 +33,10 @@ export const useIngredientsQuery = () => {
             const response = await ingredientApi.getAll();
             return response.success ? response.data : [];
         },
-        staleTime: 1000 * 60 * 60, // Cache 1 tiếng
+        staleTime: 1000 * 60 * 60, 
     });
 };
 
-// Lấy danh sách đơn vị đo
 export const useUnitsQuery = () => {
     return useQuery({
         queryKey: [QUERY_KEYS.UNITS],
@@ -50,6 +44,6 @@ export const useUnitsQuery = () => {
             const response = await unitApi.getAll();
             return response.success ? response.data : [];
         },
-        staleTime: Infinity, // Đơn vị đo gần như không bao giờ đổi
+        staleTime: Infinity, 
     });
 };

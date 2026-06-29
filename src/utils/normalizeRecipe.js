@@ -1,10 +1,7 @@
-// utils/normalizeRecipe.js
 import { getAvatarUrl, getRecipeImageUrl } from "./imageHelper";
 
 /**
  * Hàm hỗ trợ parse chuỗi instructions thành mảng các bước nấu ăn
- * @param {string} instructionData - Chuỗi JSON hoặc text thô chứa các bước
- * @returns {Array} Mảng các object step
  */
 function parseInstructions(instructionData) {
   let steps = [];
@@ -32,11 +29,6 @@ function parseInstructions(instructionData) {
   return steps;
 }
 
-/**
- * Chuẩn hóa dữ liệu recipe từ backend để phù hợp với giao diện frontend
- * @param {Object} r - Dữ liệu recipe thô từ API
- * @returns {Object} Dữ liệu đã được chuẩn hóa
- */
 export function normalizeRecipe(r) {
   const parsedSteps = parseInstructions(r.instructions);
   return {
@@ -67,28 +59,22 @@ export function normalizeRecipe(r) {
     isSaved: !!r.is_saved,
     isTrusted: Boolean(r.is_trusted),
     
-    // --- PHẦN SỬA ĐỔI CHÍNH Ở ĐÂY ---
-    // Chuyển đổi mảng ingredients từ backend thành detailedIngredients cho UI
     detailedIngredients: Array.isArray(r.ingredients) 
       ? r.ingredients.map(ing => ({
           id: ing.ingredient_id,
           name: ing.ingredient_name,
           quantity: ing.quantity,
-          // amount: `${ing.quantity} ${ing.unit_name}`,
           unit_name: ing.unit_name,
           unit_id: ing.unit_id
         }))
       : [],
 
      ingredientNames: Array.isArray(r.ingredients)
-      // Nếu API trả về mảng object -> Lấy ra mảng tên
       ? r.ingredients.map(ing => ing.ingredient_names)
-      // Nếu API List trả về string (VD: "Thịt bò, Hành tây, Muối") -> Tách thành mảng
       : (typeof r.ingredient_names === 'string' 
           ? r.ingredient_names.split(',').map(name => name.trim()).filter(Boolean)
           : Array.isArray(r.ingredient_names) ? r.ingredient_names : []),
 
-    // -------------------------------
     reportCount: r.report_count !== undefined ? Number(r.report_count) : 0,
     ratingCount: r.rating_count !== undefined ? Number(r.rating_count) : 0,
     ratingSumScore: r.rating_sum_score !== undefined ? Number(r.rating_sum_score) : 0,

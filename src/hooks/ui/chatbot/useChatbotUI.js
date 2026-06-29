@@ -48,7 +48,6 @@ export const useChatbotUI = () => {
             'Có món nào nhanh gọn trong 5 phút không?'
           ];
 
-    // 4. Gửi tin nhắn
     const sendMessage = async (text) => {
         if (!text.trim()) return;
         
@@ -85,7 +84,6 @@ export const useChatbotUI = () => {
         }
     };
 
-    // 5. Xóa lịch sử
     const handleClearChat = () => {
         if (messages.length === 0) return; 
 
@@ -120,7 +118,7 @@ export const useChatbotUI = () => {
         open, toggleOpen,
         input, setInput,
         messages,
-        loading: chatMutation.isPending, // Gắn cờ loading vào trạng thái của Mutation
+        loading: chatMutation.isPending,
         currentContext,
         quicks,
         sendMessage,

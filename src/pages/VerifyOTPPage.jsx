@@ -1,4 +1,3 @@
-// File: src/pages/VerifyOTPPage.jsx
 import React from 'react';
 import { Shield, ArrowLeft, CheckCircle, Loader2 } from 'lucide-react';
 import { useVerifyOTPForm } from '../hooks/ui/auth/useAuthForms';
@@ -11,19 +10,15 @@ const VerifyOTPPage = () => {
     handleChange, handleKeyDown, handlePaste, handleVerify, handleResend, navigate
   } = useVerifyOTPForm();
 
-  // Nếu không có email (đang redirect), không render gì cả
   if (!email) return null;
 
   return (
     <div className="min-h-screen flex flex-col bg-[#fff9f0]">
-      {/* 1. Header */}
       <Header />
 
-      {/* 2. Main Content */}
       <main className="flex-1 flex items-center justify-center p-4 py-12">
         <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-8 border border-orange-100">
           
-          {/* Header: Back Button */}
           <div className="flex items-center mb-6">
             <button 
               onClick={() => navigate(-1)} 
@@ -76,14 +71,12 @@ const VerifyOTPPage = () => {
               ))}
             </div>
 
-            {/* Error Message */}
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-2 rounded-xl text-sm text-center mb-4 animate-pulse">
                 {error}
               </div>
             )}
 
-            {/* Success Message */}
             {success && (
               <div className="text-green-600 text-sm text-center mb-4 flex items-center justify-center gap-2 font-semibold bg-green-50 py-2 rounded-xl border border-green-200">
                 <CheckCircle className="w-5 h-5" />
@@ -92,7 +85,6 @@ const VerifyOTPPage = () => {
             )}
           </div>
 
-          {/* Verify Button */}
           <button
             onClick={handleVerify}
             disabled={loading || success || otp.join('').length !== 6}
@@ -109,7 +101,6 @@ const VerifyOTPPage = () => {
             ) : success ? 'Đã Xác Thực' : 'Xác Thực Ngay'}
           </button>
 
-          {/* Resend / Timer Section */}
           <div className="mt-8 text-center border-t pt-6 border-gray-100">
             <div className="text-sm text-gray-500">
               Không nhận được mã?{' '}

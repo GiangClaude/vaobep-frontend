@@ -1,12 +1,9 @@
-// VỊ TRÍ: frontend/src/component/menu/RecipeSearchModal.jsx
-
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Search, Clock, Flame, Plus } from 'lucide-react';
 import Pagination from '../common/Pagination'; 
 import { getRecipeImageUrl } from '../../utils/imageHelper';
 
-// Import trực tiếp các queries
 import { 
     useRecipesListQuery, 
     useSavedRecipesQuery, 
@@ -24,12 +21,10 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
         setPage(1);
     }, [activeTab]);
 
-    // 1. SỬ DỤNG REACT QUERY HOOKS
     const { data: exploreData, isFetching: loadingExplore } = useRecipesListQuery({ page, limit: 6, keyword });
     const { data: savedData, isFetching: loadingSaved } = useSavedRecipesQuery({ page, limit: 6 });
     const { data: mineData, isFetching: loadingMine } = useOwnerRecipesQuery();
 
-    // 2. GÁN DỮ LIỆU ĐỘNG THEO TAB
     let recipes = [];
     let pagination = null;
     let isLoading = false;
@@ -62,7 +57,6 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
     return createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-[32px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-4xl h-[85vh] flex flex-col overflow-hidden border border-white/20 transform transition-all animate-in zoom-in-95 duration-200">
-                {/* Header Modal */}
                 <div className="p-5 px-8 border-b border-slate-100 flex justify-between items-center bg-white shrink-0">
                     <div>
                         <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">Thêm món ăn</h2>
@@ -73,9 +67,7 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
                     </button>
                 </div>
 
-                {/* Phân vùng Tabs & Search (Nằm trên nền xám nhẹ) */}
                 <div className="bg-slate-50 border-b border-slate-100 shrink-0">
-                    {/* Tabs Pill Style */}
                     <div className="flex px-6 pt-4 pb-2 gap-2 overflow-x-auto hide-scrollbar">
                         {tabs.map(tab => (
                             <button
@@ -92,7 +84,6 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
                         ))}
                     </div>
 
-                    {/* Thanh tìm kiếm */}
                     {activeTab === 'explore' && (
                         <div className="p-4 px-6 relative">
                             <div className="relative group">
@@ -110,7 +101,6 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
                     )}
                 </div>
 
-                {/* Danh sách kết quả */}
                 <div className="flex-1 overflow-y-auto p-6 bg-slate-50/50 scroll-smooth">
                     {isLoading ? (
                         <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -160,7 +150,6 @@ export default function RecipeSearchModal({ isOpen, onClose, onSelectRecipe }) {
                         </div>
                     )}
 
-                    {/* Phân trang */}
                     {pagination && recipes.length > 0 && (
                         <div className="mt-8 border-t border-slate-100 pt-6">
                             <Pagination pagination={pagination} onPageChange={(newPage) => setPage(newPage)} />

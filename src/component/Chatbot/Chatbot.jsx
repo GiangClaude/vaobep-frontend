@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRecipeImageUrl } from '../../utils/imageHelper';
-// import useChatbot from '../../hooks/useChatbot';
 import { useChatbotUI } from '../../hooks/ui/chatbot/useChatbotUI';
 
 function Chatbot() {
@@ -27,7 +26,6 @@ function Chatbot() {
 
 return (
     <div className="fixed bottom-5 right-5 z-[9999]">
-      {/* NÚT BẬT/TẮT - Đã thu nhỏ từ 60px -> 50px */}
       <div 
         onClick={toggleOpen}
         className="w-[50px] h-[50px] bg-orange-400 text-white rounded-full flex items-center justify-center cursor-pointer shadow-[0_4px_10px_rgba(0,0,0,0.2)] ml-auto transition-transform hover:scale-105"
@@ -35,23 +33,19 @@ return (
         {open ? (
           <span className="font-bold text-base">✕</span>
         ) : (
-          // TRÌNH GIỮ CHỖ LOGO - Đã thu nhỏ
           <div className="w-[38px] h-[38px] bg-white rounded-full flex items-center justify-center overflow-hidden">
             <img src="/assets/logo/2.png" alt="" className="w-[28px] h-[28px]"/>
           </div>
         )}
       </div>
 
-      {/* KHUNG CỬA SỔ CHAT - Đã thu nhỏ từ 350x500 -> 300x420 */}
       {open && (
         <div className="absolute bottom-[65px] right-0 w-[300px] h-[430px] bg-white rounded-xl shadow-[0_8px_20px_rgba(0,0,0,0.15)] flex flex-col overflow-hidden">
           
            <div className="bg-orange-400 text-white px-[12px] py-[10px] flex justify-between items-center text-sm font-bold relative">
             <span>Trợ lý Vào Bếp</span>
             
-            {/* Vùng chứa Nút 3 chấm và Menu Option */}
             <div className="relative">
-              {/* Nút 3 chấm */}
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)} 
                 className="bg-transparent border-none text-white flex items-center justify-center p-1 rounded transition-colors hover:bg-orange-500 cursor-pointer"
@@ -66,13 +60,11 @@ return (
               {/* Popup Menu Option */}
               {isMenuOpen && (
                 <>
-                  {/* Lớp Overlay vô hình: Giúp đóng menu khi click ra ngoài */}
                   <div 
                     className="fixed inset-0 z-40" 
                     onClick={() => setIsMenuOpen(false)}
                   ></div>
 
-                  {/* Khung Option */}
                   <div className="absolute right-0 top-[120%] mt-1 w-40 bg-white rounded-lg shadow-[0_5px_15px_rgba(0,0,0,0.15)] z-50 overflow-hidden border border-gray-100 py-1">
                     <button 
                       onClick={onClearChatClick}
@@ -83,7 +75,6 @@ return (
                       </svg>
                       Xóa lịch sử
                     </button>
-                    {/* Sau này bạn có thể thêm các option khác ở đây: Cài đặt, Báo cáo... */}
                   </div>
                 </>
               )}
@@ -110,7 +101,6 @@ return (
                 key={i} 
                 className={`flex flex-col ${m.from === 'user' ? 'items-end' : 'items-start'}`}
               >
-                {/* BONG BÓNG TIN NHẮN - Giảm padding và font-size */}
                 <div 
                   className={`px-[12px] py-[8px] rounded-[16px] max-w-[85%] break-words text-[13px] leading-[1.4] 
                   ${m.from === 'user' 
@@ -129,7 +119,6 @@ return (
                         onClick={() => handleRecipeClick(recipe.recipe_id || recipe.article_id || recipe.dish_id)}
                         className="group flex items-center bg-white border border-transparent rounded-[12px] p-1.5 cursor-pointer transition-all duration-300 shadow-sm hover:shadow-md hover:border-orange-200"
                       >
-                        {/* Hình ảnh - Thu nhỏ w-10 h-10 */}
                         <div className="relative shrink-0 overflow-hidden rounded-lg">
                             <img 
                               src={recipe.cover_image ? getRecipeImageUrl(recipe.recipe_id || recipe.article_id, recipe.cover_image) : (recipe.image_url || '/default-recipe.jpg')} 

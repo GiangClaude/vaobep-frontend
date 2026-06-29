@@ -1,4 +1,3 @@
-// VỊ TRÍ TẠO FILE: frontend/src/hooks/ui/menu/useMenuListUI.js
 
 import { useNavigate } from 'react-router-dom';
 import { useCreateMenuMutation } from '../../mutations/useMenuMutations';
@@ -8,12 +7,11 @@ export const useMenuListUI = () => {
     const {showModal} = useGlobalModal();
     const createMenuMutation = useCreateMenuMutation();
 
-    // Hàm xử lý tạo nhanh 1 thực đơn trống
     const handleCreateBlankMenu = async () => {
         try {
             const result = await createMenuMutation.mutateAsync({ 
                 name: "Thực đơn mới chưa đặt tên",
-                days: [] // Backend sẽ tự xử lý mảng rỗng
+                days: [] 
             });
             
             if (result.success && result.data.menu_id) {
@@ -28,6 +26,6 @@ export const useMenuListUI = () => {
 
     return {
         handleCreateBlankMenu,
-        isCreating: createMenuMutation.isPending // Trạng thái loading để khóa nút bấm nếu cần
+        isCreating: createMenuMutation.isPending 
     };
 };

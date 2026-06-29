@@ -6,10 +6,8 @@ const Pagination = ({ pagination, onPageChange }) => {
      
     const { currentPage, totalPages, totalItems } = pagination;
 
-    // Không hiện nếu chỉ có 1 trang hoặc không có dữ liệu
     if (!totalPages || totalPages <= 1) return null;
 
-    // Logic tạo dãy số trang (Ví dụ: [1, 2, 3])
     const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
     return (
@@ -20,7 +18,6 @@ const Pagination = ({ pagination, onPageChange }) => {
             </p>
 
             <div className="flex items-center gap-2">
-                {/* Nút Previous */}
                 <button 
                     disabled={currentPage === 1}
                     onClick={() => onPageChange(currentPage - 1)}

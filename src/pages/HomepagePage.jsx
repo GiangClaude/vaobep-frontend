@@ -10,7 +10,6 @@ import DictionaryBanner from "../component/homepage/DictionaryBanner";
 import ArticleSection from "../component/homepage/ArticleSection";
 import Sidebar from '../component/homepage/Sidebar';
 
-// [MỚI] IMPORT CÁC QUERY HOOKS (Tuyệt đối không dùng hook cũ nữa)
 import { useRecentRecipesQuery, useOwnerRecipesQuery } from '../hooks/queries/useRecipesQueries';
 import { useFeaturedArticlesQuery } from '../hooks/queries/useArticlesQueries';
 import { usePublicMenusQuery } from '../hooks/queries/useMenuQueries';
@@ -18,13 +17,11 @@ import { usePublicMenusQuery } from '../hooks/queries/useMenuQueries';
 export default function HomePage() {
   const navigate = useNavigate();
 
-  // [MỚI] Lấy data từ React Query (Cắm thẳng vào Cache)
   const { data: latestRecipes = [], isLoading: latestLoading } = useRecentRecipesQuery();
   const { data: ownerRecipes = [], isLoading: ownerLoading } = useOwnerRecipesQuery();
   const { data: featuredArticles = [], isLoading: featuredLoading } = useFeaturedArticlesQuery(3);
   const { data: latestMenus = [], isLoading: menuLoading } = usePublicMenusQuery();
 
-  // Handle Navigation
   const handleNavigateToDetail = (id) => navigate(`/recipe/${id}`);
   const handleViewMoreRecipes = () => navigate('/recipes');
 
@@ -37,7 +34,6 @@ export default function HomePage() {
       <main className="grid grid-cols-1 lg:grid-cols-12 gap-8 container mx-auto px-4">
         <div className="lg:col-span-8">
           
-          {/* LATEST RECIPES */}
           {latestLoading ? (
             <div className="w-full h-64 flex items-center justify-center text-[#7d5a3f] animate-pulse">
               Đang tải công thức mới...
@@ -51,7 +47,6 @@ export default function HomePage() {
             />
           )} 
           
-          {/* FEATURED ARTICLES */}
           {featuredLoading ? (
             <div className="w-full h-40 flex items-center justify-center text-[#7d5a3f] animate-pulse">
               Đang tải bài viết nổi bật...
@@ -67,10 +62,8 @@ export default function HomePage() {
               isLoading={menuLoading} 
           /> 
 
-          {/* DICTIONARY BANNER */}
           <DictionaryBanner />
 
-          {/* OWNER RECIPES */}
           {ownerLoading ? (
             <div className="w-full h-64 flex items-center justify-center text-[#7d5a3f] animate-pulse">
               Đang tải công thức của bạn...
@@ -85,7 +78,6 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* SIDEBAR */}
         <div className="lg:col-span-4">
           <Sidebar />
         </div>

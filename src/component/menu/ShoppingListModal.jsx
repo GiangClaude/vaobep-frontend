@@ -1,12 +1,8 @@
-// VỊ TRÍ: frontend/src/component/menu/ShoppingListModal.jsx
-
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, ShoppingCart, Check, Beef, Carrot, UtensilsCrossed, Wheat, PackageOpen } from 'lucide-react';
-// Import Query thay vì useMenu cũ
 import { useShoppingListQuery } from '../../hooks/queries/useMenuQueries';
 
-// Map icon cho đẹp
 const CATEGORY_MAP = {
     meat: { label: 'Thịt & Hải sản', icon: <Beef className="w-5 h-5 text-rose-500" /> },
     vegetable: { label: 'Rau củ & Trái cây', icon: <Carrot className="w-5 h-5 text-emerald-500" /> },
@@ -16,13 +12,10 @@ const CATEGORY_MAP = {
 };
 
 export default function ShoppingListModal({ isOpen, onClose, menuId }) {
-    // 1. CHUẨN SOLID: Tách API logic sang Query
     const { data: listData, isLoading } = useShoppingListQuery(menuId);
     
-    // 2. UI State
     const [checkedItems, setCheckedItems] = useState(new Set());
 
-    // Reset tick mỗi khi mở lại modal hoặc đổi menu
     useEffect(() => {
         if (isOpen) setCheckedItems(new Set());
     }, [isOpen, menuId]);
@@ -36,7 +29,6 @@ export default function ShoppingListModal({ isOpen, onClose, menuId }) {
 
     if (!isOpen) return null;
 
-    // Tính toán process bar
     const calculateProgress = () => {
         if (!listData) return 0;
         let total = 0;
@@ -51,7 +43,6 @@ export default function ShoppingListModal({ isOpen, onClose, menuId }) {
         <div className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-slate-900/40 backdrop-blur-sm sm:p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-t-[32px] sm:rounded-[32px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-2xl h-[85vh] sm:h-[80vh] flex flex-col overflow-hidden border border-white/20 transform transition-all sm:animate-in sm:zoom-in-95 slide-in-from-bottom-10 sm:slide-in-from-bottom-0 duration-300">
                 
-                {/* Header Gradient */}
                 <div className="p-6 border-b border-orange-100 flex flex-col gap-4 bg-gradient-to-r from-orange-50 to-amber-50 shrink-0 relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-32 h-32 bg-white/40 rounded-full blur-2xl -mt-10 -mr-10 pointer-events-none"></div>
                     
@@ -70,7 +61,6 @@ export default function ShoppingListModal({ isOpen, onClose, menuId }) {
                         </button>
                     </div>
 
-                    {/* Progress Bar */}
                     {!isLoading && listData && Object.keys(listData).length > 0 && (
                         <div className="relative z-10 mt-2">
                             <div className="flex justify-between text-xs font-bold text-slate-500 mb-1.5 px-1">
@@ -109,7 +99,6 @@ export default function ShoppingListModal({ isOpen, onClose, menuId }) {
                                 
                                 return (
                                 <div key={category} className="bg-white rounded-[24px] shadow-sm border border-slate-100 overflow-hidden">
-                                    {/* Tiêu đề nhóm */}
                                     <div className="flex items-center gap-2 bg-slate-50/50 px-5 py-3 border-b border-slate-100">
                                         <div className="bg-white p-1.5 rounded-lg shadow-sm border border-slate-100">
                                             {catInfo.icon}
@@ -121,8 +110,6 @@ export default function ShoppingListModal({ isOpen, onClose, menuId }) {
                                             {items.length}
                                         </span>
                                     </div>
-
-                                    {/* Danh sách items */}
                                     <div className="p-2">
                                         {items.map((item, index) => {
                                             const itemId = `${category}-${index}`;

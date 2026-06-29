@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { useGlobalModal } from "../../../context/ModalContext";
 
-// Import Hooks chuẩn
 import { useOwnerRecipesQuery } from "../../queries/useRecipesQueries";
 import { useFetchRecipeDetailAsync } from "../../queries/useRecipeDetailQuery"; // <-- IMPORT TỪ ĐÂY
 import { useDeleteRecipeMutation, useChangeRecipeStatusMutation } from "../../mutations/useContentMutations";
@@ -17,7 +16,6 @@ export const useMyRecipesUI = ({ isPublicView, publicRecipes }) => {
     const deleteMutation = useDeleteRecipeMutation();
     const statusMutation = useChangeRecipeStatusMutation();
     
-    // Gọi hook để lấy cái hàm fetch
     const fetchRecipeDetailAsync = useFetchRecipeDetailAsync();
 
     const displayRecipes = useMemo(() => {
@@ -35,7 +33,6 @@ export const useMyRecipesUI = ({ isPublicView, publicRecipes }) => {
         setIsCreateModalOpen(true);
     };
 
-    // Khi User bấm Edit -> Gọi hàm, đợi kết quả, nhét vào state, mở Modal. Clean & clear!
     const handleEditRecipe = async (id) => {
         try {
             const recipeData = await fetchRecipeDetailAsync(id); 

@@ -2,16 +2,11 @@ import { getAvatarUrl, getRecipeImageUrl } from "./imageHelper";
 
 /**
  * Chuẩn hóa dữ liệu Recipe từ Leaderboard
- * @param {Object} item - Một dòng dữ liệu từ API
- * @param {boolean} isCurrentMonth - API trả về dạng live hay history
  */
 export const normalizeRankedRecipe = (item, isCurrentMonth) => {
-    // Nếu là tháng hiện tại, dữ liệu nằm thẳng ở item
-    // Nếu là tháng cũ, các trường chi tiết nằm trong item.snapshot_data
     const data = isCurrentMonth ? item : item.snapshot_data;
     
     return {
-        // ID lấy từ recipe_id (Live) hoặc entity_id (History)
         id: isCurrentMonth ? item.recipe_id : item.entity_id,
         score: isCurrentMonth ? item.point : item.score,
         
@@ -34,7 +29,6 @@ export const normalizeRankedRecipe = (item, isCurrentMonth) => {
 };
 
 /**
- * Chuẩn hóa dữ liệu User từ Leaderboard
  */
 export const normalizeRankedUser = (item, isCurrentMonth) => {
     const data = isCurrentMonth ? item : item.snapshot_data;

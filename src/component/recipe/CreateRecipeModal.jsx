@@ -5,7 +5,6 @@ import { StepInput } from "./StepInput";
 import ImageWithFallBack from "../figma/ImageWithFallBack";
 import TagSelector from "../common/TagSelector";
 
-// UI Hook
 import { useRecipeFormUI } from "../../hooks/ui/recipe/useRecipeFormUI";
 
 export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
@@ -76,7 +75,6 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                             </div>
                         </div>
 
-                        {/* Tags, Ings, Steps */}
 
 
                         <div>
@@ -84,7 +82,6 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                             <TagSelector selectedTags={formData.tags} onChange={(newTags) => setFormData({...formData, tags: newTags})} />
                         </div>
 
-                                                {/* [BẮT ĐẦU THÊM MỚI 6] KHU VỰC AI ASSISTANT */}
                         <div className="bg-gradient-to-br from-purple-50 to-orange-50 border border-purple-100 rounded-2xl p-4 mt-6">
                             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
                                 <div>
@@ -106,7 +103,6 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                                 </button>
                             </div>
 
-                            {/* Card Hiển thị kết quả AI */}
                             <AnimatePresence>
                                 {aiResult && (
                                     <motion.div 
@@ -173,7 +169,6 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                         </div>
                     </div>
 
-                    {/* Footer */}
                     <div className="p-6 bg-white border-t-2 border-gray-200 rounded-b-3xl flex gap-3">
                         <button onClick={onClose} className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium">Hủy</button>
                         <button onClick={() => handleSubmit("draft")} disabled={isSaving || !formData.title} className="flex-1 px-6 py-3 bg-gray-600 text-white rounded-xl flex items-center justify-center gap-2 font-semibold disabled:opacity-50">

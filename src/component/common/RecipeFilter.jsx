@@ -1,4 +1,3 @@
-// frontend/src/component/common/RecipeFilter.jsx
 import React, { useState, useMemo } from "react";
 import { Search, Filter, Clock, Star, ChefHat, Check } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -7,12 +6,7 @@ import { TAG_TYPE_LABELS, TAG_CATEGORY_ORDER, groupTagsByType } from "../../util
 import FilterAccordion from "./FilterAccordion";
 import { useTagQueries } from "../../hooks/queries/useTagQueries";
 
-/**
- * Component hiển thị bộ lọc.
- * Nhận state 'filters' từ cha để đồng bộ UI với URL thay vì tự quản lý state nội bộ.
- */
 export function RecipeFilter({ filters, onFilterChange }) {
-  // 1. STATE & DATA (Đã xóa state filters nội bộ)
   const [openSections, setOpenSections] = useState({
     cuisine: true,
     ingredient: true,
@@ -30,19 +24,12 @@ export function RecipeFilter({ filters, onFilterChange }) {
 
   const ratingOptions = [5, 4, 3];
 
-  // 2. LOGIC XỬ LÝ
   const groupedTags = useMemo(() => groupTagsByType(serverTags), [serverTags]);
 
-  /**
-   * Đẩy bộ lọc mới lên component cha (RecipesListPage) để xử lý thay vì tự lưu.
-   */
   const updateFilters = (newFilters) => {
     if (onFilterChange) onFilterChange(newFilters);
   };
 
-  /**
-   * Xử lý bật/tắt tag dựa trên danh sách tag do cha truyền xuống.
-   */
   const handleTagToggle = (tagId) => {
     const currentTags = filters?.tags || [];
     const newTags = currentTags.includes(tagId)
@@ -55,19 +42,16 @@ export function RecipeFilter({ filters, onFilterChange }) {
     setOpenSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  // Lấy danh sách tag an toàn đề phòng filters chưa load kịp
   const activeTags = filters?.tags || [];
 
   return (
     <div className="bg-white rounded-[20px] shadow-sm border border-gray-100 p-5">
-      {/* HEADER */}
       <div className="flex items-center gap-2 mb-6">
         <Filter className="w-5 h-5 text-[#ff6b35]" />
         <h3 className="text-lg font-bold text-gray-800">Lọc món ăn</h3>
       </div>
 
       <div className="space-y-1">
-        {/* I. PHẦN TAGS ĐỘNG (TỪ DATABASE) */}
         {TAG_CATEGORY_ORDER.map((typeKey) => {
           const groupData = groupedTags[typeKey];
           if (!groupData || groupData.length === 0) return null;
@@ -109,7 +93,6 @@ export function RecipeFilter({ filters, onFilterChange }) {
           );
         })}
 
-        {/* II. PHẦN THỜI GIAN NẤU (TĨNH) */}
         <FilterAccordion
           label="Thời gian nấu"
           isOpen={openSections.cookingTime}
@@ -134,7 +117,6 @@ export function RecipeFilter({ filters, onFilterChange }) {
           ))}
         </FilterAccordion>
 
-        {/* III. PHẦN ĐÁNH GIÁ (TĨNH) */}
         <FilterAccordion
           label="Đánh giá"
           isOpen={openSections.rating}

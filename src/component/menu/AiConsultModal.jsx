@@ -1,16 +1,12 @@
-// VỊ TRÍ: frontend/src/component/menu/AiConsultModal.jsx
-
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Sparkles, Bot } from 'lucide-react';
-// Import Mutation AI
 import { useAiConsultationMutation } from '../../hooks/mutations/useMenuMutations';
 
 export default function AiConsultModal({ isOpen, onClose, menuState }) {
     const [aiResponse, setAiResponse] = useState('');
     const hasFetched = useRef(false);
     
-    // 1. KẾT NỐI MUTATION
     const consultMutation = useAiConsultationMutation();
     const isThinking = consultMutation.isPending;
 
@@ -25,7 +21,6 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                 hasFetched.current = true;
                 setAiResponse('');
                 
-                // Kiểm tra xem menu có món ăn chưa
                 const hasRecipes = menuState.days?.some(d => d.meals?.some(m => m.recipes?.length > 0));
                 
                 if (!hasRecipes) {
@@ -34,7 +29,6 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                 }
 
                 try {
-                    // Gọi API qua Mutation
                     const response = await consultMutation.mutateAsync(menuState);
                     if (response.success && response.data) {
                         setAiResponse(response.data);
@@ -49,7 +43,6 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
         fetchAI();
     }, [isOpen, menuState, consultMutation]);
 
-    // Hàm render Markdown cơ bản
     const formatText = (text) => {
         return text.split('\n').map((line, index) => {
             const formattedLine = line.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-slate-800">$1</strong>');
@@ -62,7 +55,6 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
     return createPortal(
         <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-900/40 backdrop-blur-md p-4 animate-in fade-in duration-200">
             <div className="bg-white rounded-[32px] shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] w-full max-w-lg overflow-hidden border border-white/20 transform transition-all animate-in zoom-in-95 duration-200">
-                {/* Header Gradient */}
                 <div className="p-5 bg-gradient-to-r from-violet-50 to-fuchsia-50 flex justify-between items-center relative overflow-hidden border-b border-violet-100/50">
                     <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-gradient-to-br from-violet-200/40 to-fuchsia-200/40 rounded-full blur-xl"></div>
                     <div className="flex items-center gap-3 relative z-10">
@@ -79,7 +71,6 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                     </button>
                 </div>
 
-                {/* Body */}
                 <div className="p-6 bg-white min-h-[280px] max-h-[65vh] overflow-y-auto">
                     {isThinking ? (
                         <div className="flex flex-col items-center justify-center h-full text-violet-500 space-y-5 py-12">

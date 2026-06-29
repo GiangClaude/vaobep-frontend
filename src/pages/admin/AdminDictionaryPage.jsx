@@ -6,27 +6,23 @@ import { toast } from 'react-toastify';
 import AdminTable from '../../component/admin/AdminTable';
 import { getDishImageUrl } from '../../utils/imageHelper';
 
-// [MỚI] Import hooks kiến trúc mới
 import { useAdminDictionaryQuery, useAdminCountriesQuery } from '../../hooks/queries/useAdminQueries';
 import { useAdminDictionaryMutations } from '../../hooks/mutations/useAdminMutations';
 
 import { useGlobalModal } from '../../context/ModalContext';
 
 const AdminDictionaryPage = () => {
-    // 1. Local State UI & Filter
     const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [debouncedSearch, setDebouncedSearch] = useState('');
     const [currentSort, setCurrentSort] = useState({ key: 'created_at', order: 'DESC' });
     
-    // State Form Modal
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     
     const [showAdvanced, setShowAdvanced] = useState(false);
 
-    // Dữ liệu Form
     const [formData, setFormData] = useState({
         original_name: '', english_name: '', description: '', 
         history: '', country: '', latitude: '', longitude: ''
@@ -34,25 +30,20 @@ const AdminDictionaryPage = () => {
 
     const { data: countries = [], isLoading: isLoadingCountries } = useAdminCountriesQuery();
     
-    // Ảnh
     const [imageFile, setImageFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
 
-    // Quán ăn (Eateries)
     const [editEateries, setEditEateries] = useState(false);
     const [eateries, setEateries] = useState([]);
 
-    // 2. KẾT NỐI API QUA HOOKS MỚI
     const { data, isLoading } = useAdminDictionaryQuery({
         page, limit: 10, search: debouncedSearch, sortKey: currentSort.key, sortOrder: currentSort.order
     });
     const dishes = data?.data || [];
-    console.log("AdminDish: ", dishes);
     const pagination = data?.pagination || { page: 1, limit: 10, totalPages: 1 };
 
     const { createDish, updateDish, deleteDish } = useAdminDictionaryMutations();
 
-    // 3. Logic Debounce Search
     const debouncedSearchAction = useCallback(
         debounce((keyword) => { 
             setDebouncedSearch(keyword); 
@@ -65,7 +56,6 @@ const AdminDictionaryPage = () => {
         debouncedSearchAction(e.target.value);
     };
 
-    // 4. Các hàm xử lý Modal & Form
     const openCreateModal = () => {
         setEditingItem(null);
         setFormData({
@@ -91,7 +81,6 @@ const AdminDictionaryPage = () => {
             latitude: item.latitude || '', 
             longitude: item.longitude || ''
         });
-        console.log("OpenEditModel: ", item, formData);
         
         setImageFile(null);
         if (item.image_url) {
@@ -114,7 +103,6 @@ const AdminDictionaryPage = () => {
         }
     };
 
-    // Quản lý Mảng Quán ăn
     const addEatery = () => setEateries([...eateries, { name: '', address: '' }]);
     const updateEatery = (index, field, value) => {
         const newEateries = [...eateries];
@@ -123,7 +111,6 @@ const AdminDictionaryPage = () => {
     };
     const removeEatery = (index) => setEateries(eateries.filter((_, i) => i !== index));
 
-    // Xử lý Submit
     const submitForm = async (e) => {
         e.preventDefault();
         const submitData = new FormData();
@@ -146,7 +133,7 @@ const AdminDictionaryPage = () => {
                 await updateDish.mutateAsync({ id: editingItem.dish_id, formData: submitData });
             } else {
                 await createDish.mutateAsync(submitData);
-                setPage(1); // Thêm mới thì nhảy về trang 1
+                setPage(1); 
             }
             setIsFormOpen(false);
         } catch (error) {
@@ -154,8 +141,6 @@ const AdminDictionaryPage = () => {
         }
     };
 
-    // Xử lý Xóa
-    // THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
     const confirmDelete = (item) => {
         showModal({
             title: 'Xóa món ăn',
@@ -270,7 +255,6 @@ const AdminDictionaryPage = () => {
                 )}
             </AdminTable>
 
-            {/* PAGINATION */}
             {pagination.totalPages > 1 && (
                 <div className="flex justify-end items-center gap-4 mt-4">
                     <button disabled={pagination.page === 1} onClick={() => setPage(pagination.page - 1)} className="px-4 py-2 border rounded hover:bg-gray-50 disabled:opacity-50">Trang trước</button>
@@ -279,7 +263,6 @@ const AdminDictionaryPage = () => {
                 </div>
             )}
 
-            {/* MODAL FORM THÊM / SỬA (GIỮ NGUYÊN HOÀN TOÀN TỪ CODE CỦA BẠN) */}
             {isFormOpen && (
                 <div className="fixed inset-0 bg-black/60 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-xl shadow-xl w-full max-w-4xl max-h-[90vh] overflow-y-auto">
@@ -290,7 +273,6 @@ const AdminDictionaryPage = () => {
                         
                         <form onSubmit={submitForm} className="p-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                {/* CỘT TRÁI: THÔNG TIN CƠ BẢN */}
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-1">Tên gốc *</label>
@@ -358,7 +340,6 @@ const AdminDictionaryPage = () => {
                                     </div>
                                 </div>
 
-                                {/* CỘT PHẢI: ẢNH VÀ MÔ TẢ */}
                                 <div className="space-y-4">
                                     <div>
                                         <label className="block text-sm font-medium mb-1">Ảnh món ăn</label>
@@ -385,7 +366,6 @@ const AdminDictionaryPage = () => {
                                 </div>
                             </div>
 
-                            {/* PHẦN ĐỊA ĐIỂM ĂN UỐNG (EATERIES) */}
                             <div className="mt-8 border-t pt-6">
                                 <div className="flex items-center justify-between mb-4">
                                     <h3 className="text-lg font-bold flex items-center gap-2"><MapPin size={20} className="text-red-500" /> Danh sách Quán ăn gợi ý</h3>
@@ -414,7 +394,6 @@ const AdminDictionaryPage = () => {
                                 )}
                             </div>
 
-                            {/* NÚT LƯU */}
                             <div className="mt-8 flex justify-end gap-3 sticky bottom-0 bg-white pt-4 border-t">
                                 <button type="button" onClick={() => setIsFormOpen(false)} className="px-6 py-2 border rounded text-gray-600">Hủy</button>
                                 <button type="submit" className="px-6 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-medium">Lưu Thông Tin</button>

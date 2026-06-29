@@ -7,7 +7,6 @@ import ArticleCard from '../component/common/ArticleCard';
 import { ArticleFilter } from '../component/common/ArticleFilter';
 import Pagination from '../component/common/Pagination';
 
-// [MỚI] Import Hooks
 import { useArticlesListQuery } from '../hooks/queries/useArticlesQueries';
 import { useFilters } from '../hooks/ui/common/useFilters';
 
@@ -15,18 +14,16 @@ export default function ArticlesListPage() {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   
-  // 1. Dùng UI Hook để gom toàn bộ State Filter (Kể cả Sort)
   const { filters, debouncedFilters, replaceFilters, updateFilter } = useFilters({
     searchTerm: "",
     tags: [],
-    sort: "newest" // <--- SORT nằm ở đây
+    sort: "newest" 
   });
 
-  // 2. Truyền Debounced Data vào React Query
   const { data, isLoading } = useArticlesListQuery({
     page,
     limit: 10,
-    search: debouncedFilters.searchTerm,  // Backend articleApi của bạn dùng field `search`
+    search: debouncedFilters.searchTerm, 
     tags: debouncedFilters.tags,
     sortKey: debouncedFilters.sort === 'newest' ? 'created_at' : (debouncedFilters.sort === 'featured' ? 'like_count' : 'read_time'),
     sortOrder: debouncedFilters.sort === 'read_time_asc' ? 'ASC' : 'DESC'
@@ -35,7 +32,6 @@ export default function ArticlesListPage() {
   const articles = data?.data || [];
   const paginationMeta = data?.pagination || { page: 1, totalPages: 1, totalItems: 0 };
 
-  // Nhận thay đổi từ component <ArticleFilter />
   const handleFilterChange = (newFilters) => {
     replaceFilters(newFilters);
     setPage(1); 
@@ -51,7 +47,6 @@ export default function ArticlesListPage() {
         <h1 className="text-3xl font-bold mb-8">Bài viết học thuật</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* CỘT TRÁI (TÌM KIẾM & LỌC & SẮP XẾP) */}
           <div className="lg:col-span-1 space-y-4">
              <div className="relative">
                 <input
@@ -59,18 +54,16 @@ export default function ArticlesListPage() {
                   placeholder="Tìm kiếm tiêu đề bài viết..."
                   className="w-full pl-12 pr-4 py-3 rounded-xl border border-gray-100 shadow-sm focus:ring-2 focus:ring-[#ff6b35] outline-none"
                   value={filters.searchTerm}
-                  onChange={(e) => updateFilter('searchTerm', e.target.value)} // Update Text ngay lập tức
+                  onChange={(e) => updateFilter('searchTerm', e.target.value)} 
                 />
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
              </div>
 
              <div className="sticky top-24">
               <ArticleFilter filters={filters} onFilterChange={handleFilterChange} />
-                 {/* Component ArticleFilter sẽ gọi handleFilterChange khi user bấm Sort hoặc đổi Tag */}
              </div>
           </div>
 
-          {/* CỘT PHẢI (DANH SÁCH BÀI VIẾT) */}
           <div className="lg:col-span-2 space-y-4 relative min-h-[400px]">
             {isLoading && (
               <div className="absolute inset-0 z-10 bg-white/60 flex justify-center pt-20 backdrop-blur-[1px]">

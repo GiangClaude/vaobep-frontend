@@ -1,10 +1,8 @@
 import { getAvatarUrl, getArticleImageUrl, getRecipeImageUrl } from "./imageHelper";
 
-// Hàm chuẩn hóa 1 object bài viết từ DB sang định dạng Frontend cần
 export function normalizeArticle(a) {
   if (!a) return null;
   
-  // Chuẩn hóa danh sách recipes gắn kèm (nếu có)
   const rawRecipes = a.linked_recipes || a.recipes || [];
   const normalizedRecipes = rawRecipes.map(r => ({
     id: r.recipe_id || r.id,
@@ -28,13 +26,11 @@ export function normalizeArticle(a) {
     createdAt: a.created_at || null,
     date: a.created_at ? new Date(a.created_at).toLocaleDateString('vi-VN') : "",
     
-    // Giữ Object author cho các UI đang dùng
     author: {
       id: a.author_id || a.user_id,
       name: a.author_name || "Chuyên gia",
       avatar: getAvatarUrl(a.author_id || a.user_id, a.author_avatar)
     },
-    // Trải phẳng ra để giống Recipe nếu cần
     authorName: a.author_name || "Chuyên gia",
     authorAvatar: getAvatarUrl(a.author_id || a.user_id, a.author_avatar),
 
@@ -42,9 +38,6 @@ export function normalizeArticle(a) {
     recipes: normalizedRecipes,
     linkedRecipes: a.linked_recipes || [],
 
-    // ==========================================
-    // CHUẨN HÓA TƯƠNG TÁC (ĐỒNG BỘ VỚI RECIPE)
-    // ==========================================
     isLiked: !!a.is_liked,
     isSaved: !!a.is_saved,
     likeCount: Number(a.like_count) || 0,
@@ -53,7 +46,6 @@ export function normalizeArticle(a) {
   };
 }
 
-// Hàm chuẩn hóa 1 mảng các bài viết
 export function normalizeArticleList(arr) {
   return Array.isArray(arr) ? arr.map(normalizeArticle) : [];
 }

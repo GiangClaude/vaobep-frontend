@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useDictionaryQueries.js
-
 import { useQuery } from '@tanstack/react-query';
 import dictionaryDishApi from '../../api/dictionaryDishApi';
 import { QUERY_KEYS } from '../../config/queryKeys';

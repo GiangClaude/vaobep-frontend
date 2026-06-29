@@ -1,4 +1,3 @@
-// Danh mục hiển thị Tiếng Việt cho các loại tag trong Database
 export const TAG_TYPE_LABELS = {
     cuisine: "Vùng miền & Quốc gia",
     meal_time: "Bữa ăn trong ngày",
@@ -12,7 +11,6 @@ export const TAG_TYPE_LABELS = {
     other: "Chủ đề khác"
 };
 
-// Thứ tự hiển thị ưu tiên trên giao diện
 export const TAG_CATEGORY_ORDER = [
     'cuisine', 
     'meal_time', 
@@ -28,8 +26,6 @@ export const TAG_CATEGORY_ORDER = [
 
 /**
  * Hàm gom nhóm mảng tag phẳng thành object theo tag_type
- * @param {Array} tags - Mảng các tag từ API
- * @returns {Object} - Object đã gom nhóm { meal_time: [...], ingredient: [...] }
  */
 export const groupTagsByType = (tags) => {
     if (!tags || !Array.isArray(tags)) return {};
@@ -58,10 +54,8 @@ export const getDisplayTags = (tags = [], maxDisplay = 2) => {
 
 /**
  * Hàm điều hướng người dùng sang trang tìm kiếm khi click vào một thẻ tag toàn cục.
- * Đã sửa lỗi: Nhận trực tiếp thực thể `Maps` từ component truyền vào để tuân thủ Rules of Hooks.
  */
 export const handleTagClick = (navigate, tagId, type = 'recipes') => {
 
-    // Chuyển hướng kèm query params và dùng trực tiếp navigate được truyền sang
     navigate(`/${type}?tab=${type}&tags=${tagId}`);
 };

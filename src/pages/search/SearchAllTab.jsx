@@ -9,7 +9,6 @@ export default function SearchAllTab() {
     const [searchParams] = useSearchParams();
     const keyword = searchParams.get("keyword") || "";
 
-    // Lấy 3 API cùng lúc
     const { data: userData, isFetching: loadingU } = useSearchUsersQuery({ keyword, page: 1, limit: 8, enabled: true });
     const { data: recipeData, isFetching: loadingR } = useSearchRecipesQuery({ keyword, page: 1, limit: 8, enabled: true });
     const { data: articleData, isFetching: loadingA } = useSearchArticlesQuery({ keyword, page: 1, limit: 3, enabled: true });

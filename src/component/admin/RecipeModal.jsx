@@ -7,7 +7,6 @@ import {
 import { getRecipeImageUrl, getAvatarUrl } from '../../utils/imageHelper';
 
 const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
-    // State cho Form Create/Edit
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -18,19 +17,17 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
         status: 'public',
         is_trust: 0,
         cover_image: null,
-        ingredients: [] // [{name: '', quantity: '', unit: ''}]
+        ingredients: [] 
     });
 
     const [steps, setSteps] = useState([]);
 
-    // State riêng cho Input Nguyên Liệu hiện tại (mô phỏng IngredientInput.jsx)
     const [currentIngredient, setCurrentIngredient] = useState({
         name: '', quantity: '', unit: ''
     });
 
     const [previewImage, setPreviewImage] = useState(null);
 
-    // Reset Form
    useEffect(() => {
         if (isOpen) {
             if (mode === 'create') {
@@ -45,10 +42,9 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                     ? recipeData.instructions.split('\n').filter(s => s.trim() !== '').map((desc, index) => ({
                         id: `existing-${index}`,
                         description: desc,
-                        image: "" // Admin cũ chưa có ảnh từng bước, để trống
+                        image: ""
                       }))
                     : [{ id: Date.now(), description: "", image: "" }];
-                // [SỬA LỖI] Phải khởi tạo đầy đủ structure cho formData, đặc biệt là ingredients
                 setFormData({
                     title: recipeData.title || '',
                     description: recipeData.description || '',
@@ -59,7 +55,7 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                     status: recipeData.status || 'public',
                     is_trust: recipeData.is_trust || 0,
                     cover_image: null,
-                    ingredients: recipeData.ingredients || [] // [QUAN TRỌNG] Thêm dòng này để không bị lỗi .map
+                    ingredients: recipeData.ingredients || [] 
                 });
             }
         }
@@ -67,7 +63,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
 
     if (!isOpen) return null;
 
-    // --- Handlers cho Create Form ---
     const handleFileChange = (e) => {
         const file = e.target.files[0];
         if (file) {
@@ -114,7 +109,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
     const handleStepImageUpload = (index, event) => {
         const file = event.target.files?.[0];
         if (file) {
-            // Demo hiển thị ảnh local
             const mockUrl = URL.createObjectURL(file);
             handleUpdateStep(index, "image", mockUrl);
         }
@@ -124,7 +118,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
         e.preventDefault();
         
         if (mode === 'create') {
-            // Build FormData
             const submission = new FormData();
             submission.append('title', formData.title);
             submission.append('description', formData.description);
@@ -137,7 +130,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
             
             onSubmit(submission);
         } else if (mode === 'edit') {
-            // Edit chỉ gửi JSON thường
             onSubmit({
                 status: formData.status,
                 is_trust: parseInt(formData.is_trust)
@@ -155,7 +147,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Overlay */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
@@ -164,7 +155,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
                     />
 
-                    {/* Modal Container */}
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -174,7 +164,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                             className="bg-[#fff9f0] rounded-3xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh] overflow-hidden"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            {/* Header Gradient */}
                             <div className="bg-gradient-to-r from-[#ff6b35] to-[#f7931e] px-6 py-4 flex justify-between items-center shrink-0 relative overflow-hidden">
                                 <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full translate-x-20 -translate-y-20 blur-2xl"></div>
                                 
@@ -189,13 +178,10 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                 </button>
                             </div>
 
-                            {/* Body Scrollable */}
                             <div className="p-6 overflow-y-auto custom-scrollbar flex-1 bg-[#fff9f0]">
                                 
-                                {/* --- VIEW MODE --- */}
                                 {mode === 'view' && recipeData && (
                                     <div className="space-y-6">
-                                        {/* Hero Section: Image & Title */}
                                         <div className="flex flex-col md:flex-row gap-6">
                                             <div className="w-full md:w-1/3 aspect-square rounded-2xl overflow-hidden shadow-lg border-4 border-white">
                                                 <img 
@@ -207,7 +193,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                             <div className="flex-1 space-y-3">
                                                 <h2 className="text-2xl font-black text-gray-800 leading-tight">{recipeData.title}</h2>
                                                 
-                                                {/* Author Info */}
                                                 <div className="flex items-center gap-2 p-2 bg-white rounded-xl shadow-sm border border-orange-100 w-fit">
                                                     <img 
                                                         src={getAvatarUrl(recipeData.user_id, recipeData.author_avatar)} 
@@ -220,7 +205,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                     </div>
                                                 </div>
 
-                                                {/* Meta Tags */}
                                                 <div className="flex flex-wrap gap-2 mt-2">
                                                     <span className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-xs font-bold flex items-center gap-1">
                                                         <Flame size={12} /> {recipeData.total_calo} Kcal
@@ -240,7 +224,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                             </div>
                                         </div>
 
-                                        {/* Stats Grid */}
                                         <div className="grid grid-cols-3 gap-4">
                                             <div className="bg-white p-3 rounded-2xl shadow-sm border border-orange-100 flex flex-col items-center justify-center">
                                                 <ThumbsUp className="text-[#ff6b35] mb-1" size={20} />
@@ -259,7 +242,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                             </div>
                                         </div>
 
-                                        {/* Content: Ingredients & Instructions */}
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="bg-white p-5 rounded-2xl shadow-sm border border-orange-100">
                                                 <h4 className="font-bold text-gray-800 mb-3 flex items-center gap-2">
@@ -288,13 +270,10 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                     </div>
                                 )}
 
-                                {/* --- CREATE MODE --- */}
                                 {mode === 'create' && (
                                     <form onSubmit={handleSubmit} className="space-y-6">
-                                        {/* Basic Info */}
                                         <div className="space-y-4">
 
-                                                                                    {/* Cover Image Upload */}
                                         <div>
                                             <label className="block text-lg mb-3 text-gray-800 flex items-center gap-2 font-bold">📸 Ảnh bìa công thức</label>
                                             <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 flex flex-col items-center justify-center bg-gray-50 hover:bg-white hover:border-[#ff6b35] transition-all cursor-pointer relative h-48">
@@ -345,14 +324,11 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                             </div>
                                         </div>
 
-                                        {/* Ingredients List */}
-{/* 2. INGREDIENTS SECTION (STYLE MỚI - GIỐNG IngredientInput.jsx) */}
                                         <div>
                                             <label className="block text-lg mb-3 text-gray-800 flex items-center gap-2 font-bold">
-                                                🥘 Nguyên liệu <span className="text-red-500">*</span>
+                                                Nguyên liệu <span className="text-red-500">*</span>
                                             </label>
                                             
-                                            {/* List đã thêm */}
                                             {formData.ingredients.length > 0 && (
                                                 <div className="mb-4 space-y-2">
                                                     <AnimatePresence>
@@ -378,7 +354,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                 </div>
                                             )}
 
-                                            {/* Form nhập liệu (Grid style) */}
                                             <div className="bg-white rounded-xl border-2 border-[#ffc857]/30 p-4">
                                                 <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
                                                     <div className="md:col-span-5">
@@ -451,7 +426,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                             </div>
 
                                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                                                                {/* Text Area */}
                                                                 <div className="md:col-span-2">
                                                                     <label className="block text-sm mb-1.5 text-gray-700">Mô tả chi tiết</label>
                                                                     <textarea
@@ -463,7 +437,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                                     />
                                                                 </div>
 
-                                                                {/* Image Upload (UI Only) */}
                                                                 <div>
                                                                     <label className="block text-sm mb-1.5 text-gray-700">Ảnh minh họa</label>
                                                                     {step.image ? (
@@ -474,7 +447,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                                     ) : (
                                                                         <label className="h-[120px] border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-[#ff6b35] hover:bg-orange-50/50 transition-all group">
                                                                             <input type="file" accept="image/*" onChange={(e) => handleStepImageUpload(index, e)} className="hidden"/>
-                                                                            {/* <Upload className="w-6 h-6 text-gray-400 group-hover:text-[#ff6b35] mb-2"/> */}
                                                                             <span className="text-xs text-gray-500">Tải ảnh</span>
                                                                         </label>
                                                                     )}
@@ -498,20 +470,14 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
 
 
                                         
-                                        {/* Hidden submit trigger */}
                                         <button type="submit" className="hidden"></button>
                                     </form>
                                 )}
 
-                                {/* --- EDIT MODE --- */}
                                 {mode === 'edit' && (
                                     <form onSubmit={handleSubmit} className="space-y-6">
                                         <div className="p-4 bg-orange-50 rounded-xl border border-orange-100 flex items-start gap-3">
                                             <AlertCircle className="text-[#ff6b35] shrink-0 mt-0.5" size={20} />
-                                            <div className="text-sm text-gray-700">
-                                                <p className="font-bold mb-1">Lưu ý quản trị viên:</p>
-                                                <p>Việc thay đổi trạng thái hoặc gắn nhãn "Trusted" sẽ ảnh hưởng trực tiếp đến hiển thị của món ăn trên trang chủ.</p>
-                                            </div>
                                         </div>
 
                                         <div>
@@ -521,8 +487,8 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                                 value={formData.status}
                                                 onChange={(e) => setFormData({...formData, status: e.target.value})}
                                             >
-                                                <option value="public">🟢 Public (Công khai)</option>
-                                                <option value="banned">🔴 Banned (Cấm hiển thị)</option>
+                                                <option value="public">Public</option>
+                                                <option value="banned">Ban</option>
                                             </select>
                                         </div>
                                         
@@ -539,7 +505,6 @@ const RecipeModal = ({ isOpen, onClose, mode, recipeData, onSubmit }) => {
                                 )}
                             </div>
 
-                            {/* Footer Buttons */}
                             {mode !== 'view' && (
                                 <div className="p-6 border-t border-orange-100 bg-white flex justify-end gap-3 shrink-0">
                                     <button onClick={onClose} className="px-5 py-2.5 rounded-xl border-2 border-gray-100 text-gray-600 font-semibold hover:bg-gray-50 transition-colors">

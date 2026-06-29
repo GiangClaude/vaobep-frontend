@@ -1,11 +1,8 @@
-// VỊ TRÍ: frontend/src/hooks/mutations/useContentMutations.js
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import recipeApi from '../../api/recipeApi';
 import articleApi from '../../api/articleApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
 
-// --- RECIPES ---
 export const useCreateRecipeMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -49,7 +46,6 @@ export const useChangeRecipeStatusMutation = () => {
     });
 };
 
-// --- ARTICLES --- (Tương tự Recipes)
 export const useCreateArticleMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
@@ -69,12 +65,10 @@ export const useDeleteArticleMutation = () => {
     });
 };
 
-// Thêm vào frontend/src/hooks/mutations/useContentMutations.js
 
 export const useChangeArticleStatusMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        // Tùy theo API của bà, có thể là articleApi.changeStatus hoặc articleApi.updateArticle
         mutationFn: ({ articleId, status }) => articleApi.updateArticle(articleId, { status }),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.OWNER_ARTICLES] });
@@ -82,14 +76,11 @@ export const useChangeArticleStatusMutation = () => {
     });
 };
 
-// Thêm Mutation để cập nhật toàn bộ thông tin bài viết (Title, Content, Cover,...)
 export const useUpdateArticleMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        // Gửi formData lên để update tương tự recipe
         mutationFn: ({ articleId, formData }) => articleApi.updateArticle(articleId, formData),
         onSuccess: (data, variables) => {
-            // Refetch lại chi tiết bài viết và danh sách của tôi sau khi update
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_DETAIL, variables.articleId] });
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.OWNER_ARTICLES] });
         }

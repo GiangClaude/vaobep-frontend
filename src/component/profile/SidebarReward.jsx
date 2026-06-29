@@ -13,7 +13,6 @@ export function SidebarReward({ pendingCount, onClick }) {
       onClick={onClick}
       className="bg-gradient-to-br from-[#ff6b35] to-[#f7931e] rounded-2xl p-5 text-white shadow-xl cursor-pointer relative overflow-hidden group mb-6"
     >
-      {/* Hiệu ứng lấp lánh chạy qua */}
       <motion.div 
         animate={{ x: ['-100%', '200%'] }}
         transition={{ repeat: Infinity, duration: 2, ease: "linear" }}

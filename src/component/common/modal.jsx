@@ -1,9 +1,8 @@
 import React from 'react';
-import { createPortal } from 'react-dom'; // <--- THÊM MỚI: Dùng để đưa modal ra khỏi Card
+import { createPortal } from 'react-dom'; 
 import { motion, AnimatePresence } from 'motion/react';
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react';
 
-// Map icon và màu sắc theo type
 const modalTypes = {
   success: { icon: CheckCircle, color: 'text-green-500', bg: 'bg-green-100' },
   error: { icon: AlertCircle, color: 'text-red-500', bg: 'bg-red-100' },
@@ -16,37 +15,31 @@ export default function Modal({
   onClose, 
   title, 
   message, 
-  type = 'info', // success | error | warning | info
-  actions = []   // Mảng các nút: [{ label, onClick, style: 'primary' | 'secondary' | 'danger' }]
+  type = 'info', 
+  actions = []  
 }) {
   if (!isOpen) return null;
 
   const { icon: Icon, color, bg } = modalTypes[type] || modalTypes.info;
 
-  // Sử dụng createPortal để gắn Modal vào cuối thẻ <body> thay vì nằm trong ArticleCard
   return createPortal(
     <AnimatePresence mode="wait">
-      {/* Overlay: fixed, full screen */}
       <motion.div
         key="modal-overlay"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        // QUAN TRỌNG: Chặn click từ Modal lan ra ArticleCard cha bên dưới
         onClick={(e) => {
           e.stopPropagation(); 
-          // Nếu muốn click ra ngoài để đóng, có thể gọi onClose() ở đây
         }}
         className="fixed inset-0 z-[10000] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
       >
-        {/* Modal Content Container */}
         <motion.div
           key="modal-content"
           initial={{ scale: 0.9, opacity: 0, y: 20 }}
           animate={{ scale: 1, opacity: 1, y: 0 }}
           exit={{ scale: 0.9, opacity: 0, y: 20 }}
           transition={{ type: "spring", duration: 0.4, bounce: 0.3 }}
-          // Chặn click bên trong modal không làm kích hoạt đóng modal từ overlay
           onClick={(e) => e.stopPropagation()}
           className="bg-white rounded-3xl shadow-2xl w-full max-w-sm overflow-hidden"
         >
@@ -74,7 +67,7 @@ export default function Modal({
                 <button
                   key={index}
                   onClick={(e) => {
-                    e.stopPropagation(); // Chặn click nút bấm làm nhảy trang detail
+                    e.stopPropagation();
                     if (action.onClick) {
                         action.onClick();
                     }
@@ -106,6 +99,6 @@ export default function Modal({
         </motion.div>
       </motion.div>
     </AnimatePresence>,
-    document.body // Gắn trực tiếp vào body của trang web
+    document.body 
   );
 }

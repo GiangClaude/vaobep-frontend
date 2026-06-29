@@ -15,12 +15,10 @@ export default function SearchArticleTab() {
     const keyword = searchParams.get("keyword") || "";
     
     const [page, setPage] = useState(1);
-    const [isFilterOpen, setIsFilterOpen] = useState(false); // Trạng thái mở Drawer
+    const [isFilterOpen, setIsFilterOpen] = useState(false); 
     
-    // Quản lý trạng thái bộ lọc (Tag, Sort) cho Bài viết
     const { filters, debouncedFilters, replaceFilters } = useFilters({ sort: "newest", tags: [] });
 
-    // Reset về trang 1 khi đổi từ khóa
     useEffect(() => { setPage(1); }, [keyword]);
 
     const { data, isFetching } = useSearchArticlesQuery({
@@ -30,12 +28,10 @@ export default function SearchArticleTab() {
     const articles = data?.data || [];
     const pagination = data?.pagination || {};
 
-    // Tính số lượng filter đang áp dụng để hiện badge (1 cho sort nếu khác mặc định + số lượng tags)
     const activeFilterCount = (filters.tags?.length || 0) + (filters.sort !== "newest" ? 1 : 0);
 
     return (
         <div className="animate-in fade-in duration-300">
-            {/* Header của Tab: Tiêu đề + Nút Bộ lọc */}
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-800">Bài viết học thuật</h2>
                 
@@ -53,13 +49,10 @@ export default function SearchArticleTab() {
                 </button>
             </div>
 
-            {/* Danh sách kết quả chiếm 100% chiều rộng */}
             {isFetching ? (
                 <div className="py-20 text-center animate-pulse text-[#ff6b35] font-bold">Đang tải bài viết...</div>
             ) : articles.length > 0 ? (
                 <>
-                    {/* Bọc thêm thẻ div grid nếu muốn chia 2 cột bài viết trên màn hình to, 
-                        hoặc để mặc định 1 cột như cũ tùy ý bạn. Component ArticleList hiện tại đang là 1 cột */}
                     <ArticleList data={articles} onCardClick={(id) => navigate(`/article/${id}`)} />
                     <Pagination pagination={pagination} onPageChange={setPage} />
                 </>
@@ -67,7 +60,6 @@ export default function SearchArticleTab() {
                 <EmptyState text="Không tìm thấy bài viết nào phù hợp với bộ lọc." />
             )}
 
-            {/* DRAWER BỘ LỌC (Trượt từ phải sang giống Món ăn) */}
             <AnimatePresence>
                 {isFilterOpen && (
                     <>

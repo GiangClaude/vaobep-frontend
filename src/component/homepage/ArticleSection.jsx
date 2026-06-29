@@ -7,7 +7,6 @@ export default function ArticleSection({ articles }) {
   const goToArticle = (id) => navigate(`/article/${id}`);
   return (
     <section className="mb-12">
-      {/* Section Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div className="bg-gradient-to-br from-[#ff6b35] to-[#f7931e] p-2.5 rounded-xl">

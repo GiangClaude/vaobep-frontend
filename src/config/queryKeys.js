@@ -1,4 +1,3 @@
-// VỊ TRÍ: frontend/src/config/queryKeys.js
 
 export const QUERY_KEYS = {
     // 1. Recipes
@@ -9,11 +8,11 @@ export const QUERY_KEYS = {
     FEATURED_RECIPES: 'featured_recipes',
     SAVED_RECIPES: 'saved_recipes',
     
-    // 2. Interactions (Tương tác)
+    // 2. Interactions
     INTERACTION_STATE: 'interaction_state',
     RECIPE_COMMENTS: 'recipe_comments',
 
-    // 3. Articles (Bài viết)
+    // 3. Articles
     ARTICLE_DETAIL: 'article_detail',
     PUBLIC_ARTICLES: 'public_articles',
     FEATURED_ARTICLES: 'featured_articles',

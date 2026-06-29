@@ -2,9 +2,8 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import { Loader2, UtensilsCrossed, CalendarDays, FileText } from "lucide-react";
 
-// Components
 import { ProfileHeader } from "../component/profile/ProfileHeader";
-import { ProfileSidebar } from "../component/profile/ProfileSidebar"; // THÊM SIDEBAR VÀO ĐÂY
+import { ProfileSidebar } from "../component/profile/ProfileSidebar"; 
 import { MyRecipesTab } from "../component/profile/MyRecipeTab";
 import { GiftPointsModal } from "../component/profile/GiftPointsModal";
 import MenuCard from '../component/menu/MenuCard';
@@ -19,19 +18,15 @@ export default function UserProfilePage() {
   const { id } = useParams(); 
   const { currentUser } = useAuth(); 
 
-  // State quản lý Tabs
   const [activeTab, setActiveTab] = useState('recipes');
 
-  // 1. Data Fetching
   const { data, isLoading, error } = useUserProfileQuery(id);
   
-  // 2. Business Logic & UI States
   const { 
       isGiftModalOpen, setIsGiftModalOpen, 
       handleFollowClick, handleGiftSubmit 
   } = useUserProfileUI(id, currentUser);
 
-  // Xử lý Loading
   if (isLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
@@ -40,7 +35,6 @@ export default function UserProfilePage() {
     );
   }
 
-  // Xử lý Lỗi
   if (error || !data?.user) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 gap-4">
@@ -57,11 +51,9 @@ export default function UserProfilePage() {
   console.log("User Profile: ", user);
 
   return (
-    // Đồng bộ nền xám và spacing
     <div className="min-h-screen bg-gray-50 pb-12">
       <main className="w-full mx-auto px-4 md:px-8 py-6 max-w-[1500px]">
         
-        {/* HEADER (Bìa & Avatar) */}
         <ProfileHeader
           user={user}
           isOwnProfile={false} 
@@ -70,10 +62,8 @@ export default function UserProfilePage() {
           onGift={() => setIsGiftModalOpen(true)}
         />
 
-        {/* LAYOUT 2 CỘT */}
         <div className="flex flex-col lg:flex-row gap-6 mt-6">
           
-          {/* CỘT TRÁI: SIDEBAR (Chỉ hiện thống kê, ẩn điểm danh/quà) */}
           <div className="w-full lg:w-[320px] flex-shrink-0">
              <div className="sticky top-24">
                 <ProfileSidebar 
@@ -85,10 +75,8 @@ export default function UserProfilePage() {
              </div>
           </div>
 
-          {/* CỘT PHẢI: NỘI DUNG (TABS) */}
           <div className="flex-1 min-w-0 bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
              
-             {/* Thanh Tabs Header */}
              <div className="sticky top-0 z-40 bg-white/95 backdrop-blur-sm border-b border-gray-100 px-2 flex overflow-x-auto scrollbar-hide">
                 <button 
                   onClick={() => setActiveTab('recipes')}
@@ -108,13 +96,10 @@ export default function UserProfilePage() {
                 >
                    <CalendarDays className="w-5 h-5" /> Thực đơn
                 </button>
-                {/* Nếu bạn có lấy list bài viết (articles) của user này từ API, hãy thêm tab Bài viết ở đây */}
              </div>
 
-             {/* Nội dung Tab */}
              <div className="p-6">
                 
-                {/* TAB CÔNG THỨC */}
                 {activeTab === 'recipes' && (
                    <div>
                        <MyRecipesTab isPublicView={true} publicRecipes={recipes} />
@@ -128,7 +113,6 @@ export default function UserProfilePage() {
                   </div>
                 )}
 
-                {/* TAB THỰC ĐƠN */}
                 {activeTab === 'menus' && (
                    <div>
                        {menus.length === 0 ? (

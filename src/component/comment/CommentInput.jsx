@@ -17,7 +17,6 @@ export default function CommentInput({ onSubmit, placeholder = "Viết bình lu�
 
     return (
         <form onSubmit={handleSubmit} className="flex gap-3 items-start w-full">
-            {/* Avatar người dùng hiện tại */}
             <img 
                 src={currentUser ? getAvatarUrl(currentUser.id, currentUser.avatar) : '/assets/avatar_default.png'} 
                 alt="My Avatar" 

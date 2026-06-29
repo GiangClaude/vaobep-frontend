@@ -3,12 +3,10 @@ import CommentInput from './CommentInput';
 import CommentItem from './CommentItem';
 import { getAvatarUrl } from '../../utils/imageHelper';
 
-// [MỚI] Sử dụng hook Query & Action riêng biệt
 import { useCommentsQuery } from '../../hooks/queries/useInteractionQueries';
 import { useCommentActions } from '../../hooks/ui/interaction/useCommentActions';
 
 export default function CommentSection({ postId, postType }) {
-    // Tự động fetch comments bằng React Query
     const { data, isLoading } = useCommentsQuery(postId, postType, 1);
     const { handlePost } = useCommentActions();
 

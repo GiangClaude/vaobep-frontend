@@ -19,7 +19,6 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
     const [recipeResults, setRecipeResults] = useState([]);
     const [errors, setErrors] = useState({});
 
-    // Xử lý nạp dữ liệu ban đầu
     useEffect(() => {
         if (isOpen) {
             if (initialData) {
@@ -45,7 +44,6 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
         }
     }, [initialData, isOpen]);
 
-    // Helpers
     const updateField = (field, value) => setFormData(prev => ({ ...prev, [field]: value }));
 
     const handleCoverChange = (file) => {
@@ -56,7 +54,6 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
         reader.readAsDataURL(file);
     };
 
-    // Tìm kiếm Recipes (Debounce 300ms)
     useEffect(() => {
         const q = (recipeQuery || '').trim();
         if (!q) { setRecipeResults([]); return; }
@@ -73,7 +70,6 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
         return () => clearTimeout(t);
     }, [recipeQuery, formData.recipes]);
 
-    // Submit Form
     const handleSave = async () => {
         const newErrors = {};
         if (!formData.title.trim() || formData.title.length < 5) newErrors.title = 'Tiêu đề phải có ít nhất 5 ký tự.';
@@ -87,11 +83,9 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
             return;
         }
 
-        // Tự động tính readTime trước khi submit
         const words = plainText.split(/\s+/).filter(w => w.length > 0).length;
         const readTime = Math.max(1, Math.ceil(words / 200));
 
-        // Build FormData
         const submitData = new FormData();
         submitData.append('title', formData.title);
         submitData.append('description', formData.excerpt);

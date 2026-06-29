@@ -17,19 +17,11 @@ export default function RecipeProposalSection({ dishId, initialRecipes, onRefres
         setCurrentPage, handleSearchRecipes, handleVote
     } = useDishProposalUI(dishId, initialRecipes, onRefresh);
 
-    /**
-     * Hàm xử lý khi người dùng bấm bình chọn/đề xuất.
-     * Ngăn chặn hành vi click lan ra component cha và kích hoạt API vote.
-     */
     const onVoteClick = async (e, rid) => {
         e.stopPropagation(); 
         await handleVote(rid);
     };
 
-    /**
-     * Hàm kiểm tra trạng thái vote của một công thức từ kết quả tìm kiếm.
-     * Đối chiếu kết quả search với danh sách initialRecipes đã có để lấy chính xác trạng thái is_voted.
-     */
     const checkIsVoted = (recipe) => {
         const existingInList = initialRecipes.find(ir => ir.recipe_id === recipe.recipe_id);
         return existingInList ? existingInList.is_voted : recipe.is_voted;
@@ -42,7 +34,6 @@ export default function RecipeProposalSection({ dishId, initialRecipes, onRefres
                 <span className="text-sm font-normal text-gray-400">{initialRecipes.length} liên kết</span>
             </h3>
 
-            {/* Thanh tìm kiếm */}
             <div className="relative mb-8">
                 <div className="relative">
                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -56,7 +47,6 @@ export default function RecipeProposalSection({ dishId, initialRecipes, onRefres
                     {isSearching && <Loader2 className="absolute right-4 top-1/2 -translate-y-1/2 animate-spin w-5 h-5" />}
                 </div>
 
-                {/* Kết quả tìm kiếm nhanh */}
                 {searchResults.length > 0 && (
                     <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-100 z-50 max-h-80 overflow-y-auto p-2">
                         {searchResults.map(r => {
@@ -87,7 +77,6 @@ export default function RecipeProposalSection({ dishId, initialRecipes, onRefres
                 )}
             </div>
 
-            {/* Danh sách đã liên kết */}
             <div className="space-y-4">
                 {paginatedRecipes.map((r, index) => (
                     <div 

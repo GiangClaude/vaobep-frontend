@@ -1,4 +1,3 @@
-// frontend/src/component/common/ArticleFilter.jsx
 import React, { useState, useMemo } from "react";
 import { Filter, Clock, Check, TrendingUp, Calendar, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -8,7 +7,6 @@ import FilterAccordion from "./FilterAccordion";
 import { useTagQueries } from "../../hooks/queries/useTagQueries";
 
 export function ArticleFilter({ filters, onFilterChange }) {
-    // 1. STATE & DATA (Đã xóa state filters nội bộ)
     const { tags: serverTags = [], loading: loadingTags } = useTagQueries();
     const [openSections, setOpenSections] = useState({ cuisine: true, meal_time: true });
 
@@ -21,11 +19,9 @@ export function ArticleFilter({ filters, onFilterChange }) {
         { id: "read_time_desc", label: "Chuyên sâu nhất", icon: Clock },
     ];
 
-    // Lấy dữ liệu an toàn từ props
     const activeTags = filters?.tags || [];
     const currentSort = filters?.sort || "newest";
 
-    // 2. Handlers: Đẩy thẳng dữ liệu lên component cha
     const handleUpdate = (updates) => {
         if (onFilterChange) onFilterChange({ ...filters, ...updates });
     };
@@ -44,7 +40,6 @@ export function ArticleFilter({ filters, onFilterChange }) {
                 <h3 className="text-lg font-bold text-gray-800">Bộ lọc & Sắp xếp</h3>
             </div>
 
-            {/* PHẦN SẮP XẾP (SORT) */}
             <div className="mb-6">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Sắp xếp theo</h4>
                 <div className="space-y-2">
@@ -67,7 +62,6 @@ export function ArticleFilter({ filters, onFilterChange }) {
                 </div>
             </div>
 
-            {/* PHẦN DANH MỤC TAGS */}
             <div className="space-y-1">
                 <h4 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-1">Chủ đề bài viết</h4>
                 

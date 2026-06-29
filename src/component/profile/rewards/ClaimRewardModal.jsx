@@ -3,27 +3,19 @@ import { motion, AnimatePresence } from "motion/react";
 import { Gift, Star, Coins, Ticket, X } from "lucide-react";
 
 export const ClaimRewardModal = ({ isOpen, onClose, boxName, items, isOpening }) => {
-    const [step, setStep] = useState('opening'); // 'opening' -> 'result'
+    const [step, setStep] = useState('opening'); 
 
-    // Tự động chuyển step sau 5 giây nếu API đã trả về kết quả
     useEffect(() => {
         let timer;
-        
-        // Chỉ bắt đầu đếm ngược khi: 
-        // 1. Modal đang mở
-        // 2. API đã gọi xong (isOpening === false)
-        // 3. Đang ở bước 'opening'
         if (isOpen && !isOpening && step === 'opening') {
             timer = setTimeout(() => {
                 setStep('result');
             }, 5000); // 5 giây
         }
 
-        // Dọn dẹp timer khi component unmount hoặc user bấm nút thủ công
         return () => clearTimeout(timer);
     }, [isOpen, isOpening, step]);
 
-    // Reset trạng thái khi đóng/mở modal mới
     useEffect(() => {
         if (isOpen) setStep('opening');
     }, [isOpen]);
@@ -68,7 +60,6 @@ export const ClaimRewardModal = ({ isOpen, onClose, boxName, items, isOpening })
                                 Chờ chút, món quà bất ngờ đang tới!
                             </p>
                             
-                            {/* Nút bấm mở ngay - Chỉ clickable khi API đã trả về dữ liệu */}
                             <button 
                                 onClick={handleViewResult}
                                 disabled={isOpening}

@@ -1,7 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import ScrollToTop from "./utils/ScrollToTop";
-// [THAY ĐỔI] Import AuthProvider và useAuth từ context đã tách
 import { AuthProvider, useAuth } from './AuthContext';
 import { ModalProvider } from './context/ModalContext';
 
@@ -21,7 +20,6 @@ import ResetPasswordPage from './pages/ResetPasswordPage';
 import HomePage from './pages/HomepagePage';
 import RecipeDetailPage from './pages/RecipeDetailPage';
 import RecipesListPage from './pages/RecipesListPage';
-// import SearchPage from './pages/SearchPage';
 import SearchLayout from './pages/search/SearchLayout';
 import SearchAllTab from './pages/search/SearchAllTab';
 import SearchUserTab from './pages/search/SearchUserTab';
@@ -29,10 +27,10 @@ import SearchRecipeTab from './pages/search/SearchRecipeTab';
 import SearchArticleTab from './pages/search/SearchArticleTab';
 
 import UserProfilePage from './pages/UserProfilePage';
-import ProfileLayout from './pages/ProfileLayout'; // Đổi tên ProfilePage thành ProfileLayout
+import ProfileLayout from './pages/ProfileLayout';
 import { MyRecipesTab } from './component/profile/MyRecipeTab';
 import { MyArticlesTab } from './component/profile/MyArticlesTab';
-import { MyMenusTab } from './component/profile/MyMenusTab'; // Đã tạo ở bước trước
+import { MyMenusTab } from './component/profile/MyMenusTab'; 
 import { SavedRecipeTab } from './component/profile/SavedRecipeTab';
 import { PointsTab } from './component/profile/PointsTab';
 
@@ -54,7 +52,6 @@ import AdminReportPage from './pages/admin/AdminReportPage';
 import AdminDictionaryPage from './pages/admin/AdminDictionaryPage';
 import AdminArticlePage from './pages/admin/AdminArticlePage';
 import LeaderboardPage from './pages/LeaderboardPage';
-// Layout chính
 const MainLayout = () => {
   return (
     <div className="flex flex-col min-h-screen">
@@ -69,7 +66,7 @@ const MainLayout = () => {
 };
 
 const ProtectedRoute = () => {
-  const { currentUser } = useAuth(); // Lấy từ Context
+  const { currentUser } = useAuth();
   if (!currentUser) return <Navigate to="/login" replace />;
   return <Outlet />;
 };
@@ -88,11 +85,8 @@ const IndexRedirect = () => {
 };
 
 function App() {
-  // [ĐÃ XÓA] Toàn bộ logic useState, useEffect, check token ở đây.
-  // AuthProvider sẽ lo việc đó.
 
   return (
-    // [THAY ĐỔI] Bọc toàn bộ ứng dụng trong AuthProvider
     <AuthProvider>
       <ModalProvider>
       <BrowserRouter>
@@ -129,7 +123,6 @@ function App() {
               {/* Protected Routes */}
               <Route element={<ProtectedRoute />}>
                   <Route path="/profile" element={<ProfileLayout />}>
-                    {/* Redirect mặc định vào recipes */}
                     <Route index element={<Navigate to="recipes" replace />} />
                     
                     <Route path="recipes" element={<MyRecipesTab isPublicView={false} />} />
@@ -143,7 +136,6 @@ function App() {
 
             <Route element={<AdminRoute />}>
                 <Route path="/admin" element={<AdminLayout />}>
-                    {/* Redirect /admin -> /admin/dashboard */}
                     <Route index element={<Navigate to="dashboard" replace />} />
                     
                     <Route path="dashboard" element={<AdminDashboardPage />} />
@@ -156,7 +148,6 @@ function App() {
                 </Route>
             </Route>
 
-            {/* Root Route - Dùng component con để xử lý */}
             <Route path="/" element={<IndexRedirect />} />
             
             <Route path="*" element={<Navigate to="/" replace />} />

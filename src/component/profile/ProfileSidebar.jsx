@@ -6,7 +6,6 @@ export function ProfileSidebar({ stats, badges = [], pendingRewards = [], onOpen
   
   const pendingCount = pendingRewards?.filter(r => r.status === 'pending').length || 0;
 
-  // Render 1 ô thống kê nhỏ
   const StatBox = ({ label, value, icon: Icon, colorClass }) => (
     <div className="flex items-center justify-between p-3 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors">
         <div className="flex items-center gap-3 text-gray-600">
@@ -22,7 +21,6 @@ export function ProfileSidebar({ stats, badges = [], pendingRewards = [], onOpen
   return (
     <div className="space-y-4">
       
-      {/* 1. HỘP QUÀ TẶNG (Chỉ hiện nếu có quà) */}
       <SidebarReward 
         pendingCount={pendingCount} 
         onClick={() => onOpenReward(pendingRewards.filter(r => r.status === 'pending')[0])} 
@@ -73,7 +71,6 @@ export function ProfileSidebar({ stats, badges = [], pendingRewards = [], onOpen
         </div>
       </div>
 
-      {/* 4. HUY CHƯƠNG (Giữ nguyên cấu trúc cũ, làm CSS nhẹ nhàng hơn) */}
       {badges && badges.length > 0 && (
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
           <h3 className="font-bold text-gray-800 mb-4 flex items-center gap-2">

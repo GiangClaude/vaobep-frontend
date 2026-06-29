@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import { motion } from 'motion/react'; // Thêm animation
+import { motion } from 'motion/react'; 
 import { Users, Utensils, BookOpen, Activity, TrendingUp, Calendar, PieChart as PieChartIcon, BarChart3 } from 'lucide-react';
-// import useAdminDashboard from '../../hooks/admin/useAdminDashboard';
 import { 
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, 
     PieChart, Pie, Cell
@@ -15,14 +14,13 @@ const CustomAxisTick = ({ x, y, payload }) => {
     const day = dateParts[2];   
     const month = dateParts[1]; 
     return (
-        // y + 10: Đẩy toàn bộ cụm text xuống dưới 10px so với trục hoành
         <g transform={`translate(${x},${y + 10})`}>
             <text 
                 x={0} 
                 y={0} 
                 dy={0} 
                 textAnchor="middle"
-                fill="#7d5a3f" // [SỬA] Màu nâu đất hợp theme
+                fill="#7d5a3f"
                 fontSize={12}
                 fontWeight={500}
             >
@@ -40,7 +38,6 @@ const AdminDashboardPage = () => {
 
 
     
-    // Hàm xử lý dữ liệu (Giữ nguyên)
     const processChartData = (apiData, days) => {
         const result = [];
         const today = new Date();
@@ -70,7 +67,6 @@ const AdminDashboardPage = () => {
     const summary = stats?.summary || {};
     const charts = stats?.charts || {};
 
-    // Xử lý dữ liệu
     const rawUserGrowth = charts.userGrowth || [];
     const userGrowthData = processChartData(rawUserGrowth, userTimeRange);
 
@@ -131,7 +127,6 @@ const AdminDashboardPage = () => {
         }
     ];
 
-    // Animation variants cho container
     const containerVariants = {
         hidden: { opacity: 0 },
         visible: { opacity: 1, transition: { staggerChildren: 0.1 } }
@@ -156,7 +151,6 @@ const AdminDashboardPage = () => {
                 <h1 className="text-2xl font-bold text-gray-800">Tổng quan hệ thống</h1>
             </div>
             
-            {/* CARDS SECTION */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 {statCards.map((card, index) => (
                     <motion.div 
@@ -164,7 +158,6 @@ const AdminDashboardPage = () => {
                         variants={itemVariants}
                         className={`bg-white rounded-2xl shadow-sm hover:shadow-md transition-all p-6 border ${card.borderColor} relative overflow-hidden group`}
                     >
-                        {/* Decor circle background */}
                         <div className={`absolute top-0 right-0 w-24 h-24 ${card.bg} rounded-full -mr-8 -mt-8 opacity-50 group-hover:scale-110 transition-transform`} />
                         
                         <div className="flex justify-between items-start relative z-10">
@@ -177,20 +170,12 @@ const AdminDashboardPage = () => {
                             </div>
                         </div>
                         
-                        {/* Fake trend indicator
-                        <div className="mt-4 flex items-center gap-1 text-xs font-medium text-gray-400">
-                            <TrendingUp size={12} className="text-green-500" />
-                            <span className="text-green-600">+ Cập nhật</span>
-                            <span>vừa xong</span>
-                        </div> */}
                     </motion.div>
                 ))}
             </div>
 
-            {/* CHARTS SECTION - LINE CHARTS */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
-                {/* Chart 1: User Growth */}
                 <motion.div variants={itemVariants} className="bg-white p-6 rounded-3xl shadow-sm border border-orange-100/50">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-2">
@@ -245,7 +230,6 @@ const AdminDashboardPage = () => {
                     </div>
                 </motion.div>
 
-                {/* Chart 2: Recipe Growth */}
                 <motion.div variants={itemVariants} className="bg-white p-6 rounded-3xl shadow-sm border border-orange-100/50">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center gap-2">
@@ -300,7 +284,6 @@ const AdminDashboardPage = () => {
                 </motion.div>
             </div>
 
-            {/* PIE CHARTS SECTION */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <motion.div variants={itemVariants} className="bg-white p-6 rounded-3xl shadow-sm border border-orange-100/50">
                     <div className="flex items-center gap-2 mb-4">

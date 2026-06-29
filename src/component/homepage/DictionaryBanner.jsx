@@ -1,5 +1,3 @@
-// VỊ TRÍ: component/homepage/DictionaryBanner.jsx
-
 import { BookOpenCheck, Search, Sparkles, ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import { useNavigate } from "react-router-dom";
@@ -14,13 +12,11 @@ export default function DictionaryBanner() {
       whileHover={{ scale: 1.02 }}
       className="relative bg-gradient-to-br from-[#ff5e00] via-[#ff751f] to-yellow-400 rounded-[40px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(255,117,31,0.4)] p-8 my-12 cursor-pointer group"
     >
-      {/* Animated Background Patterns */}
       <div className="absolute inset-0 opacity-20">
         <div className="absolute -top-10 -right-10 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse" />
         <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
-      {/* Floating Icons */}
       <motion.div
         animate={{ y: [0, -10, 0], rotate: [0, 5, 0] }}
         transition={{ duration: 4, repeat: Infinity }}
@@ -75,14 +71,12 @@ export default function DictionaryBanner() {
             ))}
           </div>
 
-          {/* CTA Button */}
           <button onClick={handleClick} className="bg-white text-[#ff751f] px-8 py-3.5 rounded-full flex items-center gap-3 font-extrabold text-[15px] hover:bg-yellow-300 hover:text-orange-900 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 group-hover:gap-5">
             Mở sách ngay thôi
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Right Illustration */}
         <div className="hidden lg:block relative pr-8">
           <motion.div
             animate={{ 
@@ -92,7 +86,6 @@ export default function DictionaryBanner() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="relative"
           >
-            {/* Book Stack Illustration */}
             <div className="relative">
               <div className="absolute -top-6 -left-6 w-36 h-48 bg-white/20 rounded-3xl rotate-12 blur-md"></div>
               <div className="absolute -top-3 -right-3 w-36 h-48 bg-yellow-300/30 rounded-3xl -rotate-6 blur-md"></div>
@@ -108,7 +101,6 @@ export default function DictionaryBanner() {
                   ))}
                 </div>
                 
-                {/* Magnifying Glass */}
                 <div className="absolute -bottom-6 -right-6 bg-yellow-400 p-4 rounded-full shadow-[0_10px_20px_rgba(250,204,21,0.5)] border-4 border-white">
                   <Search className="w-8 h-8 text-[#ff751f]" />
                 </div>

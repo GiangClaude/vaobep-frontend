@@ -1,9 +1,7 @@
-// File: src/pages/RegisterPage.jsx
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Eye, EyeOff, Mail, Lock, User, CheckCircle2, Circle } from 'lucide-react';
-// import { useRegister } from '../hooks/useRegister';
-import {useRegisterForm} from '../hooks/ui/auth/useAuthForms'; // Import Hook vừa tạo
+import {useRegisterForm} from '../hooks/ui/auth/useAuthForms'; 
 import Header from '../component/common/Header';
 import { Footer } from '../component/common/Footer';
 
@@ -42,7 +40,6 @@ const RegisterPage = () => {
           </div>
 
           <form onSubmit={handleRegisterSubmit} className="space-y-5">
-            {/* Họ tên */}
             <div>
               <label className="block text-sm font-medium text-[#2d1b0e] mb-2">Họ và tên</label>
               <div className="relative">
@@ -112,7 +109,6 @@ const RegisterPage = () => {
               {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
             </div>
 
-            {/* Xác nhận mật khẩu */}
             <div>
               <label className="block text-sm font-medium text-[#2d1b0e] mb-2">Xác nhận mật khẩu</label>
               <div className="relative">
@@ -136,10 +132,9 @@ const RegisterPage = () => {
               {errors.confirmPassword && <p className="text-red-500 text-sm mt-1">{errors.confirmPassword}</p>}
             </div>
 
-            {/* Error Message từ API */}
             {errors.api && (
               <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl relative mb-4" role="alert">
-                <span className="block sm:inline">{errors.api}</span>
+                <span className="block sm:inline">{"Có lỗi xảy ra. Hãy thử lại sau"}</span>
               </div>
             )}
 

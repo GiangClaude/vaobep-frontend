@@ -7,7 +7,6 @@ import ImageWithFallBack from '../component/figma/ImageWithFallBack';
 import CommentSection from '../component/comment/CommentSection';
 import AiSummaryBanner from "../component/common/AiSummaryBanner";
 
-// [MỚI] IMPORT CÁC HOOK QUERIES VÀ UI
 import { useArticleDetailQuery } from '../hooks/queries/useArticlesQueries';
 import { useInteractionStateQuery } from '../hooks/queries/useInteractionQueries';
 import { usePostActions } from '../hooks/ui/interaction/usePostActions';
@@ -20,13 +19,10 @@ export default function ArticleDetailPage() {
   const { currentUser } = useAuth();
   const [showMenu, setShowMenu] = useState(false);
 
-  // 1. Fetch dữ liệu tĩnh của bài viết
   const { data: article, isLoading, error } = useArticleDetailQuery(articleId);
 
-  // 2. Fetch trạng thái tương tác của user (Chỉ gọi khi user đã đăng nhập)
   const { data: interactionState } = useInteractionStateQuery(articleId, 'article', !!currentUser);
 
-  // 3. Khởi tạo Hook tương tác cho các nút bấm (Sử dụng dữ liệu từ Cache làm gốc)
   const { handleLike, handleSave, handleShare, handleReport } = usePostActions({
     id: articleId,
     type: 'article',
@@ -43,12 +39,10 @@ export default function ArticleDetailPage() {
     </div>
   );
 
-  console.log("Article Detail: ", article);
 
   return (
     <div className="min-h-screen bg-[#fff9f0]">
       <main className="container mx-auto px-4 py-8">
-        {/* THANH ĐIỀU HƯỚNG & MENU CHỨC NĂNG */}
         <div className="flex items-center justify-between mb-6">
           <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[#ff6b35] hover:text-[#f7931e] transition-colors font-medium">
             <ArrowLeft className="w-5 h-5" /> <span>Quay lại</span>
@@ -84,7 +78,6 @@ export default function ArticleDetailPage() {
           <div className="lg:col-span-8">
             <div className="bg-white rounded-[24px] shadow-sm overflow-hidden border border-orange-100/50">
               
-              {/* ẢNH BÌA & TIÊU ĐỀ */}
               <div className="relative h-[300px] md:h-[450px]">
                 <ImageWithFallBack src={article.image} alt={article.title} className="w-full h-full object-cover" />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
@@ -103,9 +96,7 @@ export default function ArticleDetailPage() {
                 </div>
               </div>
 
-              {/* NỘI DUNG CHÍNH */}
               <div className="p-8 md:p-10">
-                {/* Thanh Tương Tác */}
                 <div className="flex items-center gap-6 mb-8 py-4 px-6 bg-[#fff9f0] rounded-2xl border border-[#ffc857]/20">
                   <button onClick={handleLike} className={`flex items-center gap-2 font-bold transition-colors ${interactionState?.liked ? 'text-[#ff6b35]' : 'text-gray-600 hover:text-[#ff6b35]'}`}>
                     <Heart className={`w-6 h-6 ${interactionState?.liked ? 'fill-current' : ''}`} />
@@ -126,14 +117,12 @@ export default function ArticleDetailPage() {
                   )}
                 </div>
 
-                {/* [SỬA ĐỔI] Khu vực hiển thị danh sách Tags ở cuối bài viết */}
                 {article.tags && article.tags.length > 0 && (
                   <div className="flex items-center gap-2 flex-wrap pt-6 border-t border-gray-100">
                     <Tag className="w-4 h-4 text-[#ff6b35] mr-1 flex-shrink-0" />
                     {article.tags.map((t) => (
                       <button 
                         key={t.id} 
-                        // Kích hoạt tính năng nhảy thẳng sang trang search và active tag
                         onClick={() => handleTagClick(navigate, t.id, "articles")}
                         className="text-xs bg-[#ff6b35]/10 text-[#ff6b35] font-bold px-3.5 py-1.5 rounded-full border border-[#ff6b35]/20 shadow-sm transition-all hover:brightness-95 cursor-pointer"
                       >
@@ -143,13 +132,11 @@ export default function ArticleDetailPage() {
                   </div>
                 )}
 
-                {/* COMPONENT COMMENT ĐỘC LẬP */}
                 <CommentSection postId={articleId} postType="article" />
               </div>
             </div>
           </div>
 
-          {/* CỘT PHẢI: LIÊN KẾT & AI */}
           <aside className="lg:col-span-4 space-y-6">
             <div className="bg-white rounded-[24px] p-6 shadow-sm border border-orange-100/50 sticky top-24">
               <h3 className="text-lg font-bold text-gray-800 mb-5 flex items-center justify-between">
@@ -176,7 +163,7 @@ export default function ArticleDetailPage() {
               </div>
 
               <AiSummaryBanner 
-                  title="✨ Nhờ AI tóm tắt nội dung bài viết này"
+                  title="Nhờ AI tóm tắt nội dung bài viết này"
                   contextText={`Bài viết: ${article.title}. Nội dung: ${article.content || article.excerpt}`} 
               />
             </div>

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import ImageWithFallback from "../figma/ImageWithFallBack";
 import { getAvatarUrl } from "../../utils/imageHelper";
 
-// [MỚI]
 import { useUserActions } from "../../hooks/ui/interaction/useUserActions";
 import { useAuth } from "../../AuthContext";
 
@@ -12,7 +11,6 @@ export default function UserCard({ id, fullName, avatar, bio, followersCount, is
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const isMe = currentUser?.id == id;
-  // [MỚI] Tự quản lý Follow
   const { handleFollow } = useUserActions({ 
       userId: id, 
       currentIsFollowing: isFollowing, 
@@ -45,7 +43,6 @@ export default function UserCard({ id, fullName, avatar, bio, followersCount, is
 
       <p className="text-sm text-gray-500 line-clamp-2 mb-4 flex-grow min-h-[2.5rem]">{bio || "Chưa có giới thiệu..."}</p>
 
-      {/* Button gọi thẳng Hook UI */}
       {!isMe && <button
         onClick={handleFollow}
         className={`w-full py-2 px-4 rounded-full font-medium transition-all flex items-center justify-center gap-2 group ${

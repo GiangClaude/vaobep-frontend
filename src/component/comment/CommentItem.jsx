@@ -6,19 +6,16 @@ import { useNavigate } from 'react-router-dom';
 import CommentInput from './CommentInput';
 import Modal from '../common/modal';
 
-// [MỚI]
 import { useAuth } from '../../AuthContext';
 import { getAvatarUrl } from '../../utils/imageHelper';
 
 import { useCommentActions } from '../../hooks/ui/interaction/useCommentActions';
 import { useRepliesQuery } from '../../hooks/queries/useInteractionQueries';
-// import useCommentData from '../../hooks/useCommentData';
 
 export default function CommentItem({ comment, depth = 0, postId, postType }) {
     const { currentUser } = useAuth();
     
     const navigate = useNavigate();
-    // API actions mới
     const { handlePost, handleDelete, handleEdit } = useCommentActions();
 
     const [isEditing, setIsEditing] = useState(false);
@@ -26,9 +23,7 @@ export default function CommentItem({ comment, depth = 0, postId, postType }) {
     const [showReplyInput, setShowReplyInput] = useState(false);
     const [showMenu, setShowMenu] = useState(false);
     
-    // const [replies, setReplies] = useState([]);
     const [showReplies, setShowReplies] = useState(false);
-    // const [loadingReplies, setLoadingReplies] = useState(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     
     const isOwner = currentUser?.id === comment.user_id;
@@ -45,7 +40,6 @@ export default function CommentItem({ comment, depth = 0, postId, postType }) {
         if (success) {
             setShowReplyInput(false);
             setShowReplies(true);
-            // Refresh lại list comment (Do Mutation Invalidate tự động lo)
             return true;
         }
         return false;

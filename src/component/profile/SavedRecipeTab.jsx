@@ -7,7 +7,6 @@ import { RecipeCard } from "../common/RecipeCard";
 import ArticleCard from "../common/ArticleCard"; 
 import Pagination from "../common/Pagination";
 
-// Hooks React Query
 import { useSavedRecipesQuery } from "../../hooks/queries/useRecipesQueries";
 import { useSavedArticlesQuery } from "../../hooks/queries/useArticlesQueries";
 
@@ -15,18 +14,16 @@ export function SavedRecipeTab() {
   const [activeTab, setActiveTab] = useState('recipe');
   const navigate = useNavigate();
 
-  // --- LOGIC SORT (3 Trạng thái) ---
   const [sortConfig, setSortConfig] = useState({ key: null, order: null });
 
   const handleSortChange = (key) => {
     setSortConfig(prev => {
-        if (prev.key !== key) return { key, order: 'desc' }; // Bấm lần 1: Giảm dần
-        if (prev.order === 'desc') return { key, order: 'asc' }; // Bấm lần 2: Tăng dần
-        return { key: null, order: null }; // Bấm lần 3: Tắt sort
+        if (prev.key !== key) return { key, order: 'desc' }; 
+        if (prev.order === 'desc') return { key, order: 'asc' };
+        return { key: null, order: null }; 
     });
   };
 
-  // Component Nút Sort
   const SortButton = ({ label, icon: Icon, sortKey }) => {
     const isActive = sortConfig.key === sortKey;
     return (
@@ -46,8 +43,6 @@ export function SavedRecipeTab() {
     );
   };
 
-  // --- FETCH DATA ---
-  // Truyền sortConfig vào query để API xử lý (Backend của bạn đã hỗ trợ sẵn)
   const { data: recipes = [], isLoading: loadingRecipes } = useSavedRecipesQuery(sortConfig);
 
   const [articlePage, setArticlePage] = useState(1);
@@ -78,7 +73,6 @@ export function SavedRecipeTab() {
           </button>
         </div>
 
-        {/* Thanh Sort (Chỉ hiện ở Tab Recipe) */}
         {activeTab === 'recipe' && (
           <div className="flex flex-wrap gap-2 items-center">
             <span className="text-sm font-medium text-gray-500 mr-1">Sắp xếp:</span>
@@ -100,7 +94,6 @@ export function SavedRecipeTab() {
                 <AnimatePresence mode="popLayout">
                   {recipes.map((recipe) => (
                     <motion.div key={recipe.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
-                      {/* RecipeCard tự xử lý Unsave thông qua Query Cache */}
                       <RecipeCard recipe={recipe} onClick={() => navigate(`/recipe/${recipe.id}`)} />
                     </motion.div>
                   ))}
@@ -109,7 +102,6 @@ export function SavedRecipeTab() {
             ) : <EmptyState message="Chưa lưu công thức nào" icon={UtensilsCrossed} />
           )}
 
-          {/* TAB BÀI VIẾT */}
           {activeTab === 'article' && (
              loadingArticles ? <p className="text-center py-10 text-gray-500 animate-pulse">Đang tải...</p> : 
              articles.length > 0 ? (

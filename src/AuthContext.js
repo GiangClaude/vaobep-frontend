@@ -1,4 +1,3 @@
-// frontend/src/AuthContext.js
 import React, { createContext, useContext, useEffect } from 'react';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import authApi from './api/authApi';
@@ -10,7 +9,6 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
     const queryClient = useQueryClient();
 
-    // Lấy thông tin user (Chỉ gọi API nếu trong localStorage có token)
     const { data: currentUser, isLoading, refetch } = useQuery({
         queryKey: [QUERY_KEYS.MY_PROFILE],
         queryFn: async () => {
@@ -28,28 +26,21 @@ export const AuthProvider = ({ children }) => {
         retry: false 
     });
 
-    // 1. PHỤC HỒI HÀM NÀY: Để trang Login có thể cập nhật user sau khi đăng nhập thành công
     const setCurrentUser = (userData) => {
         queryClient.setQueryData([QUERY_KEYS.MY_PROFILE], userData);
     };
 
     const logout = () => {
         localStorage.removeItem('token');
-        // 2. CHỈ XÓA DỮ LIỆU USER: Không dùng queryClient.clear() để tránh giết chết các query khác đang chạy
-    
-        // Đặt lại currentUser về null
         queryClient.setQueryData([QUERY_KEYS.MY_PROFILE], null);
     };
 
-    // Lắng nghe sự kiện 401 từ axios interceptor
     useEffect(() => {
         const handleUnauthorized = () => logout();
         window.addEventListener('auth_unauthorized', handleUnauthorized);
         return () => window.removeEventListener('auth_unauthorized', handleUnauthorized);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
-    // 3. THÊM setCurrentUser VÀO ĐÂY LẠI
     const value = {
         currentUser: currentUser || null,
         setCurrentUser, 

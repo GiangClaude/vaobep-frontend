@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/hooks/queries/useLeaderboardQueries.js
-
 import { useQuery } from '@tanstack/react-query';
 import { leaderboardApi } from '../../api/leaderboardApi';
 import { QUERY_KEYS } from '../../config/queryKeys';

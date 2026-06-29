@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/component/article/MyArticlesTab.jsx
-
 import { useState, useMemo } from 'react';
 import { Plus } from 'lucide-react';
 import { motion } from 'motion/react';
@@ -7,9 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 import ArticleEditorModal from '../article/ArticleEditorModal';
 import ArticleCard from '../common/ArticleCard';
-import { useGlobalModal } from '../../context/ModalContext'; // Dùng Global Modal chuẩn
+import { useGlobalModal } from '../../context/ModalContext'; 
 
-// [MỚI] Import Hooks chuẩn của React Query
 import { useOwnerArticlesQuery } from '../../hooks/queries/useArticlesQueries';
 import { useDeleteArticleMutation, useChangeArticleStatusMutation } from '../../hooks/mutations/useContentMutations';
 
@@ -21,14 +18,11 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
   const [editorOpen, setEditorOpen] = useState(false);
   const [editorInitial, setEditorInitial] = useState(null);
 
-  // 1. Lấy Data từ React Query (Tự động cache, loading)
   const { data: ownerArticles = [], isLoading } = useOwnerArticlesQuery();
 
-  // 2. Khởi tạo Mutations để gọi API xóa/cập nhật
   const deleteMutation = useDeleteArticleMutation();
   const statusMutation = useChangeArticleStatusMutation();
 
-  // 3. Lọc mượt mà tại client với useMemo (Giống MyRecipesTab)
   const displayArticles = useMemo(() => {
     let result = isPublicView ? publicArticles : ownerArticles;
 
@@ -40,7 +34,6 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
     return result;
   }, [isPublicView, publicArticles, ownerArticles, filter]);
 
-  // --- ACTIONS ---
   const goToArticle = (id) => navigate(`/article/${id}`);
 
   const openCreate = () => {
@@ -87,7 +80,6 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
     });
   };
 
-  // Hàm này tui giữ lại dự phòng nếu sau này ArticleCard của bà có nút Ẩn/Hiện con mắt giống RecipeCard
   const handleToggleVisibility = (article) => {
     const newStatus = article.status === 'hidden' ? 'public' : 'hidden';
     statusMutation.mutate({ articleId: article.id || article.article_id, status: newStatus });
@@ -95,12 +87,10 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
 
   const onEditorSaved = () => {
     setEditorOpen(false);
-    // Không cần gọi fetchOwnerArticles thủ công nữa, Mutation trong Editor lưu xong sẽ tự động kích hoạt React Query tải lại danh sách!
   };
 
   return (
     <div>
-      {/* Thay vì gắn thẻ <Modal /> tĩnh, giờ ta dùng hệ thống showModal toàn cục */}
       <ArticleEditorModal 
         isOpen={editorOpen} 
         onClose={() => setEditorOpen(false)} 

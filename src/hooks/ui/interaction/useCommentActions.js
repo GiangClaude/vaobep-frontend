@@ -1,4 +1,3 @@
-// frontend/src/hooks/ui/interaction/useCommentActions.js
 import { useAuthGuard } from './useAuthGuard';
 import { usePostCommentMutation, useDeleteCommentMutation, useEditCommentMutation } from '../../mutations/useInteractionMutations';
 import { useGlobalModal } from '../../../context/ModalContext';

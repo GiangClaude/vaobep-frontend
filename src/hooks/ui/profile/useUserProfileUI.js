@@ -6,14 +6,11 @@ import { useFollowUserMutation } from '../../mutations/useInteractionMutations';
 export const useUserProfileUI = (userId, currentUser) => {
     const { showModal, hideModal } = useGlobalModal();
     
-    // State Modal Tặng điểm
     const [isGiftModalOpen, setIsGiftModalOpen] = useState(false);
     
-    // Mutations
     const giftMutation = useGiftPointsMutation();
     const followMutation = useFollowUserMutation();
 
-    // Logic: Xử lý Follow (Kiểm tra đăng nhập trước)
     const handleFollowClick = () => {
         if (!currentUser) {
             showModal({
@@ -27,11 +24,9 @@ export const useUserProfileUI = (userId, currentUser) => {
             });
             return;
         }
-        // Gọi API ngầm. Việc optimistic update đã được setup bên trong useFollowUserMutation.
         followMutation.mutate(userId);
     };
 
-    // Logic: Xử lý Submit form tặng điểm
     const handleGiftSubmit = async (data) => {
         try {
             const result = await giftMutation.mutateAsync(data);

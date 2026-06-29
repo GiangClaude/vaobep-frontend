@@ -1,4 +1,3 @@
-// frontend/src/hooks/mutations/useAuthMutations.js
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import authApi from '../../api/authApi';
 import { QUERY_KEYS } from '../../config/queryKeys';
@@ -10,8 +9,6 @@ export const useLoginMutation = () => {
         onSuccess: (data) => {
             if (data.data.token) {
                 localStorage.setItem('token', data.data.token);
-                // queryClient.removeQueries();
-                // Ép React Query tải lại thông tin User ngay lập tức
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.MY_PROFILE] });
             }
         }

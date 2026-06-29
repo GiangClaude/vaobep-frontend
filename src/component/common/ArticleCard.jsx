@@ -47,7 +47,6 @@ export default function ArticleCard({
       onClick={onClick}
       className="flex flex-col h-full bg-white rounded-[32px] shadow-[0_8px_24px_-10px_rgba(255,117,31,0.15)] border-2 border-transparent hover:border-orange-100 hover:shadow-[0_12px_32px_-10px_rgba(255,117,31,0.3)] p-5 cursor-pointer transition-all duration-300 group"
     >
-      {/* Header: Author & Options */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <img src={authorAvatar} alt="Author" className="w-11 h-11 rounded-full object-cover border-2 border-orange-100 shadow-sm" />
@@ -87,21 +86,20 @@ export default function ArticleCard({
         </div>
       </div>
 
-      {/* Content */}
       <div className="mb-4 flex-1">
         <h3 className="text-[18px] font-extrabold text-gray-800 mb-2 leading-snug group-hover:text-[#ff751f] transition-colors">{title}</h3>
         <p className="text-sm text-gray-600 line-clamp-3 font-medium leading-relaxed">{excerpt}</p>
         <TagList tags={tags} maxDisplay={3} containerClassName="flex flex-wrap gap-2 mt-3 mb-1" />
       </div>
 
-      {/* Image (If exists) */}
+      {/* Image  */}
       {image && (
         <div className="mb-5 rounded-[24px] overflow-hidden relative bg-orange-50 h-52 shadow-inner border border-gray-100">
           <ImageWithFallback src={image} alt={title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out" />
         </div>
       )}
 
-      {/* Action Footer (Like, Comment, Share Pill Buttons) */}
+      {/* Action Footer  */}
       <div className="mt-auto flex items-center justify-between pt-4 border-t-2 border-dashed border-gray-100">
         <div className="flex gap-2">
           <button onClick={(e) => { e.stopPropagation(); handleLike(); }} className={`flex items-center gap-2 h-9 px-3.5 rounded-full font-bold text-sm transition-all duration-300 hover:-translate-y-0.5 ${isLiked ? 'bg-orange-100 text-[#ff751f]' : 'bg-gray-50 text-gray-500 hover:bg-orange-50 hover:text-[#ff751f]'}`}>

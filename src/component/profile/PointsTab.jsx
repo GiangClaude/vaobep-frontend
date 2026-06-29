@@ -6,7 +6,6 @@ import { useOutletContext } from "react-router-dom";
 export function PointsTab() {
   const [filter, setFilter] = useState("all"); 
 
-  // Chỉ lấy những gì cần thiết cho tab này (bỏ rewards, handleCheckIn đi)
   const { currentUser, pointsHistory, pointsLoading } = useOutletContext();
 
   const currentPoints = currentUser?.points || 0;
@@ -14,7 +13,6 @@ export function PointsTab() {
   const history = pointsHistory || []; 
   const loading = pointsLoading;
 
-  // (Mock các hàm chưa làm)
   const onGiftPoints = () => alert("Tính năng tặng điểm đang phát triển!");
   const onPromoteRecipe = () => alert("Tính năng quảng bá công thức đang phát triển!");
 
@@ -43,7 +41,6 @@ export function PointsTab() {
 
   return (
     <div className="space-y-6">
-      {/* 1. Points Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <motion.div whileHover={{ y: -4 }} className="bg-gradient-to-br from-[#ff6b35] to-[#f7931e] rounded-2xl p-6 text-white shadow-sm relative overflow-hidden">
           <div className="relative z-10">
@@ -70,7 +67,6 @@ export function PointsTab() {
         </div>
       </div>
 
-      {/* 2. Lịch sử điểm */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-lg font-bold flex items-center gap-2 text-gray-800"><Calendar className="w-5 h-5 text-[#ff6b35]" /> Lịch Sử Giao Dịch</h3>
@@ -78,7 +74,6 @@ export function PointsTab() {
 
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-             {/* ... (Phần render thead và tbody table giữ nguyên như code cũ của bạn) ... */}
             <thead>
               <tr className="border-b border-gray-200">
                 <th className="text-left py-3 px-2 text-gray-500 font-medium">Thời gian</th>

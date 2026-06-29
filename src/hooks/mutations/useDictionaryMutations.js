@@ -7,7 +7,6 @@ export const useVoteRecipeMutation = () => {
     return useMutation({
         mutationFn: ({ dishId, recipeId }) => dictionaryDishApi.voteRecipe(dishId, recipeId),
         onSuccess: (data, variables) => {
-            // Cập nhật lại chi tiết món ăn (để danh sách đề xuất tự động reload)
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.DISH_DETAIL, variables.dishId] });
         }
     });

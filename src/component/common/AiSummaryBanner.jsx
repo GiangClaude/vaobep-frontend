@@ -1,24 +1,18 @@
-// VỊ TRÍ TẠO FILE MỚI: frontend/src/component/common/AiSummaryBanner.jsx
-
 import React, {useEffect, useState} from 'react';
 import { Sparkles, Loader2, AlertCircle } from 'lucide-react';
 import {useSummarizeMutation} from '../../hooks/mutations/useAiMutations';
 
 export default function AiSummaryBanner({ contextText, title = "Nhờ AI tóm tắt & phân tích bài viết này" }) {
-    // const { summary, loadingSummary, errorSummary, fetchSummary } = usePostAi();
     const summarizeMutation = useSummarizeMutation();
     const [summaryText, setSummaryText] = useState(null);
 
 
     useEffect(() => {
         if (contextText) {
-            // Lưu ngữ cảnh vào session để Chatbot đọc được
             sessionStorage.setItem('vaobep_ai_context', contextText);
-            // Phát tín hiệu cho Chatbot biết ngữ cảnh đã thay đổi
             window.dispatchEvent(new Event('ai_context_updated'));
         }
 
-        // Cleanup: Khi rời khỏi trang, xóa ngữ cảnh đi
         return () => {
             sessionStorage.removeItem('vaobep_ai_context');
             window.dispatchEvent(new Event('ai_context_updated'));

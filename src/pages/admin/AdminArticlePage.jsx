@@ -6,18 +6,11 @@ import { getArticleImageUrl } from '../../utils/imageHelper';
 import { toast } from 'react-toastify';
 
 import { useAdminArticlesQuery, useAdminFetchDetails } from '../../hooks/queries/useAdminQueries';
-// Giả định bạn đã tạo mutation cho Article trong useAdminMutations.js
 import { useAdminArticleMutations } from '../../hooks/mutations/useAdminMutations';
 
 import { useGlobalModal } from '../../context/ModalContext';
 
 const AdminArticlePage = () => {
-    // 1. Hook
-    // const { 
-    //     articles, pagination, isLoading, 
-    //     fetchArticles, fetchArticleDetail, 
-    //     handleUpdateStatus, handleDeleteArticle 
-    // } = useAdminArticles();
     const { showModal } = useGlobalModal();
    const [page, setPage] = useState(1);
     const [searchQuery, setSearchQuery] = useState('');
@@ -43,13 +36,6 @@ const AdminArticlePage = () => {
     const [previewData, setPreviewData] = useState(null);
     const [isPreviewLoading, setIsPreviewLoading] = useState(false);
 
-    // // 3. Khởi tạo & Fetch data khi đổi filter
-    // useEffect(() => {
-    //     fetchArticles(1, 10, searchQuery, statusFilter, currentSort.key, currentSort.order);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [statusFilter]); // Tự động load lại khi chọn filter khác
-
-    // 4. Các hàm xử lý giao diện
     const handleSearch = (e) => {
         e.preventDefault();
         setPage(1);
@@ -58,13 +44,12 @@ const AdminArticlePage = () => {
     const changeStatus = async (id, newStatus) => {
         const result = await updateStatus.mutateAsync({ articleId: id, status: newStatus });
         if (result.success && isPreviewOpen) {
-            setIsPreviewOpen(false); // Đóng modal nếu đang duyệt trong modal
+            setIsPreviewOpen(false); 
         } else if (!result.success) {
             toast.error(result.message)
         }
     };
 
-// THAY THẾ HÀM confirmDelete CŨ BẰNG ĐOẠN NÀY:
     const confirmDelete = (item) => {
         showModal({
             title: 'Xóa bài viết',
@@ -88,7 +73,6 @@ const AdminArticlePage = () => {
         });
     };
 
-    // Mở Modal Xem Trước (Gọi API lấy chi tiết HTML)
     const openPreview = async (id) => {
         setIsPreviewLoading(true);
         setIsPreviewOpen(true);
@@ -103,7 +87,6 @@ const AdminArticlePage = () => {
         }
     };
 
-    // 5. Cấu hình cột
     const columns = [
         { key: 'name', label: 'Bài viết', className: 'w-[40%]', sortable: true },
         { key: 'author', label: 'Tác giả', className: 'w-[20%]', sortable: true },
@@ -159,7 +142,7 @@ const AdminArticlePage = () => {
                 loading={isLoading}
                 onSort={(key, order) => {
                     setCurrentSort({ key, order });
-                    setPage(1); // Quay về trang 1 khi đổi sắp xếp
+                    setPage(1); 
                 }}
                 currentSort={currentSort}
                 onPageChange={setPage}
@@ -234,18 +217,15 @@ const AdminArticlePage = () => {
                 </div>
             )}
 
-            {/* MODAL PREVIEW BÀI VIẾT */}
             {isPreviewOpen && (
                 <div className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4">
                     <div className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden">
                         
-                        {/* Header Modal */}
                         <div className="px-6 py-4 border-b flex justify-between items-center bg-gray-50">
                             <h2 className="text-xl font-bold flex items-center gap-2"><Eye size={20} className="text-indigo-600"/> Đọc thử bài viết</h2>
                             <button onClick={() => setIsPreviewOpen(false)}><X size={24} className="text-gray-500 hover:text-red-500"/></button>
                         </div>
 
-                        {/* Nội dung Modal (Scrollable) */}
                         <div className="p-6 overflow-y-auto flex-1 custom-scrollbar">
                             {isPreviewLoading ? (
                                 <div className="text-center py-10 text-gray-500">Đang tải nội dung...</div>
@@ -274,7 +254,6 @@ const AdminArticlePage = () => {
                                         />
                                     )}
 
-                                    {/* Render nội dung HTML từ Editor */}
                                     <div 
                                         className="prose max-w-none prose-indigo"
                                         dangerouslySetInnerHTML={{ __html: previewData.content }}
@@ -285,7 +264,6 @@ const AdminArticlePage = () => {
                             )}
                         </div>
 
-                        {/* Footer Modal (Công cụ Duyệt nhanh) */}
                         {!isPreviewLoading && previewData && (
                             <div className="px-6 py-4 border-t bg-gray-50 flex justify-between items-center">
                                 <span className="text-sm font-medium text-gray-500">

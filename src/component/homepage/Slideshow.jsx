@@ -1,5 +1,3 @@
-// VỊ TRÍ: component/homepage/Slideshow.jsx
-
 import { useState, useEffect } from "react";
 import { Clock, Users, Heart, Star, ChevronLeft, ChevronRight, Loader2, Sparkles } from "lucide-react"; 
 import { motion, AnimatePresence } from "motion/react";
@@ -107,10 +105,8 @@ export function Slideshow() {
               className="w-full h-full object-cover transition-transform duration-[10s] ease-out hover:scale-110"
             />
             
-            {/* Overlay Gradient (Đen mờ ở dưới để nổi chữ, cam mờ ở trên cho ngọt ngào) */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-orange-900/10" />
             
-            {/* Info Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-10 pb-12">
               <motion.div
                 initial={{ y: 20, opacity: 0 }}
@@ -161,7 +157,6 @@ export function Slideshow() {
         </motion.div>
       </AnimatePresence>
       
-      {/* Navigation Buttons (Vuốt/Ấn là nảy) */}
       <button
         onClick={handlePrev}
         className="absolute left-6 top-1/2 -translate-y-1/2 bg-white/80 backdrop-blur-md hover:bg-[#ff751f] hover:text-white text-[#ff751f] p-3.5 rounded-full transition-all duration-300 shadow-xl z-10 opacity-0 group-hover:opacity-100 hover:scale-110 active:scale-95"
@@ -176,7 +171,6 @@ export function Slideshow() {
         <ChevronRight className="w-6 h-6" />
       </button>
 
-      {/* Dots Indicator (Chấm lấp lánh như viên kẹo) */}
       <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2.5 z-10">
         {slides.map((_, index) => (
           <button

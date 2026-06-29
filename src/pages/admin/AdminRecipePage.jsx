@@ -2,27 +2,22 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Search, ChefHat, Plus, Eye, PenLine, Ban, CheckCircle, Flame, Lock, Unlock } from 'lucide-react'; // [MỚI]
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
-// import ConfirmModal from '../../component/admin/ConfirmModal';
 import RecipeModal from '../../component/admin/RecipeModal';
 import debounce from 'lodash.debounce';
 import { toast } from 'react-toastify';
 
-// import useAdminRecipes from '../../hooks/admin/useAdminRecipes';
 import { useAdminRecipesQuery, useAdminFetchDetails } from '../../hooks/queries/useAdminQueries';
 import { useAdminRecipeMutations } from '../../hooks/mutations/useAdminMutations';
 
 import { useGlobalModal } from '../../context/ModalContext';
 
 const AdminRecipePage = () => {
-    // [CẬP NHẬT] Lấy thêm create/update/get từ hook
-    // const { recipes, loading, pagination, fetchRecipes, hideRecipe, createRecipe, updateRecipe, getRecipe } = useAdminRecipes();
     const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', order: 'DESC' });
     const [debouncedSearch, setDebouncedSearch] = useState('');
 
-    // Modal State
     const [modalMode, setModalMode] = useState('create');
     const [selectedRecipe, setSelectedRecipe] = useState(null);
     const [isRecipeModalOpen, setIsRecipeModalOpen] = useState(false);
@@ -36,26 +31,10 @@ const AdminRecipePage = () => {
     const { hideRecipe, createRecipe, updateRecipe } = useAdminRecipeMutations();
     const { fetchRecipeDetail } = useAdminFetchDetails();
 
-    // const loadData = (keyword, page, sortKey, sortOrder) => {
-    //     fetchRecipes(page, pagination.limit, keyword, sortKey, sortOrder);
-    // };
-
-    // const debouncedSearch = useCallback(
-    //     debounce((keyword) => {
-    //         loadData(keyword, 1, sortConfig.key, sortConfig.order);
-    //     }, 500),
-    //     [sortConfig]
-    // );
-
     const debouncedSearchAction = useCallback(
         debounce((keyword) => { setDebouncedSearch(keyword); setPage(1); }, 500), []
     );
 
-    // useEffect(() => {
-    //     loadData('', 1, 'created_at', 'DESC');
-    // }, []);
-
-    // --- Handlers ---
     const handleSearchChange = (e) => {
         setSearchTerm(e.target.value);
         debouncedSearchAction(e.target.value);
@@ -66,7 +45,6 @@ const AdminRecipePage = () => {
         setPage(1);
     };
 
-    // Modal Actions
     const openCreateModal = () => {
         setModalMode('create');
         setSelectedRecipe(null);
@@ -93,7 +71,7 @@ const AdminRecipePage = () => {
     const handleModalSubmit = async (data) => {
         try {
             if (modalMode === 'create') {
-                await createRecipe(data); // data là FormData
+                await createRecipe(data);
                 toast.success("Tạo công thức thành công");
             } else if (modalMode === 'edit') {
                 await updateRecipe(selectedRecipe.recipe_id, data);
@@ -105,7 +83,6 @@ const AdminRecipePage = () => {
         }
     };
 
-    // THAY THẾ TOÀN BỘ onQuickHide VÀ confirmQuickHide CŨ BẰNG ĐOẠN NÀY:
     const onQuickHide = (recipe) => {
         const isBanned = recipe.status === 'banned';
         const newStatus = isBanned ? 'public' : 'banned';
@@ -143,7 +120,6 @@ const AdminRecipePage = () => {
 
     return (
         <div className="space-y-6">
-            {/* HEADER TOOLBAR */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-100 rounded-lg text-[#ff6b35]">
@@ -168,14 +144,6 @@ const AdminRecipePage = () => {
                         />
                     </div>
                     
-                    {/* Create Button (Đã uncomment và style lại)
-                    <button 
-                        onClick={openCreateModal}
-                        className="bg-gradient-to-r from-[#ff6b35] to-[#f7931e] hover:shadow-lg hover:shadow-orange-200 text-white px-4 py-2.5 rounded-xl text-sm font-bold flex items-center gap-2 transition-all active:scale-95 shrink-0"
-                    >
-                        <Plus size={18} />
-                        <span className="hidden sm:inline">Tạo món</span>
-                    </button> */}
                 </div>
             </div>
 
@@ -190,7 +158,6 @@ const AdminRecipePage = () => {
             >
                 {recipes.map(recipe => (
                     <tr key={recipe.recipe_id} className="group hover:bg-orange-50/30 transition-colors border-b border-gray-100 last:border-none">
-                        {/* Title Column */}
                         <td className="px-5 py-4">
                             <div className="flex items-center gap-2 max-w-full">
                                 <span 
@@ -247,7 +214,7 @@ const AdminRecipePage = () => {
                                         ? 'text-green-600 bg-green-50 hover:bg-green-100' 
                                         : 'text-red-600 bg-red-50 hover:bg-red-100'
                                     }`}
-                                    title={recipe.status === 'banned' ? 'Mở khóa' : 'Ban công thức'}
+                                    title={recipe.status === 'banned' ? 'Mở khóa' : 'Khóa công thức'}
                                 >
                                     {recipe.status === 'banned' ? <Unlock size={16} /> : <Ban size={16} />}
                                 </button>
@@ -257,7 +224,6 @@ const AdminRecipePage = () => {
                 ))}
             </AdminTable>
 
-            {/* MODALS */}
             <RecipeModal 
                 isOpen={isRecipeModalOpen}
                 onClose={() => setIsRecipeModalOpen(false)}

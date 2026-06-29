@@ -1,13 +1,6 @@
-// Đường dẫn mới: hooks/query/useTagQuery.js
 import { useState, useEffect } from 'react';
-// Lưu ý cập nhật lại đường dẫn import api cho đúng với cấu trúc thư mục mới của bà nhé
 import tagApi from '../../api/tagApi'; 
 
-/**
- * Hook Query: useTagQuery
- * Chức năng: Chuyên chịu trách nhiệm gọi API để fetch danh sách tags từ server.
- * Trả về: data (tags), trạng thái loading và error để UI xử lý.
- */
 export function useTagQueries() {
     const [tags, setTags] = useState([]);
     const [loading, setLoading] = useState(false);

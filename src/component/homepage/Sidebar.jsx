@@ -1,5 +1,3 @@
-// VỊ TRÍ: component/homepage/Sidebar.jsx
-
 import { useState, useEffect } from "react";
 import { Trophy, TrendingUp, Lightbulb, Clock, Users, Heart, Star, Flame, Droplets, ChefHat, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
@@ -31,9 +29,7 @@ export default function Sidebar() {
   return (
     <div className="top-24 space-y-6">
       
-      {/* Widget 1: ĐANG HOT */}
       <div className="bg-white rounded-[32px] shadow-[0_8px_24px_-10px_rgba(255,117,31,0.15)] border-2 border-orange-50 p-6 relative overflow-hidden">
-        {/* Decor Pattern góc phải */}
         <div className="absolute -top-6 -right-6 w-20 h-20 bg-orange-100 rounded-full opacity-50 blur-xl"></div>
         
         <div className="flex items-center gap-2.5 mb-6 relative z-10">
@@ -54,7 +50,6 @@ export default function Sidebar() {
                 onClick={() => navigate(`/recipe/${recipe.id}`)}
                 className="flex gap-4 cursor-pointer group bg-orange-50/30 p-2.5 rounded-2xl hover:bg-orange-50 transition-colors"
               >
-                {/* Số thứ tự (Huy hiệu nổi bật) */}
                 <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center font-black text-white shadow-md
                   ${index === 0 ? 'bg-gradient-to-br from-yellow-400 to-yellow-200 ring-2 ring-yellow-200' : 
                     index === 1 ? 'bg-gradient-to-br from-gray-300 to-gray-500' : 
@@ -98,7 +93,6 @@ export default function Sidebar() {
         </button>
       </div>
 
-      {/* Widget 2: MẸO NẤU ĂN */}
       <div className="bg-gradient-to-br from-orange-50 via-white to-yellow-50 rounded-[32px] shadow-[0_8px_24px_-10px_rgba(255,117,31,0.15)] border-2 border-yellow-100 p-6">
         <div className="flex items-center gap-2.5 mb-6">
           <div className="bg-gradient-to-br from-[#ff751f] to-yellow-400 p-2.5 rounded-[14px] shadow-md -rotate-3">
@@ -134,13 +128,11 @@ export default function Sidebar() {
         </div>
       </div>
 
-      {/* Widget 3: CHALLENGE BANNER */}
       <motion.div
         whileHover={{ scale: 1.03, rotate: 1 }}
         whileTap={{ scale: 0.98 }}
         className="relative bg-gradient-to-br from-[#ff751f] via-orange-500 to-yellow-400 rounded-[32px] p-6 cursor-pointer overflow-hidden shadow-xl shadow-orange-500/20"
       >
-        {/* Lớp phủ sáng (flare) */}
         <div className="absolute inset-0 opacity-30">
           <div className="absolute -top-10 -right-10 w-32 h-32 bg-white rounded-full blur-2xl animate-pulse" />
         </div>

@@ -11,14 +11,11 @@ import { useResetPasswordForm } from '../hooks/ui/auth/useAuthForms';
 const ResetPasswordPage = () => {
     const { passwords, setPasswords, errors, loading, handleSubmit, email, successMessage, clearSuccess, navigate } = useResetPasswordForm();
     
-    // State quản lý việc show/hide password (UI Only)
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
 
-    // Tránh render lỗi nếu useEffect đang redirect
     if (!email) return null; 
 
-    // --- LOGIC HIỂN THỊ KIỂM TRA MẬT KHẨU REAL-TIME ---
     const pwd = passwords.newPassword;
     const passwordRules = [
         { text: 'Ít nhất 8 ký tự', met: pwd.length >= 8 },
@@ -77,7 +74,6 @@ const ResetPasswordPage = () => {
                             {errors.newPassword && <p className="text-red-500 text-sm mt-1">{errors.newPassword}</p>}
                         </div>
 
-                        {/* Confirm Password */}
                         <div>
                             <label className="block text-sm font-medium text-[#2d1b0e] mb-2">Xác nhận mật khẩu</label>
                             <div className="relative">
@@ -123,7 +119,6 @@ const ResetPasswordPage = () => {
             </main>
             <Footer />
 
-            {/* Success Modal */}
             <Modal
                 isOpen={!!successMessage}
                 onClose={() => clearSuccess()}

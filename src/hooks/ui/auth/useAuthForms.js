@@ -1,4 +1,3 @@
-// frontend/src/hooks/ui/auth/useAuthForms.js
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRef, useEffect } from 'react';
@@ -9,8 +8,8 @@ import {
     useRegisterMutation,
     useForgotPasswordMutation,
     useResetPasswordMutation,
-    useVerifyOTPMutation, // Dùng để kích hoạt tài khoản (Register)
-    useVerifyOTPOnlyMutation, // Dùng để check OTP (Forgot Password)
+    useVerifyOTPMutation, 
+    useVerifyOTPOnlyMutation, 
     useResendOTPMutation  
 } from '../../mutations/useAuthMutations';
 
@@ -99,9 +98,6 @@ export const useRegisterForm = () => {
     return { registerData, setRegisterData, agreedToTerms, setAgreedToTerms, errors, loading: registerMutation.isPending, handleRegisterSubmit };
 };
 
-// Thêm vào cuối file frontend/src/hooks/ui/auth/useAuthForms.js
-
-
 // 1. Hook Quên Mật Khẩu
 export const useForgotPasswordForm = () => {
     const [email, setEmail] = useState('');
@@ -116,7 +112,6 @@ export const useForgotPasswordForm = () => {
 
         try {
             await forgotMutation.mutateAsync(email);
-            // Thành công -> Chuyển hướng sang trang OTP kèm "intent" là quên mật khẩu
             navigate('/verify-otp', { state: { email, intent: 'reset_password' } });
         } catch (err) {
             setError("Không thể gửi yêu cầu. Vui lòng kiểm tra lại email.");
@@ -190,7 +185,7 @@ export const useVerifyOTPForm = () => {
     const navigate = useNavigate();
     
     const email = location.state?.email;
-    const intent = location.state?.intent || 'register'; // register hoặc reset_password
+    const intent = location.state?.intent || 'register';
     const shouldResend = location.state?.resend;
     const hasSentRef = useRef(false);
 
@@ -209,7 +204,6 @@ export const useVerifyOTPForm = () => {
                 .then(() => showModal({ type: 'info', title: 'Đã gửi mã', message: `Mã OTP mới đã được gửi đến ${email}` }))
                 .catch(err => setError(err.message));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [email, shouldResend]);
 
     useEffect(() => {
@@ -221,7 +215,6 @@ export const useVerifyOTPForm = () => {
         }
     }, [timer]);
 
-    // Xử lý UI Nhập liệu
     const handleChange = (index, value) => {
         if (value && !/^\d$/.test(value)) return;
         const newOtp = [...otp];
@@ -249,7 +242,6 @@ export const useVerifyOTPForm = () => {
         inputRefs.current[Math.min(pastedData.length, 5)]?.focus();
     };
 
-    // Xử lý Nút Xác Nhận
     const handleVerify = async () => {
         const otpValue = otp.join('');
         if (otpValue.length !== 6) return setError('Vui lòng nhập đủ 6 số');

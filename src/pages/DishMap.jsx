@@ -13,7 +13,6 @@ const DishMap = () => {
     const mapContainer = useRef(null);
     const map = useRef(null);
     
-    // State quản lý trạng thái zoom để thêm/bớt class ở container cha
     const [isZoomedIn, setIsZoomedIn] = useState(false);
 
     const { data: summaryData = [], isLoading: loadingSummary } = useDishMapSummaryQuery();
@@ -21,7 +20,6 @@ const DishMap = () => {
 
     const loading = loadingSummary || loadingAll;
     
-    // Khởi tạo bản đồ Mapbox và đăng ký sự kiện lắng nghe mức zoom duy nhất
     useEffect(() => {
         if (map.current || loading) return;
 
@@ -44,7 +42,6 @@ const DishMap = () => {
 
         map.current.on('zoom', handleMapZoom);
 
-        // Hủy bỏ lắng nghe sự kiện khi component bị unmount
         return () => {
             if (map.current) {
                 map.current.off('zoom', handleMapZoom);
@@ -52,14 +49,12 @@ const DishMap = () => {
         };
     }, [loading]);
 
-    // Tạo và quản lý các Marker hiển thị món ăn trên bản đồ
     useEffect(() => {
         if (!map.current || loading) return;
 
         const currentMarkers = document.querySelectorAll('.mapboxgl-marker');
         currentMarkers.forEach(m => m.remove());
 
-        // --- LAYER 1: QUỐC GIA (Zoom out) ---
         summaryData.forEach(country => {
             const el = document.createElement('div');
             el.className = 'country-marker group';
@@ -88,7 +83,6 @@ const DishMap = () => {
             });
         });
 
-        // --- LAYER 2: CHI TIẾT MÓN ĂN (Zoom in) ---
         allDishes.forEach(dish => {
             const el = document.createElement('div');
             el.className = 'dish-marker hover:z-50';
@@ -125,7 +119,6 @@ const DishMap = () => {
     return (
         <div className={`w-full h-[650px] rounded-3xl shadow-inner border-[12px] border-white overflow-hidden relative group ${isZoomedIn ? 'is-zoomed-in' : ''}`}>
             
-            {/* Inject CSS xử lý ẩn hiện marker theo class của container cha để tối ưu render */}
             <style>{`
                 .country-marker { display: block; }
                 .dish-marker { display: none; }
@@ -136,7 +129,6 @@ const DishMap = () => {
 
             <div ref={mapContainer} className="w-full h-full" />
             
-            {/* Overlay Trang trí */}
             <div className="absolute top-4 left-4 pointer-events-none">
                 <div className="bg-[#fff9f0]/90 backdrop-blur-sm p-3 rounded-xl border border-[#7d5a3f]/20 shadow-lg">
                     <h2 className="text-[#7d5a3f] font-bold text-sm tracking-widest uppercase">Bản đồ ẩm thực</h2>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Search, UserPlus, Eye, PenLine, Lock, Unlock, Users } from 'lucide-react'; // [MỚI]
-// import useAdminUsers from '../../hooks/admin/useAdminUsers';
 import AdminTable from '../../component/admin/AdminTable';
 import StatusBadge from '../../component/admin/StatusBadge';
 import UserModal from '../../component/admin/UserModal';
@@ -11,19 +10,11 @@ import { useAdminUsersQuery, useAdminFetchDetails} from '../../hooks/queries/use
 import { useAdminUserMutations } from '../../hooks/mutations/useAdminMutations';
 import { useGlobalModal } from '../../context/ModalContext';
 const AdminUserPage = () => {
-    // const { users, loading, pagination, fetchUsers, toggleStatus, createUser, getUser, updateUser } = useAdminUsers();
     const { showModal } = useGlobalModal();
     const [page, setPage] = useState(1);
     const [searchTerm, setSearchTerm] = useState('');
     const [sortConfig, setSortConfig] = useState({ key: 'created_at', order: 'DESC' });
     const [debouncedSearch, setDebouncedSearch] = useState('');
-
-    
-
-    // const loadData = (keyword, page, sortKey, sortOrder) => {
-    //     fetchUsers(page, pagination.limit, keyword, sortKey, sortOrder);
-    // };
-
     const { data, isLoading: loading } = useAdminUsersQuery({
         page, limit: 10, search: debouncedSearch, sortKey: sortConfig.key, sortOrder: sortConfig.order
     });
@@ -34,25 +25,13 @@ const AdminUserPage = () => {
     const { toggleStatus, createUser, updateUser } = useAdminUserMutations();
     const { fetchUserDetail } = useAdminFetchDetails();
 
-    const [modalMode, setModalMode] = useState('create'); // 'create', 'view', 'edit'
+    const [modalMode, setModalMode] = useState('create');
     const [selectedUserData, setSelectedUserData] = useState(null);
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);
-
-
-    // const debouncedSearch = useCallback(
-    //     debounce((keyword) => {
-    //         loadData(keyword, 1, sortConfig.key, sortConfig.order);
-    //     }, 500),
-    //     [sortConfig] 
-    // );
 
     const debounceSearchAction = useCallback(
         debounce((keyword) => { setDebouncedSearch(keyword); setPage(1); }, 500), []
     );
-
-    // useEffect(() => {
-    //     loadData('', 1, 'created_at', 'DESC');
-    // }, []); 
 
     const handleSearchChange = (e) => {
         const value = e.target.value;
@@ -65,7 +44,6 @@ const AdminUserPage = () => {
         setPage(1);
     };
 
-    // THAY THẾ TOÀN BỘ onBlockClick VÀ confirmBlock CŨ BẰNG ĐOẠN NÀY:
     const onBlockClick = (user) => {
         if (user.role === 'admin') {
             toast.warning("Không thể tương tác với tài khoản Admin!");
@@ -114,9 +92,6 @@ const AdminUserPage = () => {
     };
 
     const openEditModal = async (user) => {
-        // Edit mode không cần fetch detail full nếu chỉ sửa role/status, 
-        // nhưng để chắc chắn có data mới nhất ta cứ fetch (hoặc dùng data từ row bảng cũng được)
-        // Ở đây dùng data từ row cho nhanh, vì role/status có sẵn ở row rồi
         setModalMode('edit');
         setSelectedUserData(user); 
         setIsUserModalOpen(true);
@@ -128,7 +103,6 @@ const AdminUserPage = () => {
                 await createUser.mutateAsync(formData);
                 toast.success("Tạo người dùng thành công");
             } else if (modalMode === 'edit') {
-                // Chỉ gửi role và status
                  await updateUser.mutateAsync({ userId: selectedUserData.user_id, data: { role: formData.role, account_status: formData.account_status }});
                 toast.success("Cập nhật người dùng thành công");
             }
@@ -138,7 +112,6 @@ const AdminUserPage = () => {
         }
     };
 
-// [CẤU HÌNH CỘT]
     const columns = [
         { label: 'Người dùng', key: 'full_name', sortable: true, className: 'w-[30%]' }, 
         { label: 'Vai trò', key: 'role', sortable: true, className: 'w-[15%]' },  
@@ -149,7 +122,6 @@ const AdminUserPage = () => {
 
     return (
         <div className="space-y-6">
-            {/* HEADER TOOLBAR */}
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div className="flex items-center gap-3">
                     <div className="p-2 bg-orange-100 rounded-lg text-[#ff6b35]">
@@ -162,7 +134,6 @@ const AdminUserPage = () => {
                 </div>
 
                 <div className="flex gap-3 w-full sm:w-auto">
-                    {/* Search Input */}
                     <div className="relative flex-1 sm:w-64">
                         <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                         <input 

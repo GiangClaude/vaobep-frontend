@@ -1,4 +1,3 @@
-// frontend/src/hooks/ui/interaction/usePostActions.js
 import { useAuthGuard } from './useAuthGuard';
 import { useToggleLikeMutation, useToggleSaveMutation, useReportPostMutation, useRatePostMutation } from '../../mutations/useInteractionMutations';
 import { useGlobalModal } from '../../../context/ModalContext';
@@ -7,13 +6,11 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
     const { requireAuth } = useAuthGuard();
     const { showModal, showReportModal } = useGlobalModal();
     
-    // Gọi Mutations
     const toggleLikeMutation = useToggleLikeMutation();
     const toggleSaveMutation = useToggleSaveMutation();
     const reportMutation = useReportPostMutation();
     const rateMutation = useRatePostMutation();
     
-    // Hành động Like
     const handleLike = requireAuth(() => {
         toggleLikeMutation.mutate({ 
             postId: id, 
@@ -23,7 +20,6 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
         });
     });
 
-    // Hành động Save (Bookmark)
     const handleSave = requireAuth(() => {
         toggleSaveMutation.mutate({ 
             postId: id, 
@@ -36,7 +32,6 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
         });
     });
 
-    // Hành động Share (Thuần UI, không gọi server)
     const handleShare = (e) => {
         if (e && e.stopPropagation) e.stopPropagation();
         
@@ -72,7 +67,6 @@ export const usePostActions = ({ id, type, isLiked, likesCount, isSaved }) => {
         });
     });
 
-    // Hành động Báo cáo
     const handleReport = requireAuth((e) => {
         if (e && e.stopPropagation) e.stopPropagation();
         

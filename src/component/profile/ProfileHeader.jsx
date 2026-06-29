@@ -1,5 +1,5 @@
 import { Edit, UserPlus, UserMinus, Flag, Award, Gift } from "lucide-react";
-import { motion } from "framer-motion"; // Lưu ý: framer-motion hoặc motion/react tùy thư viện bạn cài
+import { motion } from "framer-motion"; 
 import { getAvatarUrl } from '../../utils/imageHelper';
 
 export function ProfileHeader({
@@ -25,28 +25,23 @@ export function ProfileHeader({
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden relative mb-6">
       
-      {/* 1. ẢNH BÌA (Cover Photo) */}
       <div className="h-48 md:h-64 bg-gradient-to-r from-[#ff6b35] via-[#f7931e] to-[#ffc857] w-full relative">
-         {/* Hiển thị ảnh bìa nếu có */}
             {user.coverImage && (
                 <img 
-                  src={user.coverImage} // Sử dụng hàm lấy url ảnh bìa
+                  src={user.coverImage} 
                   alt="Cover" 
                   className="absolute inset-0 w-full h-full object-cover z-0"
-                  onError={(e) => e.target.style.display = 'none'} // Ẩn ảnh nếu lỗi, lộ ra gradient
+                  onError={(e) => e.target.style.display = 'none'} 
                 />
             )}
-              {/* Lớp overlay làm tối ảnh một chút để nổi bật avatar */}
               <div className="absolute inset-0 bg-black/15 z-0"></div> 
       </div>
 
       {/* 2. NỘI DUNG HEADER */}
       <div className="px-6 pb-6 relative">
         
-        {/* Hàng chứa Avatar và Nút Action */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 -mt-16 sm:-mt-12 mb-4">
 
-          {/* Avatar đè lên bìa */}
           <motion.div whileHover={{ scale: 1.02 }} className="relative z-10">
             <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-white bg-white shadow-md">
               <img
@@ -57,7 +52,6 @@ export function ProfileHeader({
             </div>
           </motion.div>
 
-          {/* Action Buttons (Nằm góc phải) */}
           <div className="flex flex-wrap gap-2 z-10 w-full sm:w-auto mt-2 sm:mt-0">
             {isOwnProfile ? (
               <motion.button
@@ -83,15 +77,6 @@ export function ProfileHeader({
                   {isFollowing ? <><UserMinus className="w-4 h-4" /> Đang theo dõi</> : <><UserPlus className="w-4 h-4" /> Theo dõi</>}
                 </motion.button>
 
-                {/* <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={onGift}
-                  className="px-5 py-2.5 rounded-xl bg-pink-50 text-pink-600 hover:bg-pink-100 font-semibold flex items-center justify-center gap-2 transition-all text-sm"
-                >
-                  <Gift className="w-4 h-4" /> Tặng điểm
-                </motion.button> */}
-
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -106,7 +91,6 @@ export function ProfileHeader({
           </div>
         </div>
 
-        {/* Thông tin Text (Tên, Bio, Badge) */}
         <div>
           <div className="flex items-center gap-3 mb-1">
             <h1 className="text-2xl font-bold text-gray-900">{user.fullName}</h1>

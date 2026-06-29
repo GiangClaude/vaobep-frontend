@@ -31,7 +31,6 @@ const UserRankCard = ({ user, rank }) => {
                     {user.bio}
                 </p>
 
-                {/* Tóm tắt tương tác */}
                 <div className="flex items-center space-x-4 text-xs sm:text-sm text-gray-600 mt-2">
                     <div className="flex items-center" title="Tổng số công thức">
                         <BookOpen size={16} className="mr-1 text-orange-500" /> {user.totalRecipes}

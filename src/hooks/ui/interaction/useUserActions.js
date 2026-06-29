@@ -1,4 +1,3 @@
-// frontend/src/hooks/ui/interaction/useUserActions.js
 import { useAuthGuard } from './useAuthGuard';
 import { useFollowUserMutation } from '../../mutations/useInteractionMutations';
 import { useQueryClient } from '@tanstack/react-query';
@@ -12,11 +11,9 @@ export const useUserActions = ({ userId, currentIsFollowing, currentFollowers })
     const handleFollow = requireAuth((e) => {
         if (e && e.stopPropagation) e.stopPropagation();
 
-        // 1. Optimistic Updates cho User (Để sáng nút ngay lập tức)
         const newIsFollowing = !currentIsFollowing;
         const newFollowers = newIsFollowing ? currentFollowers + 1 : Math.max(0, currentFollowers - 1);
         
-        // Quét cập nhật cache Search và Profile
         const updates = { isFollowing: newIsFollowing, followers_count: newFollowers, 'stats.followers': newFollowers };
         
         queryClient.setQueriesData({ queryKey: [QUERY_KEYS.SEARCH_USERS] }, (old) => {
@@ -24,7 +21,6 @@ export const useUserActions = ({ userId, currentIsFollowing, currentFollowers })
             return { ...old, data: old.data.map(u => String(u.user_id) === String(userId) ? { ...u, ...updates } : u) };
         });
 
-        // 2. Gọi API ngầm
         followMutation.mutate(userId);
     });
 

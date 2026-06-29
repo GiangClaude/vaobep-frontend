@@ -12,7 +12,6 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
         account_status: 'active'
     });
 
-    // Reset form khi mở modal hoặc thay đổi mode/userData
     useEffect(() => {
         if (isOpen) {
             if (mode === 'create') {
@@ -21,7 +20,7 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                 setFormData({
                     full_name: userData.fullName || userData.full_name || '',
                     email: userData.email || '',
-                    password: '', // Không hiển thị password cũ
+                    password: '', 
                     role: userData.role || 'user',
                     account_status: userData.account_status || 'active'
                 });
@@ -39,7 +38,6 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
     const isViewMode = mode === 'view';
     const isEditMode = mode === 'edit';
     
-    // Title mapping
     const titleMap = {
         create: 'Thêm User Mới',
         edit: 'Chỉnh Sửa User',
@@ -59,7 +57,6 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                         className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm"
                     />
 
-                    {/* Modal Container */}
                     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -69,9 +66,7 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                             className="bg-[#fff9f0] rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
                             onClick={(e) => e.stopPropagation()}
                         >
-                            {/* Header Gradient */}
                             <div className="bg-gradient-to-r from-[#ff6b35] to-[#f7931e] px-6 py-4 flex justify-between items-center shrink-0 relative overflow-hidden">
-                                {/* Decor */}
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full translate-x-10 -translate-y-10 blur-xl"></div>
                                 
                                 <div className="flex items-center gap-3 relative z-10 text-white">
@@ -89,10 +84,8 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                                 </button>
                             </div>
 
-                            {/* Body (Scrollable) */}
                             <div className="p-6 overflow-y-auto custom-scrollbar">
                                 
-                                {/* --- VIEW MODE: Profile Card Style --- */}
                                 {isViewMode && userData && (
                                     <div className="flex flex-col items-center">
                                         <div className="relative mb-4">
@@ -136,9 +129,7 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                                     </div>
                                 )}
 
-                                {/* --- FORM: Create / Edit --- */}
                                 <form onSubmit={handleSubmit} className="space-y-5">
-                                    {/* Info Fields (Ẩn khi View nếu muốn gọn, hoặc hiện read-only) */}
                                     {!isViewMode && (
                                         <>
                                             <div>
@@ -182,7 +173,6 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                                         </>
                                     )}
 
-                                    {/* Password (Chỉ hiện khi Create) */}
                                     {mode === 'create' && (
                                         <div>
                                             <label className="block text-sm font-bold text-gray-700 mb-1 ml-1">Mật khẩu</label>
@@ -200,7 +190,6 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                                         </div>
                                     )}
 
-                                    {/* Role & Status Selection */}
                                     <div className="grid grid-cols-2 gap-4 pt-2">
                                         <div>
                                             <label className="block text-sm font-bold text-gray-700 mb-1 ml-1">Vai trò</label>
@@ -237,12 +226,10 @@ const UserModal = ({ isOpen, onClose, mode, userData, onSubmit }) => {
                                         </div>
                                     </div>
                                     
-                                    {/* Nút Submit ẩn khi View */}
                                     <button type="submit" className="hidden"></button>
                                 </form>
                             </div>
 
-                            {/* Footer Actions */}
                             {!isViewMode && (
                                 <div className="p-6 border-t border-orange-100 bg-white flex justify-end gap-3 shrink-0">
                                     <button

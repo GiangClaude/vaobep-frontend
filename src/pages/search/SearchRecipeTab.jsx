@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Filter, X } from "lucide-react"; // Thêm icon Filter, X
+import { Filter, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { RecipeCard } from "../../component/common/RecipeCard";
@@ -16,7 +16,7 @@ export default function SearchRecipeTab() {
     const keyword = searchParams.get("keyword") || "";
     
     const [page, setPage] = useState(1);
-    const [isFilterOpen, setIsFilterOpen] = useState(false); // Trạng thái mở Drawer
+    const [isFilterOpen, setIsFilterOpen] = useState(false); 
     
     const { filters, debouncedFilters, replaceFilters } = useFilters({ tags: [] });
 
@@ -29,12 +29,10 @@ export default function SearchRecipeTab() {
     const recipes = data?.data || [];
     const pagination = data?.pagination || {};
 
-    // Tính số lượng filter đang áp dụng để hiện badge đỏ
     const activeFilterCount = (filters.tags?.length || 0) + (filters.cookingTime ? 1 : 0) + (filters.minRating ? 1 : 0);
 
     return (
         <div className="animate-in fade-in duration-300">
-            {/* Header của Tab: Tiêu đề + Nút Bộ lọc */}
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-gray-800">Công thức nấu ăn</h2>
                 
@@ -52,12 +50,10 @@ export default function SearchRecipeTab() {
                 </button>
             </div>
 
-            {/* Danh sách kết quả chiếm 100% */}
             {isFetching ? (
                 <div className="py-20 text-center animate-pulse text-[#ff6b35] font-bold">Đang tải công thức...</div>
             ) : recipes.length > 0 ? (
                 <>
-                    {/* Đổi grid-cols-2 thành grid-cols-2 lg:grid-cols-2 (Hoặc 3 nếu card gọn lại) */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                         {recipes.map(r => <RecipeCard key={r.id} recipe={r} onClick={() => navigate(`/recipe/${r.id}`)} />)}
                     </div>
@@ -67,17 +63,14 @@ export default function SearchRecipeTab() {
                 <EmptyState text="Không tìm thấy công thức nào phù hợp." />
             )}
 
-            {/* DRAWER BỘ LỌC (Trượt từ phải sang) */}
             <AnimatePresence>
                 {isFilterOpen && (
                     <>
-                        {/* Lớp mờ nền đen */}
                         <motion.div 
                             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                             onClick={() => setIsFilterOpen(false)}
                             className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50"
                         />
-                        {/* Nội dung Drawer */}
                         <motion.div 
                             initial={{ x: "100%" }} animate={{ x: 0 }} exit={{ x: "100%" }}
                             transition={{ type: "tween", duration: 0.3 }}
@@ -91,7 +84,6 @@ export default function SearchRecipeTab() {
                             </div>
                             
                             <div className="p-4 flex-1">
-                                {/* Component RecipeFilter cũ, gỡ bỏ class bọc bg-white/shadow vì drawer đã tự có nền */}
                                 <RecipeFilter 
                                     filters={filters} 
                                     onFilterChange={(f) => { replaceFilters(f); setPage(1); }} 

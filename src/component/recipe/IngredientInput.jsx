@@ -1,11 +1,9 @@
 import { X, AlertCircle, Plus, Loader2 } from "lucide-react"; 
-import { motion, AnimatePresence } from "framer-motion"; // Đã sửa lại framer-motion cho chuẩn
+import { motion, AnimatePresence } from "framer-motion"; 
 
-// [MỚI] Import UI Hook thay vì hook cũ
 import { useIngredientInputUI } from "../../hooks/ui/recipe/useIngredientInputUI";
 
 export function IngredientInput({ ingredients, onChange }) {
-  // Giao toàn quyền xử lý logic cho UI Hook
   const {
       isLoading,
       dbUnits,
@@ -22,7 +20,6 @@ export function IngredientInput({ ingredients, onChange }) {
 
   return (
     <div>
-      {/* --- Phần hiển thị danh sách đã chọn --- */}
       {ingredients.length > 0 && (
         <div className="mb-4 space-y-2">
           <AnimatePresence>
@@ -47,10 +44,9 @@ export function IngredientInput({ ingredients, onChange }) {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-gray-600">
                   <span className="font-semibold text-[#ff6b35]">{ing.amount} {ing.unit}</span>
-                  {/* <span>{ing.unit}</span> */}
                 </div>
                 <button
-                  type="button" // Ngăn form submit
+                  type="button" 
                   onClick={() => handleRemoveIngredient(index)}
                   className="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition-all"
                 >
@@ -62,11 +58,9 @@ export function IngredientInput({ ingredients, onChange }) {
         </div>
       )}
 
-      {/* --- Form nhập liệu --- */}
       <div className="bg-white rounded-xl border-2 border-[#ffc857]/30 p-4">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           
-          {/* 1. Input Tên (Có Search & Dropdown) */}
           <div className="md:col-span-5 relative" ref={dropdownRef}>
             <label className="block text-sm mb-1.5 text-gray-700">
               Nguyên liệu <span className="text-red-500">*</span>
@@ -130,7 +124,6 @@ export function IngredientInput({ ingredients, onChange }) {
             </AnimatePresence>
           </div>
 
-          {/* 2. Input Số lượng */}
           <div className="md:col-span-3">
             <label className="block text-sm mb-1.5 text-gray-700">
               Số lượng <span className="text-red-500">*</span>
@@ -144,7 +137,6 @@ export function IngredientInput({ ingredients, onChange }) {
             />
           </div>
 
-          {/* 3. Select Đơn vị */}
           <div className="md:col-span-3">
             <label className="block text-sm mb-1.5 text-gray-700">
               Đơn vị <span className="text-red-500">*</span>
@@ -162,7 +154,6 @@ export function IngredientInput({ ingredients, onChange }) {
             </select>
           </div>
 
-          {/* 4. Button Add */}
           <div className="md:col-span-1 flex items-end">
             <motion.button
               type="button"

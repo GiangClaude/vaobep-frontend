@@ -1,19 +1,13 @@
-// VỊ TRÍ: frontend/src/pages/MenuListPage.jsx
-
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// [MỚI] Import Hooks kiến trúc mới
 import { useMyMenusQuery } from '../hooks/queries/useMenuQueries';
 import { useMenuListUI } from '../hooks/ui/menu/useMenuListUI';
 
 const MenuListPage = () => {
     const navigate = useNavigate();
     
-    // 1. Dùng Query để tự động lấy data thay cho useEffect cũ
     const { data: menus = [], isLoading, isError, error } = useMyMenusQuery();
     
-    // 2. Dùng UI Hook để lấy hàm tạo mới thực đơn
     const { handleCreateBlankMenu, isCreating } = useMenuListUI();
 
     if (isLoading) return <div className="p-8 text-center text-gray-500 mt-10">Đang tải danh sách thực đơn...</div>;

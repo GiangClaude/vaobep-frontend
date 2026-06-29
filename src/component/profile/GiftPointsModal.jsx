@@ -1,21 +1,17 @@
-// src/component/profile/GiftPointsModal.jsx
 import React, { useState } from 'react';
 import { Gift, X, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import Modal from '../common/modal'; // Đã sửa import default
-
+import Modal from '../common/modal';
 export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints }) {
     const [amount, setAmount] = useState('');
     const [message, setMessage] = useState('');
     const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // 1. State lưu lỗi validate (để hiện chữ đỏ)
     const [validationError, setValidationError] = useState('');
 
-    // 2. State điều khiển Modal kết quả (Success/Error)
     const [resultModal, setResultModal] = useState({
         isOpen: false,
-        type: 'info', // success | error
+        type: 'info', 
         title: '',
         message: ''
     });
@@ -24,11 +20,10 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setValidationError(''); // Reset lỗi cũ trước khi validate
+        setValidationError(''); 
         
         const points = parseInt(amount);
 
-        // --- VALIDATION ---
         if (!amount || isNaN(points)) {
             setValidationError("Vui lòng nhập số điểm hợp lệ.");
             return;
@@ -42,7 +37,6 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
             return;
         }
 
-        // --- XỬ LÝ GỬI ---
         setIsSubmitting(true);
         const result = await onSend({
             recipientId: recipient?.id,
@@ -51,7 +45,6 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
         });
         setIsSubmitting(false);
 
-        // --- HIỂN THỊ KẾT QUẢ BẰNG MODAL ---
         if (result.success) {
             setResultModal({
                 isOpen: true,
@@ -59,7 +52,6 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
                 title: 'Thành công!',
                 message: result.message
             });
-            // Reset form
             setAmount('');
             setMessage('');
         } else {
@@ -72,11 +64,9 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
         }
     };
 
-    // Hàm đóng Modal kết quả
     const handleCloseResultModal = () => {
         setResultModal(prev => ({ ...prev, isOpen: false }));
         
-        // Nếu là thông báo thành công thì đóng luôn cả Gift Modal
         if (resultModal.type === 'success') {
             onClose();
         }
@@ -121,13 +111,11 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
                                     value={amount}
                                     onChange={(e) => {
                                         setAmount(e.target.value);
-                                        if (validationError) setValidationError(''); // Xóa lỗi khi người dùng sửa
+                                        if (validationError) setValidationError(''); 
                                     }}
                                     className={`w-full px-4 py-3 rounded-xl border ${validationError ? 'border-red-500 ring-1 ring-red-500' : 'border-gray-200 focus:ring-purple-500'} focus:ring-2 outline-none transition-all font-semibold text-lg`}
                                     placeholder="Nhập số điểm (min 10)..."
-                                    // Bỏ required để tự xử lý validate hiển thị lỗi chữ đỏ
                                 />
-                                {/* Hiển thị lỗi validation chữ đỏ */}
                                 {validationError && (
                                     <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
                                         {validationError}
@@ -169,7 +157,6 @@ export function GiftPointsModal({ isOpen, onClose, recipient, onSend, maxPoints 
                 </div>
             </AnimatePresence>
 
-            {/* Modal thông báo kết quả (Success/Error) */}
             <Modal 
                 isOpen={resultModal.isOpen}
                 onClose={handleCloseResultModal}

@@ -1,5 +1,3 @@
-// VỊ TRÍ: frontend/src/pages/MenuPlannerPage.jsx
-
 import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MenuProvider, useMenuState, MENU_ACTIONS } from '../context/MenuContext';
@@ -7,13 +5,11 @@ import { Trash2, GripVertical, Copy, User, ShoppingCart, Sparkles, Wand2, Plus, 
 import { getRecipeImageUrl } from '../utils/imageHelper';
 import { useAuth } from '../AuthContext';
 
-// Import Modals
 import RecipeSearchModal from '../component/menu/RecipeSearchModal';
 import ShoppingListModal from '../component/menu/ShoppingListModal';
 import AiConsultModal from '../component/menu/AiConsultModal';
 import AiGeneratorModal from '../component/menu/AiGeneratorModal';
 
-// Import Hooks Kiến trúc mới
 import { useMenuDetailQuery } from '../hooks/queries/useMenuQueries';
 import { useMenuPlannerUI } from '../hooks/ui/menu/useMenuPlannerUI';
 
@@ -22,12 +18,9 @@ const MenuPlannerBoard = () => {
     const { currentUser } = useAuth();
     const { menuState, dispatch } = useMenuState();
 
-    // 1. Fetch dữ liệu thực đơn tự động bằng Query
     const { data: fetchedMenu, isLoading } = useMenuDetailQuery(menuId);
     const hasInitialized = useRef(false);
     
-    // 2. Cập nhật Context khi tải xong dữ liệu từ API
-    // Hàm side-effect để nạp dữ liệu từ server vào state quản lý cục bộ
     useEffect(() => {
         if (fetchedMenu && !hasInitialized.current) {
             dispatch({ type: MENU_ACTIONS.INIT_MENU, payload: fetchedMenu });
@@ -35,10 +28,8 @@ const MenuPlannerBoard = () => {
         }
     }, [fetchedMenu, dispatch]);
 
-    // Kiểm tra quyền chủ sở hữu
     const isOwner = currentUser?.id === menuState?.user_id;
 
-    // 3. Kéo toàn bộ State UI & Hàm xử lý từ Hook UI
     const {
         searchModalTarget, setSearchModalTarget,
         isShoppingListOpen, setIsShoppingListOpen,
@@ -49,8 +40,6 @@ const MenuPlannerBoard = () => {
         handleDragStart, handleDragEnd, handleDragOver, handleDrop
     } = useMenuPlannerUI(menuId, menuState, dispatch, currentUser, isOwner);
 
-    // Tính tổng calo trong ngày (Giữ nguyên logic)
-    // Hàm duyệt qua các món ăn trong một ngày để cộng dồn lượng calo
     const calculateDayCalo = (day) => {
         let total = 0;
         day.meals?.forEach(meal => {
@@ -73,13 +62,10 @@ const MenuPlannerBoard = () => {
     }
 
     return (
-        // Đổi màu nền sang tone kem ấm
         <div className="flex flex-col h-screen bg-[#fff9f0]">
-            {/* CÁC MODAL */}
             <RecipeSearchModal 
                 isOpen={!!searchModalTarget}
                 onClose={() => setSearchModalTarget(null)}
-                // Hàm format lại dữ liệu công thức trước khi đưa vào bảng
                 onSelectRecipe={(recipe) => {
                    const menuFormattedRecipe = {
                         recipe_id: recipe.id || recipe.recipe_id,
@@ -104,7 +90,6 @@ const MenuPlannerBoard = () => {
             <AiConsultModal isOpen={isAiModalOpen} onClose={() => setIsAiModalOpen(false)} menuState={menuState} />
             <AiGeneratorModal isOpen={isAiGenModalOpen} onClose={() => setIsAiGenModalOpen(false)} />
 
-            {/* HEADER ĐƯỢC TÂN TRANG ĐỒNG BỘ VỚI HOMEPAGE */}
             <header className="bg-white/90 backdrop-blur-xl shadow-[0_4px_20px_-10px_rgba(255,117,31,0.3)] px-8 py-5 flex flex-wrap gap-4 justify-between items-center shrink-0 border-b-2 border-orange-100 z-10 sticky top-0">
                 <div className="flex flex-col gap-1.5 flex-1 min-w-[300px]">
                     <input 
@@ -157,16 +142,13 @@ const MenuPlannerBoard = () => {
                 </div>
             </header>
 
-            {/* KANBAN BOARD - LÀM MỀM MẠI HƠN */}
             <main className="flex-1 overflow-x-auto p-8 scroll-smooth custom-scrollbar">
                 <div className="flex gap-6 min-h-full items-start">
                     {menuState.days?.map((day, index) => (
                         <div key={day.day_id} className="w-[360px] shrink-0 bg-white rounded-[32px] p-5 flex flex-col border-2 border-transparent shadow-[0_8px_20px_-10px_rgba(255,117,31,0.15)] relative group hover:border-orange-100 hover:shadow-[0_12px_25px_-10px_rgba(255,117,31,0.3)] transition-all duration-300">
                             
-                            {/* Phông nền trang trí nhẹ góc trên */}
                             <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-orange-50 to-transparent rounded-tr-[32px] pointer-events-none"></div>
 
-                            {/* Nút xóa ngày */}
                             {isOwner && (
                                 <button 
                                     onClick={() => { if(window.confirm('Bạn có chắc muốn xóa ngày này?')) dispatch({ type: MENU_ACTIONS.REMOVE_DAY, payload: { dayId: day.day_id }}) }} 
@@ -226,7 +208,6 @@ const MenuPlannerBoard = () => {
                                             </div>
                                         </div>
                                         
-                                        {/* Vùng chứa Món ăn */}
                                         <div className="p-3 flex flex-col gap-3 min-h-[90px]">
                                             {(!meal.recipes || meal.recipes.length === 0) ? (
                                                 <div className="h-full flex items-center justify-center border-2 border-dashed border-orange-200 rounded-[16px] py-6 bg-white/50">

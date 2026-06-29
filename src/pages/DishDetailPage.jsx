@@ -8,7 +8,6 @@ import RecipeProposalSection from '../component/dictionary/RecipeProposalSection
 import AiSummaryBanner from "../component/common/AiSummaryBanner";
 import { useAuth } from '../AuthContext';
 
-// [MỚI] Import Hooks
 import { useDishDetailQuery } from '../hooks/queries/useDictionaryQueries';
 import { useInteractionStateQuery } from '../hooks/queries/useInteractionQueries';
 import { usePostActions } from '../hooks/ui/interaction/usePostActions';
@@ -18,20 +17,16 @@ const DishDetailPage = () => {
     const navigate = useNavigate();
     const { currentUser } = useAuth();
 
-    // 1. Fetch dữ liệu tĩnh
     const { data: dish, isLoading, error, refetch } = useDishDetailQuery(id);
 
-    // 2. Fetch trạng thái tương tác
     const { data: interactionState } = useInteractionStateQuery(id, 'dish', !!currentUser);
  
-    // console.log("Dish Detail:", dish, interactionState); // Debug log để kiểm tra dữ liệu trả vềs
-    // 3. UI Hooks Action
     const { handleLike, handleShare } = usePostActions({
         id: id,
         type: 'dish',
         isLiked: interactionState?.liked || false,
         likesCount: dish?.like_count || 0,
-        isSaved: false // Thường thì Dish không có save
+        isSaved: false
     });
 
     if (isLoading) return (
@@ -89,39 +84,21 @@ const DishDetailPage = () => {
                         </div>
                     </div>
 
-                    {/* Component Độc lập */}
                     <CommentSection postId={id} postType="dish" />
                 </div>
 
-                {/* CỘT PHẢI */}
                 <div className="space-y-6">
-                    {/* <div className="bg-white p-6 rounded-3xl shadow-sm border border-[#7d5a3f]/10">
-                        <h3 className="text-[#7d5a3f] font-bold text-xl mb-4 flex items-center"><span className="mr-2">📍</span> Ăn ở đâu?</h3>
-                        <div className="space-y-4">
-                            {dish.eateries?.length > 0 ? (
-                                dish.eateries.map((place, index) => (
-                                    <div key={index} className="border-b border-dashed border-[#e6dcd3] pb-3 last:border-0 hover:bg-[#fffcf7] p-2 rounded-xl transition-colors">
-                                        <p className="font-bold text-[#4a3728]">{place.name}</p>
-                                        <p className="text-sm text-gray-500 italic">{place.address}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-400 italic text-sm">Thông tin địa điểm đang được cập nhật...</p>
-                            )}
-                        </div>
-                    </div> */}
 
                     <div className="bg-[#7d5a3f] p-6 rounded-3xl shadow-lg text-[#fff9f0]">
                         <h3 className="font-bold text-xl mb-4 flex items-center"><span className="mr-2">🍳</span> Công thức nấu</h3>
                         <div className="space-y-4">
-                            {/* Refetch là query action */}
                             <RecipeProposalSection dishId={id} initialRecipes={dish.recipes || []} onRefresh={refetch} />
                         </div>
                     </div>
 
                     <div className="mt-6">
                         <AiSummaryBanner 
-                            title="✨ Nhờ AI phân tích thêm về món này"
+                            title="Nhờ AI phân tích thêm về món này"
                             contextText={`Món: ${dish.original_name}. Từ: ${dish.country}. Mô tả: ${dish.description}`} 
                         />
                     </div>

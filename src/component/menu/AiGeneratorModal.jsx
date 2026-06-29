@@ -1,10 +1,7 @@
-// VỊ TRÍ: frontend/src/component/menu/AiGeneratorModal.jsx
-
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Wand2, Sparkles } from 'lucide-react';
 import { useMenuState, MENU_ACTIONS } from '../../context/MenuContext';
-// Dùng Mutation mới tạo
 import { useAutoGenerateMenuMutation } from '../../hooks/mutations/useMenuMutations';
 import { useGlobalModal } from '../../context/ModalContext';
 import { v4 as uuidv4 } from 'uuid';
@@ -13,7 +10,6 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
     const { dispatch } = useMenuState();
     const [prompt, setPrompt] = useState('');
     const { showModal } = useGlobalModal();
-    // 1. KẾT NỐI MUTATION
     const generateMutation = useAutoGenerateMenuMutation();
     const isThinking = generateMutation.isPending; 
 
@@ -44,7 +40,6 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                         }))
                     }))
                 }));
-                // Đẩy vào Context Kanban
                 dispatch({ type: MENU_ACTIONS.OVERRIDE_DAYS, payload: result.data });
                 showModal({
                     type: 'success',

@@ -1,4 +1,3 @@
-// frontend/src/hooks/ui/common/usePagination.js
 import { useState } from 'react';
 
 export const usePagination = (initialPage = 1, defaultLimit = 12) => {

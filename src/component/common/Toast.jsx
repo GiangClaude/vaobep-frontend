@@ -5,7 +5,7 @@ import { CheckCircle, X } from 'lucide-react';
 export default function Toast({ message, isVisible, onClose, type = 'success' }) {
     useEffect(() => {
         if (isVisible) {
-            const timer = setTimeout(onClose, 3000); // Tự đóng sau 3s
+            const timer = setTimeout(onClose, 3000); 
             return () => clearTimeout(timer);
         }
     }, [isVisible, onClose]);
