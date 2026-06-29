@@ -1,4 +1,3 @@
-// Mở file: src/component/profile/ProfileTabs.jsx
 import { FileText, Heart, User, Coins, Settings, CalendarDays } from "lucide-react";
 import { motion } from "motion/react";
 import { Link, useLocation } from "react-router-dom";

@@ -11,7 +11,6 @@ export default function SearchUserTab() {
     const [page, setPage] = useState(1);
     const [sort, setSort] = useState("newest");
 
-    // Reset về trang 1 khi đổi từ khóa
     useEffect(() => { setPage(1); }, [keyword]);
 
     const { data, isFetching } = useSearchUsersQuery({

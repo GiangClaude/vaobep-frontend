@@ -3,21 +3,18 @@ import { motion } from 'framer-motion';
 import { X, Image as ImageIcon, Clock } from 'lucide-react';
 import {useTagQueries} from "../../hooks/queries/useTagQueries";
 
-// UI Hook
 import { useArticleFormUI } from '../../hooks/ui/article/useArticleFormUI';
 
 export default function ArticleEditorModal({ isOpen, onClose, initialData = null }) {
     const { tags: availableTags = [] } = useTagQueries();
     const editorRef = useRef(null);
 
-    // Kéo toàn bộ State và Actions từ UI Hook
     const {
         formData, updateField, handleCoverChange,
         tagQuery, setTagQuery, recipeQuery, setRecipeQuery, recipeResults,
         errors, handleSave, isSaving
     } = useArticleFormUI(initialData, isOpen, onClose);
 
-    // Cập nhật nội dung editor khi form thay đổi
     useEffect(() => {
         if (isOpen && editorRef.current && editorRef.current.innerHTML !== formData.content) {
             editorRef.current.innerHTML = formData.content;
@@ -38,13 +35,11 @@ export default function ArticleEditorModal({ isOpen, onClose, initialData = null
                 </div>
 
                 <div className="p-6 space-y-4 overflow-y-auto">
-                    {/* Tiêu đề */}
                     <div>
                         <input value={formData.title} onChange={(e) => updateField('title', e.target.value)} placeholder="Tiêu đề..." className="w-full text-xl font-bold border-b pb-2 focus:outline-none" />
                         {errors.title && <div className="text-sm text-red-600 mt-1">{errors.title}</div>}
                     </div>
 
-                    {/* Mô tả */}
                     <div>
                         <input value={formData.excerpt} onChange={(e) => updateField('excerpt', e.target.value)} placeholder="Mô tả ngắn..." className="w-full text-sm text-[#7d5a3f] border-b pb-2 focus:outline-none" />
                         {errors.excerpt && <div className="text-xs text-red-500 mt-1">{errors.excerpt}</div>}
@@ -74,7 +69,6 @@ export default function ArticleEditorModal({ isOpen, onClose, initialData = null
                         {errors.tags && <div className="text-xs text-red-500 mt-1">{errors.tags}</div>}
                     </div>
 
-                    {/* Recipes Liên kết */}
                     <div>
                         <div className="mb-2 text-sm text-gray-700 font-medium">Công thức liên quan</div>
                         <div className="flex items-center gap-2 flex-wrap mb-3">
