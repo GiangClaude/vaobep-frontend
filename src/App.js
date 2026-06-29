@@ -54,11 +54,11 @@ import AdminArticlePage from './pages/admin/AdminArticlePage';
 import LeaderboardPage from './pages/LeaderboardPage';
 const MainLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div>
       <Header />
-      <main className="w-full max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex-grow">
+      <div>
         <Outlet />
-      </main>
+      </div>
       <Footer />
       <Chatbot />
     </div>
