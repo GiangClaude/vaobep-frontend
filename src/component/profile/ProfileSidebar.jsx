@@ -41,7 +41,7 @@ export function ProfileSidebar({ stats, badges = [], pendingRewards = [], onOpen
               className={`w-full py-2.5 rounded-xl font-bold transition-all text-sm ${
                   isCheckedIn 
                   ? "bg-green-50 text-green-600 cursor-not-allowed border border-green-200" 
-                  : "bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white shadow-md hover:shadow-lg"
+                  : "bg-[#ff751f] text-white shadow-md hover:shadow-lg"
               }`}
             >
               {isCheckedIn ? "Đã nhận điểm hôm nay" : "Điểm danh ngay"}

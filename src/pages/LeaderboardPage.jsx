@@ -53,14 +53,14 @@ const LeaderboardPage = () => {
                     </button>
                 </div>
 
-                <select
+                {/* <select
                     value={selectedPeriod}
                     onChange={(e) => handlePeriodChange(e.target.value)}
                     className="w-full sm:w-auto border border-gray-300 text-gray-700 rounded-lg focus:ring-orange-500 focus:border-orange-500 block p-2.5"
                 >
                     <option value="current">Tháng này</option>
                     <option value="previous">Tháng trước</option>
-                </select>
+                </select> */}
             </div>
 
             <div className="mt-4">

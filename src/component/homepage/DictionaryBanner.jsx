@@ -10,11 +10,18 @@ export default function DictionaryBanner() {
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
-      className="relative bg-gradient-to-br from-[#ff5e00] via-[#ff751f] to-yellow-400 rounded-[40px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(255,117,31,0.4)] p-8 my-12 cursor-pointer group"
+      className="relative bg-gray-900 rounded-[40px] overflow-hidden shadow-[0_20px_40px_-15px_rgba(0,0,0,0.5)] p-8 my-12 cursor-pointer group"
     >
-      <div className="absolute inset-0 opacity-20">
-        <div className="absolute -top-10 -right-10 w-64 h-64 bg-white rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-white rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }} />
+      <div 
+        className="absolute inset-0 bg-cover bg-center transition-transform duration-700 ease-out group-hover:scale-105 opacity-40 blur-[2px]"
+        style={{ backgroundImage: "url('https://res.cloudinary.com/dmt1ghktm/image/upload/vaobep/default/istockphoto-513124350-170667a.webp')" }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent" />
+
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute -top-10 -right-10 w-64 h-64 bg-[#ff751f] rounded-full blur-[80px] animate-pulse" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 bg-yellow-500 rounded-full blur-[60px] animate-pulse" style={{ animationDelay: '1s' }} />
       </div>
 
       <motion.div
@@ -72,7 +79,7 @@ export default function DictionaryBanner() {
           </div>
 
           <button onClick={handleClick} className="bg-white text-[#ff751f] px-8 py-3.5 rounded-full flex items-center gap-3 font-extrabold text-[15px] hover:bg-yellow-300 hover:text-orange-900 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 active:scale-95 group-hover:gap-5">
-            Mở sách ngay thôi
+            Khám phá
             <ArrowRight className="w-5 h-5" />
           </button>
         </div>
@@ -86,6 +93,7 @@ export default function DictionaryBanner() {
             transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
             className="relative"
           >
+            
             <div className="relative">
               <div className="absolute -top-6 -left-6 w-36 h-48 bg-white/20 rounded-3xl rotate-12 blur-md"></div>
               <div className="absolute -top-3 -right-3 w-36 h-48 bg-yellow-300/30 rounded-3xl -rotate-6 blur-md"></div>

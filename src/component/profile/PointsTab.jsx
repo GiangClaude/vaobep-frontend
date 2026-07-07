@@ -2,7 +2,7 @@ import { Coins, TrendingUp, TrendingDown, Gift, Star, Calendar, Filter, CheckCir
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom"; 
-
+import {toast} from "react-toastify";
 export function PointsTab() {
   const [filter, setFilter] = useState("all"); 
 
@@ -13,9 +13,8 @@ export function PointsTab() {
   const history = pointsHistory || []; 
   const loading = pointsLoading;
 
-  const onGiftPoints = () => alert("Tính năng tặng điểm đang phát triển!");
-  const onPromoteRecipe = () => alert("Tính năng quảng bá công thức đang phát triển!");
-
+ const onGiftPoints = () => toast("Tính năng tặng điểm đang phát triển!");
+  const onPromoteRecipe = () => toast("Tính năng quảng bá công thức đang phát triển!");
   const getRoleInfo = (role) => {
     const roles = {
       user: { name: "Thành viên", color: "text-gray-600", bg: "bg-gray-100" },

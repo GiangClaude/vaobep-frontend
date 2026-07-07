@@ -4,6 +4,7 @@ import { MenuProvider, useMenuState, MENU_ACTIONS } from '../context/MenuContext
 import { Trash2, GripVertical, Copy, User, ShoppingCart, Sparkles, Wand2, Plus, X, CalendarDays, Flame } from 'lucide-react';
 import { getRecipeImageUrl } from '../utils/imageHelper';
 import { useAuth } from '../AuthContext';
+import { useGlobalModal } from '../context/ModalContext';
 
 import RecipeSearchModal from '../component/menu/RecipeSearchModal';
 import ShoppingListModal from '../component/menu/ShoppingListModal';
@@ -17,6 +18,7 @@ const MenuPlannerBoard = () => {
     const { menuId } = useParams();
     const { currentUser } = useAuth();
     const { menuState, dispatch } = useMenuState();
+    const { showModal } = useGlobalModal();
 
     const { data: fetchedMenu, isLoading } = useMenuDetailQuery(menuId);
     const hasInitialized = useRef(false);
@@ -110,7 +112,7 @@ const MenuPlannerBoard = () => {
 
                 <div className="flex flex-wrap gap-3 items-center">
                     {isOwner && (
-                        <button onClick={() => setIsAiModalOpen(true)} className="group flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#ff751f] to-yellow-400 text-white font-bold rounded-full shadow-md shadow-orange-300/50 hover:shadow-lg hover:shadow-orange-400/50 hover:-translate-y-0.5 transition-all">
+                        <button onClick={() => setIsAiModalOpen(true)} className="group flex items-center gap-2 px-5 py-2.5 bg-[#ff751f] text-white font-bold rounded-full shadow-md shadow-orange-300/50 hover:shadow-lg hover:shadow-orange-400/50 hover:-translate-y-0.5 transition-all">
                             <Sparkles className="w-4 h-4 group-hover:rotate-12 transition-transform" /> AI Tư Vấn
                         </button>
                     )}
@@ -151,7 +153,21 @@ const MenuPlannerBoard = () => {
 
                             {isOwner && (
                                 <button 
-                                    onClick={() => { if(window.confirm('Bạn có chắc muốn xóa ngày này?')) dispatch({ type: MENU_ACTIONS.REMOVE_DAY, payload: { dayId: day.day_id }}) }} 
+                                    onClick={() => {
+                                            showModal({
+                                                title: 'Xóa Ngày?',
+                                                message: 'Bạn có chắc chắn muốn xóa ngày này khỏi thực đơn không? Toàn bộ các bữa ăn trong ngày sẽ bị xóa.',
+                                                type: 'warning',
+                                                actions: [
+                                                    { label: 'Hủy', style: 'secondary' },
+                                                    { 
+                                                        label: 'Xóa ngay', 
+                                                        style: 'danger', 
+                                                        onClick: () => dispatch({ type: MENU_ACTIONS.REMOVE_DAY, payload: { dayId: day.day_id } }) 
+                                                    }
+                                                ]
+                                            });
+                                        }} 
                                     className="absolute -top-3 -right-3 bg-white text-gray-400 hover:bg-red-500 hover:text-white p-2 rounded-full opacity-0 scale-90 group-hover:opacity-100 group-hover:scale-100 transition-all shadow-md z-10 border-2 border-white"
                                 >
                                     <X className="w-4 h-4" />
