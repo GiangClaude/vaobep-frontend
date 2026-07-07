@@ -1,11 +1,12 @@
 
 import { useNavigate } from 'react-router-dom';
-import { useCreateMenuMutation } from '../../mutations/useMenuMutations';
+import { useCreateMenuMutation, useDeleteMenuMutation} from '../../mutations/useMenuMutations';
 import { useGlobalModal } from '../../../context/ModalContext';
 export const useMenuListUI = () => {
     const navigate = useNavigate();
     const {showModal} = useGlobalModal();
     const createMenuMutation = useCreateMenuMutation();
+    const deleteMenuMutation = useDeleteMenuMutation();
 
     const handleCreateBlankMenu = async () => {
         try {
@@ -24,8 +25,34 @@ export const useMenuListUI = () => {
         }
     };
 
+    const handleDeleteMenu = (menuId) => {
+        try {
+            showModal({
+                type: 'confirm',
+                title: 'Xác nhận xóa thực đơn',
+                message: 'Bạn có chắc chắn muốn xóa thực đơn này? Hành động này không thể hoàn tác.',
+                actions: [
+                    { label: 'Không', style: 'secondary' },
+                    { label: 'Có', style: 'danger', onClick: async () => {
+                        try {
+                            await deleteMenuMutation.mutateAsync(menuId);
+                            showModal({ type: 'success', title: 'Thành công', message: 'Thực đơn đã được xóa.' });
+                        } catch (error) {
+                            showModal({ type: 'error', title: 'Lỗi xóa thực đơn', message: "Có lỗi xảy ra" });
+                        }
+                    }
+                    }
+                ]
+            })
+        } catch (error) {
+            showModal({ type: 'error', title: 'Lỗi xóa thực đơn', message: "Có lỗi xảy ra" });
+        }
+    }
+
     return {
         handleCreateBlankMenu,
+        handleDeleteMenu,
+        isDeleting: deleteMenuMutation.isPending,
         isCreating: createMenuMutation.isPending 
     };
 };

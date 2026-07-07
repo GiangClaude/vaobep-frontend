@@ -1,26 +1,44 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CalendarDays, User, UtensilsCrossed, Sparkles } from 'lucide-react';
-import { getAvatarUrl } from '../../utils/imageHelper';
-
+import { CalendarDays, User, UtensilsCrossed, Trash2 } from 'lucide-react';
+import { useMenuListUI } from '../../hooks/ui/menu/useMenuListUI';
+import { useAuth } from '../../AuthContext';
 const MenuCard = ({ menu }) => {
     const navigate = useNavigate();
-    console.log("Menu Card: ", menu);
+    const { handleDeleteMenu } = useMenuListUI();
+    const {currentUser} = useAuth();
     return (
         <div 
             onClick={() => navigate(`/menus/planner/${menu.menu_id}`)}
             className="group relative bg-white rounded-[32px] overflow-hidden shadow-[0_8px_20px_-10px_rgba(255,117,31,0.2)] hover:shadow-[0_16px_32px_-10px_rgba(255,117,31,0.4)] transition-all duration-300 cursor-pointer flex flex-col h-full hover:-translate-y-1.5 border-2 border-transparent hover:border-orange-100"
         >
             <div className="h-36 bg-gradient-to-br from-[#ff751f] via-orange-400 to-yellow-400 p-5 flex flex-col justify-between relative overflow-hidden">
+                {/* Các icon trang trí mờ ở background */}
                 <UtensilsCrossed className="absolute -right-4 -top-4 w-28 h-28 text-white opacity-20 group-hover:rotate-12 transition-transform duration-700" />
                 <CalendarDays className="absolute -left-6 -bottom-6 w-24 h-24 text-white opacity-20 group-hover:-rotate-12 transition-transform duration-700" />
                 
-                <div className="flex justify-between items-start z-10">
+                {/* HÀNG TRÊN CÙNG: Chứa Badge (Trái) và Nút Xóa (Phải) */}
+                <div className="flex justify-between items-start z-20 w-full relative">
                     <span className="bg-white/20 backdrop-blur-md text-white text-[10px] font-extrabold uppercase tracking-wide px-2.5 py-1 rounded-full border border-white/30">
                         {menu.is_public ? 'Công khai' : 'Cá nhân'}
                     </span>
+
+                    {/* NÚT XÓA ĐÃ ĐƯỢC CHUYỂN LÊN ĐÂY */}
+                    {currentUser && currentUser.id === menu.user_id && (
+                        <button
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteMenu(menu.menu_id);
+                            }}
+                            className="bg-white/20 hover:bg-red-500 text-white backdrop-blur-md px-3 py-1 rounded-full text-xs font-bold transition-all duration-300 border border-white/30 hover:border-red-500 shadow-sm flex items-center gap-1 opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0"
+                        >
+                            <Trash2 className="w-3.5 h-3.5" /> Xóa
+                        </button>
+                    )}
+
                 </div>
 
+                {/* HÀNG DƯỚI: Box thống kê số ngày */}
                 <div className="z-10 bg-white shadow-lg px-4 py-2 rounded-2xl w-max border border-orange-100 group-hover:scale-105 transition-transform duration-300">
                     <div className="text-[10px] font-bold text-gray-400 uppercase tracking-wide mb-0.5">Kế hoạch</div>
                     <div className="text-[#ff751f] font-extrabold text-sm flex items-center gap-1.5">
@@ -29,6 +47,7 @@ const MenuCard = ({ menu }) => {
                 </div>
             </div>
 
+            {/* PHẦN THÔNG TIN BÊN DƯỚI (Màu trắng) */}
             <div className="p-5 flex flex-col flex-1 bg-white relative">
                 <div className="absolute top-0 left-4 right-4 border-t-2 border-dashed border-orange-100/50 -translate-y-1/2"></div>
 
@@ -62,7 +81,6 @@ const MenuCard = ({ menu }) => {
                             </span>
                             {menu.author_role === 'pro' && (
                                 <span className="text-[9px] font-black text-yellow-500 uppercase tracking-wider flex items-center gap-0.5">
-                                    {/* <Sparkles className="w-2.5 h-2.5" />  */}
                                     Chuyên gia
                                 </span>
                             )}

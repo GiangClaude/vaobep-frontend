@@ -43,8 +43,8 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                 dispatch({ type: MENU_ACTIONS.OVERRIDE_DAYS, payload: result.data });
                 showModal({
                     type: 'success',
-                    title: 'Tuyệt vời!',
-                    message: "✨ AI đã lên xong thực đơn! Hãy kiểm tra bảng Kanban và bấm 'Lưu Thực Đơn' để lưu vào hệ thống nhé."
+                    title: 'Đã tạo xong!',
+                    message: "AI đã lên xong thực đơn! Hãy kiểm tra bảng Kanban và bấm 'Lưu Thực Đơn' để lưu vào hệ thống nhé."
                 });
                 onClose();
             } else {
@@ -100,6 +100,7 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                                 </p>
                                 <p className="text-red-500 text-[15px] font-medium leading-relaxed">
                                     Lưu ý: AI sẽ tự động thay thế toàn bộ thực đơn, hãy chắc chắn bạn đồng ý cho phép sửa. 
+                                          Thực đơn do AI khởi tạo chỉ mang tính chất tham khảo, không có giá trị thay thế chỉ định của bác sĩ
                                 </p>
                             </div>
                             <div className="relative">

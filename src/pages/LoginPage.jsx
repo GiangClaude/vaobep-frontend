@@ -5,8 +5,8 @@ import {useLoginForm} from '../hooks/ui/auth/useAuthForms';
 import "../index.css";
 import Header from '../component/common/Header';
 import { Footer } from '../component/common/Footer';
-
 const LoginPage = () => {
+
     const { 
         loginData, 
         setLoginData, 

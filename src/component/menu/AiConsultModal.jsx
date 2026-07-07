@@ -72,6 +72,9 @@ export default function AiConsultModal({ isOpen, onClose, menuState }) {
                 </div>
 
                 <div className="p-6 bg-white min-h-[280px] max-h-[65vh] overflow-y-auto">
+                    <p className="text-sm text-red-500 mb-5">
+                                AI nhận xét chỉ mang tính chất tham khảo, không có giá trị thay thế chỉ định của bác sĩ
+                     </p>
                     {isThinking ? (
                         <div className="flex flex-col items-center justify-center h-full text-violet-500 space-y-5 py-12">
                             <div className="relative">

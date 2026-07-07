@@ -71,6 +71,18 @@ const ProtectedRoute = () => {
   return <Outlet />;
 };
 
+const GuestRoute = () => {
+  const { currentUser } = useAuth();
+  
+  // Nếu đã đăng nhập -> Chuyển hướng về homepage
+  if (currentUser) {
+    return <Navigate to="/homepage" replace />;
+  }
+  
+  // Nếu chưa đăng nhập -> Cho phép render các component con (Login, Register...)
+  return <Outlet />;
+};
+
 const ProtectedLayout = () => {
   const { currentUser } = useAuth(); 
   if (!currentUser) {
@@ -93,11 +105,13 @@ function App() {
       <ScrollToTop />
           <Routes>
             {/* Public Routes */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-            <Route path="/verify-otp" element={<VerifyOTPPage />} />
-            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            <Route path="/reset-password" element={<ResetPasswordPage />} />  
+            <Route element={<GuestRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/verify-otp" element={<VerifyOTPPage />} />
+              <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+              <Route path="/reset-password" element={<ResetPasswordPage />} />  
+            </Route>
             {/* Main App Routes */}
             <Route element={<MainLayout />}>
               <Route path="/homepage" element={<HomePage />} />
