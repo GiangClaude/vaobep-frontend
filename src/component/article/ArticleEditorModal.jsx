@@ -4,7 +4,7 @@ import { X, Image as ImageIcon, Clock } from 'lucide-react';
 import {useTagQueries} from "../../hooks/queries/useTagQueries";
 
 import { useArticleFormUI } from '../../hooks/ui/article/useArticleFormUI';
-
+import { toast } from 'react-toastify';
 export default function ArticleEditorModal({ isOpen, onClose, initialData = null }) {
     const { tags: availableTags = [] } = useTagQueries();
     const editorRef = useRef(null);
@@ -15,6 +15,7 @@ export default function ArticleEditorModal({ isOpen, onClose, initialData = null
         errors, handleSave, isSaving
     } = useArticleFormUI(initialData, isOpen, onClose);
 
+    console.log('ArticleEditorModal Recipe Results:', recipeResults);
     useEffect(() => {
         if (isOpen && editorRef.current && editorRef.current.innerHTML !== formData.content) {
             editorRef.current.innerHTML = formData.content;
@@ -74,9 +75,14 @@ export default function ArticleEditorModal({ isOpen, onClose, initialData = null
                         <div className="flex items-center gap-2 flex-wrap mb-3">
                             {formData.recipes.map(r => (
                                 <div key={r.id} className="flex items-center gap-2 bg-gray-50 border text-sm px-2 py-1 rounded-md">
-                                    <img src={r.image} alt="" className="w-8 h-8 object-cover rounded-sm" />
+                                    <img src={r.cover_image} alt="" className="w-8 h-8 object-cover rounded-sm" />
                                     <span className="font-medium">{r.title}</span>
-                                    <button onClick={() => updateField('recipes', formData.recipes.filter(rec => rec.id !== r.id))} className="ml-2 text-red-500"><X className="w-3 h-3"/></button>
+                                    <button 
+                                        onClick={() => updateField('recipes', formData.recipes.filter(rec => (rec.id || rec.recipe_id) !== (r.id || r.recipe_id)))} 
+                                        className="ml-2 text-red-500"
+                                    >
+                                        <X className="w-3 h-3"/>
+                                    </button>
                                 </div>
                             ))}
                         </div>
@@ -84,8 +90,16 @@ export default function ArticleEditorModal({ isOpen, onClose, initialData = null
                         {recipeResults.length > 0 && (
                             <div className="bg-white border mt-1 rounded-lg shadow-xl max-h-40 overflow-y-auto">
                                 {recipeResults.map(r => (
-                                    <div key={r.id} onClick={() => { if(formData.recipes.length >= 5) { alert("Tối đa 5 món"); return; } updateField('recipes', [...formData.recipes, r]); setRecipeQuery(''); }} className="p-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 border-b">
-                                        <img src={r.image} className="w-8 h-8 object-cover rounded" alt="" />
+                                    <div key={r.recipe_id} onClick={() => { 
+                                            if(formData.recipes.length >= 5) { 
+                                                 toast.warning("Chỉ được chọn tối đa 5 món ăn!");
+                                                return; 
+                                            } 
+                                            updateField('recipes', [...formData.recipes, r]); 
+                                            setRecipeQuery(''); 
+                                            }} 
+                                            className="p-2 hover:bg-gray-50 cursor-pointer flex items-center gap-2 border-b">
+                                        <img src={r.cover_image} className="w-8 h-8 object-cover rounded" alt="" />
                                         <span className="text-sm">{r.title}</span>
                                     </div>
                                 ))}

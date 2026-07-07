@@ -12,8 +12,6 @@ const Header = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const navigate = useNavigate();
 
-  console.log("Header: ", currentUser);
-
   const logout = () => {
     localStorage.removeItem('token');
     setCurrentUser(null);

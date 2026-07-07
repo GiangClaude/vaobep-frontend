@@ -3,7 +3,8 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import ScrollToTop from "./utils/ScrollToTop";
 import { AuthProvider, useAuth } from './AuthContext';
 import { ModalProvider } from './context/ModalContext';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 import Header from './component/common/Header';
 import { Footer } from './component/common/Footer';
 import Chatbot from './component/Chatbot/Chatbot';
@@ -165,8 +166,8 @@ function App() {
             <Route path="/" element={<IndexRedirect />} />
             
             <Route path="*" element={<Navigate to="/" replace />} />
-            
           </Routes>
+          <ToastContainer style={{ zIndex: 99999 }} position="top-right" autoClose={2000} />
       </BrowserRouter>
       </ModalProvider>
     </AuthProvider>

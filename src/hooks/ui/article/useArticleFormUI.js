@@ -62,9 +62,9 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
                 const resp = await recipeApi.searchSimple(q);
                 const results = resp.data || [];
                 const formatted = results.map(r => ({
-                    id: r.recipe_id, title: r.title, image: getRecipeImageUrl(r.recipe_id, r.cover_image)
+                    recipe_id: r.recipe_id, title: r.title, cover_image: getRecipeImageUrl(r.recipe_id, r.cover_image)
                 }));
-                setRecipeResults(formatted.filter(r => !formData.recipes.find(s => s.id === r.id)));
+                setRecipeResults(formatted.filter(r => !formData.recipes.find(s => s.recipe_id === r.recipe_id)));
             } catch (err) { console.error(err); }
         }, 300);
         return () => clearTimeout(t);
@@ -93,9 +93,12 @@ export const useArticleFormUI = (initialData, isOpen, onClose) => {
         submitData.append('status', formData.status);
         submitData.append('read_time', readTime);
         if (formData.coverFile) submitData.append('cover_image', formData.coverFile);
-        submitData.append('tags', JSON.stringify(formData.tags.map(t => t.id || t.tag_id)));
-        submitData.append('recipeIds', JSON.stringify(formData.recipes.map(r => r.id || r.recipe_id)));
+        // Lọc trùng ID tags và ID recipes trước khi gửi
+        const uniqueTagIds = [...new Set(formData.tags.map(t => t.id || t.tag_id))];
+        const uniqueRecipeIds = [...new Set(formData.recipes.map(r => r.id || r.recipe_id))];
 
+        submitData.append('tags', JSON.stringify(uniqueTagIds));
+        submitData.append('recipeIds', JSON.stringify(uniqueRecipeIds));
         try {
             if (formData.id) {
                 await updateMutation.mutateAsync({ articleId: formData.id, formData: submitData });

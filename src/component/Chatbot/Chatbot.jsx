@@ -102,7 +102,7 @@ return (
                 className={`flex flex-col ${m.from === 'user' ? 'items-end' : 'items-start'}`}
               >
                 <div 
-                  className={`px-[12px] py-[8px] rounded-[16px] max-w-[85%] break-words text-[13px] leading-[1.4] 
+                  className={`px-[12px] py-[8px] rounded-[16px] max-w-[85%] break-words text-[13px] leading-[1.4] whitespace-pre-wrap
                   ${m.from === 'user' 
                     ? 'bg-orange-400 text-white rounded-br-[4px]' 
                     : 'bg-[#e9ecef] text-[#333] rounded-bl-[4px]'}`}
