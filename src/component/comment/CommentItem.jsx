@@ -46,7 +46,7 @@ export default function CommentItem({ comment, depth = 0, postId, postType }) {
     };
 
     const confirmDelete = async () => {
-        const success = await handleDelete(comment.comment_id);
+        const success = await handleDelete(comment.comment_id, postId, postType);
         if (success) setIsDeleteModalOpen(false);
     };
 

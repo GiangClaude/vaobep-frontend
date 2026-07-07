@@ -42,7 +42,7 @@ const MenuCard = ({ menu }) => {
                     </p>
                 ) : (
                     <p className="text-sm text-gray-400 line-clamp-2 mb-4 font-medium">
-                        Cùng khám phá thực đơn hấp dẫn này nhé! 😋
+                        Thực đơn hấp dẫn đa dạng với nhiều món ăn ngon, hãy thử xem nhé!
                     </p>
                 )}
 
@@ -62,7 +62,8 @@ const MenuCard = ({ menu }) => {
                             </span>
                             {menu.author_role === 'pro' && (
                                 <span className="text-[9px] font-black text-yellow-500 uppercase tracking-wider flex items-center gap-0.5">
-                                    <Sparkles className="w-2.5 h-2.5" /> Chuyên gia
+                                    {/* <Sparkles className="w-2.5 h-2.5" />  */}
+                                    Chuyên gia
                                 </span>
                             )}
                             {menu.author_role === 'admin' && (

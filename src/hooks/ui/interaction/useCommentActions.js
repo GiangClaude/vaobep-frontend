@@ -20,9 +20,9 @@ export const useCommentActions = () => {
         }
     });
 
-    const handleDelete = requireAuth(async (commentId) => {
+    const handleDelete = requireAuth(async (commentId, postId, postType) => {
         try {
-            await deleteMutation.mutateAsync(commentId);
+            await deleteMutation.mutateAsync({ commentId, postId, postType });
             return true;
         } catch (error) {
             showModal({ title: "Lỗi", message: "Không thể xóa bình luận", type: "error" });

@@ -21,11 +21,11 @@ export const MenuSection = ({ title, menus, isLoading }) => {
                         {title}
                         <span className="text-[#ff6b35]">🔥</span>
                     </h2>
-                    <p className="text-sm text-gray-500 mt-1">Khám phá các thực đơn được yêu thích nhất</p>
+                    <p className="text-sm text-gray-500 mt-1">Khám phá các thực đơn mới nhất</p>
                 </div>
-                <button className="text-[#ff6b35] font-semibold hover:text-[#e65a2a] transition-colors flex items-center text-sm">
+                {/* <button className="text-[#ff6b35] font-semibold hover:text-[#e65a2a] transition-colors flex items-center text-sm">
                     Xem tất cả <ArrowRight className="w-4 h-4 ml-1" />
-                </button>
+                </button> */}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">

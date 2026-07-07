@@ -33,7 +33,7 @@ export default function Sidebar() {
         <div className="absolute -top-6 -right-6 w-20 h-20 bg-orange-100 rounded-full opacity-50 blur-xl"></div>
         
         <div className="flex items-center gap-2.5 mb-6 relative z-10">
-          <div className="p-2 bg-gradient-to-br from-[#ff751f] to-yellow-400 rounded-xl shadow-md rotate-3">
+          <div className="p-2 bg-[#ff751f] rounded-xl shadow-md rotate-3">
             <TrendingUp className="w-5 h-5 text-white" />
           </div>
           <h3 className="text-[18px] font-extrabold text-gray-800">Nổi bật gần đây</h3>
@@ -141,13 +141,13 @@ export default function Sidebar() {
           <div className="bg-white/20 backdrop-blur-md p-3 rounded-2xl mb-3 shadow-inner border border-white/30">
             <Trophy className="w-8 h-8 text-white drop-shadow-md" />
           </div>
-          <h4 className="text-white text-[18px] font-black tracking-wide mb-1 drop-shadow-md uppercase">Vua Đầu Bếp</h4>
-          <p className="text-orange-50 text-xs font-bold mb-4">Tranh tài xếp hạng tuần này!</p>
+          <h4 className="text-white text-[18px] font-black tracking-wide mb-1 drop-shadow-md uppercase">Bảng Xếp Hạng</h4>
+          {/* <p className="text-orange-50 text-xs font-bold mb-4">Tranh tài xếp hạng tuần này!</p> */}
           <button 
             onClick={() => navigate('/leaderboard')}
             className="bg-white text-[#ff751f] font-black px-6 py-2 rounded-full text-sm hover:bg-yellow-100 hover:shadow-lg transition-all duration-300 w-full"
           >
-            Go Go Go 🚀
+            Xem ngay
           </button>
         </div>
       </motion.div>

@@ -48,6 +48,28 @@ const smartUpdateCache = (oldData, targetId, updates, postType) => {
     return oldData;
 };
 
+const updateCommentCountCache = (oldData, targetId, idFields, amount) => {
+    if (!oldData) return oldData;
+    const isTarget = (item) => idFields.some(field => String(item[field]) === String(targetId));
+
+    const updateItem = (item) => {
+        if (isTarget(item)) {
+            // Cập nhật cả comment_count (snake_case) và commentCount (camelCase) đề phòng UI dùng 1 trong 2
+            return {
+                ...item,
+                comment_count: Math.max(0, (item.comment_count || 0) + amount),
+                commentCount: Math.max(0, (item.commentCount || 0) + amount)
+            };
+        }
+        return item;
+    };
+
+    if (Array.isArray(oldData)) return oldData.map(updateItem);
+    if (oldData.data && Array.isArray(oldData.data)) return { ...oldData, data: oldData.data.map(updateItem) };
+    if (typeof oldData === 'object' && isTarget(oldData)) return updateItem(oldData);
+    return oldData;
+};
+
 
 export const useToggleLikeMutation = () => {
     const queryClient = useQueryClient();
@@ -136,6 +158,16 @@ export const usePostCommentMutation = () => {
         mutationFn: ({ postId, content, postType, parentId }) => interactionApi.postComment(postId, content, postType, parentId),
         onSuccess: (data, variables) => {
            queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.RECIPE_COMMENTS] });
+
+           const config = POST_CONFIG_MAP[variables.postType];
+            if (config) {
+                const allKeys = [...config.listKeys, config.detailKey];
+                allKeys.forEach(baseKey => {
+                    queryClient.setQueriesData({ queryKey: [baseKey] }, (oldData) => 
+                        updateCommentCountCache(oldData, variables.postId, config.idFields, 1)
+                    );
+                });
+            }
         }
     });
 };
@@ -143,9 +175,21 @@ export const usePostCommentMutation = () => {
 export const useDeleteCommentMutation = () => {
     const queryClient = useQueryClient();
     return useMutation({
-        mutationFn: (commentId) => interactionApi.deleteComment(commentId),
-        onSuccess: (data, variables) => {
+        mutationFn: ({ commentId, postId, postType }) => interactionApi.deleteComment(commentId),
+        onSuccess: (response, variables) => {
             queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.RECIPE_COMMENTS] }); 
+
+            const deletedCount = response?.data?.deletedCount || response?.deletedCount || 1;
+
+            const config = POST_CONFIG_MAP[variables.postType];
+            if (config) {
+                const allKeys = [...config.listKeys, config.detailKey];
+                allKeys.forEach(baseKey => {
+                    queryClient.setQueriesData({ queryKey: [baseKey] }, (oldData) => 
+                        updateCommentCountCache(oldData, variables.postId, config.idFields, -deletedCount)
+                    );
+                });
+            }
         }
     });
 };
