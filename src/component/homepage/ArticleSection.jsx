@@ -20,11 +20,7 @@ export default function ArticleSection({ articles }) {
             <p className="text-sm text-gray-600 mt-1">Kiến thức và mẹo vặt nấu ăn</p>
           </div>
         </div>
-        
-        <button className="flex items-center gap-2 text-[#ff6b35] hover:gap-3 transition-all">
-          <span>Xem tất cả</span>
-          <ArrowRight className="w-5 h-5" />
-        </button>
+      
       </div>
 
       {/* Articles Grid */}
