@@ -60,6 +60,25 @@ export function SavedRecipeTab() {
     </div>
   );
 
+  const compactCardStyles = `
+    .saved-recipe-card-wrapper > div > div {
+      flex-direction: column !important;
+    }
+    .saved-recipe-card-wrapper > div > div > div:first-child {
+      width: 100% !important;
+      max-width: none !important;
+      flex: 1 1 100% !important;
+    }
+    .saved-recipe-card-wrapper > div > div > div:nth-child(2) {
+      display: none !important;
+      width: 0 !important;
+      min-width: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      overflow: hidden !important;
+    }
+  `;
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6 flex-wrap gap-4">
@@ -83,6 +102,8 @@ export function SavedRecipeTab() {
         )}
       </div>
 
+      <style>{compactCardStyles}</style>
+
       <AnimatePresence mode="wait">
         <motion.div key={activeTab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
           
@@ -94,7 +115,9 @@ export function SavedRecipeTab() {
                 <AnimatePresence mode="popLayout">
                   {recipes.map((recipe) => (
                     <motion.div key={recipe.id} layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.5 }}>
-                      <RecipeCard recipe={recipe} onClick={() => navigate(`/recipe/${recipe.id}`)} />
+                      <div className="saved-recipe-card-wrapper">
+                        <RecipeCard recipe={recipe} onClick={() => navigate(`/recipe/${recipe.id}`)} />
+                      </div>
                     </motion.div>
                   ))}
                 </AnimatePresence>
