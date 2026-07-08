@@ -25,7 +25,7 @@ export default function ArticlesListPage() {
     limit: 10,
     search: debouncedFilters.searchTerm, 
     tags: debouncedFilters.tags,
-    sortKey: debouncedFilters.sort === 'newest' ? 'created_at' : (debouncedFilters.sort === 'featured' ? 'like_count' : 'read_time'),
+    sortKey: debouncedFilters.sort === 'newest' ? 'created_at' : (debouncedFilters.sort === 'featured' ? 'score' : 'read_time'),
     sortOrder: debouncedFilters.sort === 'read_time_asc' ? 'ASC' : 'DESC'
   });
 
