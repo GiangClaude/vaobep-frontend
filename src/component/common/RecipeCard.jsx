@@ -99,43 +99,47 @@ export function RecipeCard({ recipe = {}, onClick, expandDirection = "right" }) 
             initial={false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.3 }}
-            className={`overflow-hidden border-t-2 md:border-t-0 md:border-l-2 border-dashed border-orange-100 bg-gradient-to-br from-white to-orange-50/30 flex-shrink-0 w-full md:w-80 h-full ${expandDirection === 'left' ? 'md:order-first md:border-r-2 md:border-l-0' : ''}`}
+            className={`overflow-hidden border-t-2 md:border-t-0 md:border-l-2 border-dashed border-orange-100 bg-gradient-to-br from-white to-orange-50/30 flex-shrink-0 w-full md:w-80 flex flex-col ${expandDirection === 'left' ? 'md:order-first md:border-r-2 md:border-l-0' : ''}`}
           >
-            <div className="p-5 h-full flex flex-col w-full">
+            <div className="p-5 flex-1 flex flex-col w-full">
               
-              <div className="mb-4">
-                <p className="text-sm text-gray-500 line-clamp-2 min-h-[40px] leading-relaxed font-medium italic">
-                  "{description}"
-                </p>
+              {/* 3. Bọc phần [Mô tả + Nguyên liệu] vào một div.flex-1 để khối này đẩy khối bình luận xuống */}
+              <div className="flex-1">
+                <div className="mb-4">
+                  <p className="text-sm text-gray-500 line-clamp-2 min-h-[40px] leading-relaxed font-medium italic">
+                    "{description}"
+                  </p>
+                </div>
+                
+                <div className="mb-4 bg-white p-3 rounded-2xl shadow-sm border border-orange-50 h-[120px] flex flex-col overflow-hidden">
+                  <h4 className="text-sm mb-2 text-[#ff751f] flex items-center gap-1.5 font-bold uppercase tracking-wide flex-shrink-0">
+                    <ChefHat className="w-4 h-4" /> Nguyên liệu chính
+                  </h4>
+                  <ul className="text-sm text-gray-600 font-medium space-y-2 flex-grow">
+                    {ingredientNames && ingredientNames.length > 0
+                      ? ingredientNames.slice(0, 3).map((ingredient, index) => (
+                          <li key={index} className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(250,204,21,0.6)] flex-shrink-0"></span>
+                            <span className="truncate">{ingredient}</span>
+                          </li>
+                        ))
+                      : <li className="flex items-center gap-2">
+                          <span className="w-2 h-2 rounded-full bg-gray-300"></span>Đang cập nhật...
+                        </li>}
+                  </ul>
+                </div>
               </div>
               
-              <div className="mb-4 bg-white p-3 rounded-2xl shadow-sm border border-orange-50 h-[120px] flex flex-col overflow-hidden">
-                <h4 className="text-sm mb-2 text-[#ff751f] flex items-center gap-1.5 font-bold uppercase tracking-wide flex-shrink-0">
-                  <ChefHat className="w-4 h-4" /> Nguyên liệu chính
-                </h4>
-                <ul className="text-sm text-gray-600 font-medium space-y-2 flex-grow">
-                  {ingredientNames && ingredientNames.length > 0
-                    ? ingredientNames.slice(0, 3).map((ingredient, index) => (
-                        <li key={index} className="flex items-center gap-2">
-                          <span className="w-2 h-2 rounded-full bg-yellow-400 shadow-[0_0_6px_rgba(250,204,21,0.6)] flex-shrink-0"></span>
-                          <span className="truncate">{ingredient}</span>
-                        </li>
-                      ))
-                    : <li className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-gray-300"></span>Đang cập nhật...
-                      </li>}
-                </ul>
-              </div>
-              
-              <div className="flex-grow min-h-0 mt-auto flex items-end">
+              {/* 4. Thêm mt-auto vào div bọc nút bình luận để nó luôn ghim ở dưới cùng */}
+              <div className="mt-auto w-full pt-2">
                 <div className="w-full bg-orange-100/50 rounded-xl p-2.5 flex items-center justify-center gap-2 hover:bg-[#ff751f] hover:text-white transition-colors group/btn text-[#ff751f] cursor-pointer">
                   <MessageCircle className="w-4 h-4" />
                   <span className="text-xs font-bold uppercase tracking-wide truncate">Xem {commentCount} Bình luận</span>
                 </div>
               </div>
+
             </div>
           </motion.div>
-
         </div>
       </motion.div>
   );
