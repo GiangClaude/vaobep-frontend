@@ -19,10 +19,9 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
 
     return (
         <AnimatePresence>
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" />
-            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-                <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-[#fff9f0] rounded-3xl shadow-2xl w-full max-w-5xl my-8" onClick={(e) => e.stopPropagation()}>
-                    
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[50]" />
+            <div className="fixed inset-0 z-50 flex items-start justify-center p-4 pt-[100px] pb-10 overflow-y-auto">
+                <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="bg-[#fff9f0] rounded-3xl shadow-2xl w-full max-w-4xl mb-8 max-h-[82vh] flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>   
                     {/* Header */}
                     <div className="bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white p-6 rounded-t-3xl flex justify-between items-center">
                         <div className="flex items-center gap-3">
@@ -33,7 +32,7 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                     </div>
 
                     {/* Body */}
-                    <div className="p-6 max-h-[70vh] overflow-y-auto space-y-6">
+                    <div className="p-6 flex-1 overflow-y-auto space-y-6">
                         {/* Ảnh Bìa */}
                         <div>
                             <label className="block text-lg mb-3 font-bold text-gray-800 flex items-center gap-2"><Upload className="w-5 h-5 text-[#ff6b35]" /> Ảnh đại diện</label>
@@ -169,7 +168,7 @@ export function CreateRecipeModal({ isOpen, onClose, initialData = null }) {
                         </div>
                     </div>
 
-                    <div className="p-6 bg-white border-t-2 border-gray-200 rounded-b-3xl flex gap-3">
+                    <div className="p-6 bg-white border-t-2 border-gray-200 rounded-b-3xl flex gap-3 sticky bottom-0 z-10">
                         <button onClick={onClose} className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-medium">Hủy</button>
                         <button onClick={() => handleSubmit("draft")} disabled={isSaving || !formData.title} className="flex-1 px-6 py-3 bg-gray-600 text-white rounded-xl flex items-center justify-center gap-2 font-semibold disabled:opacity-50">
                             <Save className="w-5 h-5" /> Lưu nháp
