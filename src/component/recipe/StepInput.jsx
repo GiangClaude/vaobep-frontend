@@ -1,10 +1,18 @@
 import { X, Upload, Image as ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import { toast } from "react-toastify";
 import ImageWithFallBack from "../figma/ImageWithFallBack";
+
+const MAX_STEPS = 10;
 
 export function StepInput({ steps, onChange }) {
   
   const handleAddStep = () => {
+    if (steps.length >= MAX_STEPS) {
+      toast.error("Tối đa chỉ có 10 bước cho mỗi công thức.");
+      return;
+    }
+
     onChange([
       ...steps,
       { id: `step-${Date.now()}`, description: "", image: "" }
@@ -119,10 +127,11 @@ export function StepInput({ steps, onChange }) {
       </AnimatePresence>
 
       <motion.button
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={{ scale: steps.length >= MAX_STEPS ? 1 : 1.01 }}
+        whileTap={{ scale: steps.length >= MAX_STEPS ? 1 : 0.99 }}
         onClick={handleAddStep}
-        className="w-full border-2 border-dashed border-[#ff6b35] text-[#ff6b35] py-4 rounded-xl hover:bg-orange-50 transition-all flex items-center justify-center gap-2 font-medium"
+        disabled={steps.length >= MAX_STEPS}
+        className={`w-full border-2 border-dashed py-4 rounded-xl transition-all flex items-center justify-center gap-2 font-medium ${steps.length >= MAX_STEPS ? "border-gray-300 text-gray-400 cursor-not-allowed" : "border-[#ff6b35] text-[#ff6b35] hover:bg-orange-50"}`}
       >
         <ImageIcon className="w-5 h-5" />
         Thêm bước mới

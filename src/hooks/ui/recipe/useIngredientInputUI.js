@@ -1,5 +1,8 @@
 import { useState, useRef, useEffect } from "react";
+import { toast } from "react-toastify";
 import { useIngredientsQuery, useUnitsQuery } from "../../queries/useMiscQueries";
+
+export const MAX_INGREDIENTS = 30;
 
 export const useIngredientInputUI = (ingredients, onChange) => {
     const { data: dbIngredients = [], isLoading: loadingIngs } = useIngredientsQuery();
@@ -14,9 +17,19 @@ export const useIngredientInputUI = (ingredients, onChange) => {
         id: "", name: "", amount: "", unit: "", isNew: false
     });
 
-    const filteredIngredients = dbIngredients.filter(ing =>
-        ing.name.toLowerCase().includes(searchTerm.toLowerCase())
+    const selectedIngredientNames = new Set(
+        ingredients
+            .map((ing) => (typeof ing.name === "string" ? ing.name.trim().toLowerCase() : ""))
+            .filter(Boolean)
     );
+
+    const filteredIngredients = dbIngredients.filter((ing) => {
+        const normalizedName = ing.name?.trim().toLowerCase() || "";
+        return (
+            normalizedName.includes(searchTerm.toLowerCase()) &&
+            !selectedIngredientNames.has(normalizedName)
+        );
+    });
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -41,6 +54,11 @@ export const useIngredientInputUI = (ingredients, onChange) => {
     };
 
     const handleAddIngredient = () => {
+        if (ingredients.length >= MAX_INGREDIENTS) {
+            toast.error("Tối đa chỉ có 30 nguyên liệu cho mỗi công thức.");
+            return;
+        }
+
         if (currentIngredient.name && currentIngredient.amount && currentIngredient.unit) {
             onChange([...ingredients, { ...currentIngredient }]);
             setCurrentIngredient({ id: "", name: "", amount: "", unit: "", isNew: false });

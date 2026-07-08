@@ -1,7 +1,7 @@
 import { X, AlertCircle, Plus, Loader2 } from "lucide-react"; 
 import { motion, AnimatePresence } from "framer-motion"; 
 
-import { useIngredientInputUI } from "../../hooks/ui/recipe/useIngredientInputUI";
+import { MAX_INGREDIENTS, useIngredientInputUI } from "../../hooks/ui/recipe/useIngredientInputUI";
 
 export function IngredientInput({ ingredients, onChange }) {
   const {
@@ -17,6 +17,10 @@ export function IngredientInput({ ingredients, onChange }) {
       handleRemoveIngredient
   } = useIngredientInputUI(ingredients, onChange);
 
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const hasSelectedDuplicate = ingredients.some(
+    (ing) => (ing.name || "").trim().toLowerCase() === normalizedSearchTerm
+  );
 
   return (
     <div>
@@ -59,6 +63,11 @@ export function IngredientInput({ ingredients, onChange }) {
       )}
 
       <div className="bg-white rounded-xl border-2 border-[#ffc857]/30 p-4">
+        <div className="flex items-center justify-between mb-3 text-sm text-gray-600">
+          <span>Đã thêm: {ingredients.length}/{MAX_INGREDIENTS}</span>
+          {ingredients.length >= MAX_INGREDIENTS && <span className="text-[#ff6b35] font-semibold">Đã đạt giới hạn</span>}
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-12 gap-3">
           
           <div className="md:col-span-5 relative" ref={dropdownRef}>
@@ -85,6 +94,13 @@ export function IngredientInput({ ingredients, onChange }) {
                  </div>
             )}
 
+            {normalizedSearchTerm && hasSelectedDuplicate && (
+              <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
+                <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
+                <span>Nguyên liệu này đã được thêm trước đó. Hãy chọn lại từ danh sách hoặc xóa mục cũ nếu muốn thay đổi.</span>
+              </div>
+            )}
+
             <AnimatePresence>
               {showDropdown && searchTerm && !isLoading && (
                 <motion.div
@@ -107,7 +123,7 @@ export function IngredientInput({ ingredients, onChange }) {
                         </button>
                       ))}
                     </div>
-                  ) : (
+                  ) : !hasSelectedDuplicate ? (
                     <button
                       type="button"
                       onClick={() => handleSelectIngredient({ ingredient_id: `new-${Date.now()}`, name: searchTerm }, true)}
@@ -118,7 +134,7 @@ export function IngredientInput({ ingredients, onChange }) {
                         <span className="text-gray-800">Tạo mới: <span className="font-semibold text-[#ff6b35]">"{searchTerm}"</span></span>
                       </div>
                     </button>
-                  )}
+                  ) : null}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -159,7 +175,7 @@ export function IngredientInput({ ingredients, onChange }) {
               type="button"
               whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
               onClick={handleAddIngredient}
-              disabled={!currentIngredient.name || !currentIngredient.amount || !currentIngredient.unit}
+              disabled={ingredients.length >= MAX_INGREDIENTS || !currentIngredient.name || !currentIngredient.amount || !currentIngredient.unit}
               className="w-full bg-gradient-to-r from-[#ff6b35] to-[#f7931e] text-white p-2.5 rounded-lg hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               <Plus className="w-5 h-5" />
