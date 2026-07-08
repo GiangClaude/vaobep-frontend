@@ -14,7 +14,7 @@ export function MyArticlesTab({ isPublicView = false, publicArticles = [] }) {
   const navigate = useNavigate();
   const { showModal } = useGlobalModal();
 
-  const [filter, setFilter] = useState('public');
+  const [filter, setFilter] = useState('all');
   const [editorOpen, setEditorOpen] = useState(false);
   const [editorInitial, setEditorInitial] = useState(null);
 
