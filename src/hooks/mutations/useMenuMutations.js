@@ -45,6 +45,6 @@ export const useAiConsultationMutation = () => {
 
 export const useAutoGenerateMenuMutation = () => {
     return useMutation({
-        mutationFn: (prompt) => menuApi.generateMenuAuto(prompt)
+        mutationFn: (payload) => menuApi.generateMenuAuto(payload)
     });
 };

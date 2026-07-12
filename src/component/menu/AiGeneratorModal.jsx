@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Wand2, Sparkles } from 'lucide-react';
+import { X, Wand2, Sparkles, CalendarDays } from 'lucide-react';
 import { useMenuState, MENU_ACTIONS } from '../../context/MenuContext';
 import { useAutoGenerateMenuMutation } from '../../hooks/mutations/useMenuMutations';
 import { useGlobalModal } from '../../context/ModalContext';
@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 export default function AiGeneratorModal({ isOpen, onClose }) {
     const { dispatch } = useMenuState();
     const [prompt, setPrompt] = useState('');
+    const [days, setDays] = useState(3);
     const { showModal } = useGlobalModal();
     const generateMutation = useAutoGenerateMenuMutation();
     const isThinking = generateMutation.isPending; 
@@ -17,7 +18,7 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
         if (!prompt.trim()) return;
         
         try {
-            const result = await generateMutation.mutateAsync(prompt);
+            const result = await generateMutation.mutateAsync({ prompt, days });
 
             if (result.success && result.data) {
                 let aiDays = Array.isArray(result.data) ? result.data : result.data.days;
@@ -101,8 +102,29 @@ export default function AiGeneratorModal({ isOpen, onClose }) {
                                 <p className="text-red-500 text-[15px] font-medium leading-relaxed">
                                     Lưu ý: AI sẽ tự động thay thế toàn bộ thực đơn, hãy chắc chắn bạn đồng ý cho phép sửa. 
                                           Thực đơn do AI khởi tạo chỉ mang tính chất tham khảo, không có giá trị thay thế chỉ định của bác sĩ
-                                </p>
+                                </p>  
                             </div>
+
+                            <div className="mb-4">
+                                <label className="flex items-center gap-2 text-sm font-bold text-slate-700 mb-2">
+                                    <CalendarDays className="w-4 h-4 text-[#ff6b35]"/>
+                                    Số ngày lên thực đơn
+                                </label>
+                                <div className="flex items-center gap-3">
+                                    <input 
+                                        type="range" 
+                                        min="1" 
+                                        max="30" 
+                                        value={days} 
+                                        onChange={(e) => setDays(parseInt(e.target.value))}
+                                        className="flex-1 h-2 bg-orange-100 rounded-lg appearance-none cursor-pointer accent-[#ff6b35]"
+                                    />
+                                    <span className="font-bold text-lg text-[#ff6b35] w-14 text-center bg-orange-50 py-1 rounded-lg">
+                                        {days}
+                                    </span>
+                                </div>
+                            </div>
+
                             <div className="relative">
                                 <textarea 
                                     value={prompt}

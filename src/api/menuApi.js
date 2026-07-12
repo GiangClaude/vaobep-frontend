@@ -51,8 +51,8 @@ const menuApi = {
         return response;
     },
 
-    generateMenuAuto: async (prompt) => {
-        const response = await apiClient.post('/menus/ai/generate', { prompt });
+    generateMenuAuto: async ({prompt, days}) => {
+        const response = await apiClient.post('/menus/ai/generate', { prompt, days });
         return response;
     },
 };
